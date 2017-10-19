@@ -89,6 +89,7 @@ public class DwcaParser {
     }
 
 
+
     private MeasurementOrFact parseMeasurementOrFact(Record record) {
         //Note: ReferenceId here is put with the other format for reference IDs (Check TODO in parseReferences).
         return new MeasurementOrFact(record.value(DwcTerm.measurementID),
@@ -155,5 +156,5 @@ public class DwcaParser {
                 record.value(TermFactory.instance().findTerm(TermURIs.agentOpenIdURI)));
     }
 
-
+   
 }
