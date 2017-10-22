@@ -1,7 +1,7 @@
 package org.bibalex.eol.parser.formats;
 
 /**
- * Created by ba on 10/19/17.
+ * Created by Amr Morad
  */
-public class ParentFormat {
+public class ParentFormat implements Format {
 }
