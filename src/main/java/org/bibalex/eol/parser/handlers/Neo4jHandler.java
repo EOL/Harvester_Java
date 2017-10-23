@@ -10,8 +10,8 @@ import java.util.ArrayList;
  */
 public class Neo4jHandler {
 
-    public int createIfNotExist_node(int resourceId, String scientificName, String rank, String taxonId,
-                                ArrayList<AncestorNode> currentAncestry, int parentGeneratedId){
+    public int createIfNotExist_node_ancestryFormat(int resourceId, String scientificName, String rank, String taxonId,
+                                ArrayList<AncestorNode> currentAncestry){
         //TODO call the neo4j and return the id
         return 1;
     }
@@ -40,5 +40,20 @@ public class Neo4jHandler {
     public boolean updateNode(String nodeId, int generatedNodeId){
         //TODO call neo4j and update the value of the nodeid
         return true;
+    }
+
+    public boolean createRelationBetweenNodeAndSynonyms(int generatedNodeId){
+        //TODO call neo4j to adjust the relations between the accepted node and its synonyms
+        return true;
+    }
+
+    public int getNode(String parentUsageId, int resourceId){
+        //TODO call Neo4j to get the node using parentUsageId and resourceId
+        return 1;
+    }
+
+    public int createIfNotExist_node_parentFormat(int resourceId, String taxonId){
+        //TODO call the neo4j and return the id
+        return 1;
     }
 }

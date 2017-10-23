@@ -5,5 +5,5 @@ package org.bibalex.eol.parser.formats;
  */
 public interface Format {
 
-    void handleLine();
+    void handleLines();
 }

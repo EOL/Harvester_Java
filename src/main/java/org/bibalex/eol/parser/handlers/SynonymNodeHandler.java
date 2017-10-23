@@ -1,10 +1,8 @@
 package org.bibalex.eol.parser.handlers;
 
-import org.bibalex.eol.parser.models.AncestorNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -15,7 +13,7 @@ public class SynonymNodeHandler {
     private Neo4jHandler neo4jHandler;
     private int resourceId;
     private int currentNodeGeneratedId;
-    private HashMap<String, Integer> orphanSynonyms;
+    public HashMap<String, Integer> orphanSynonyms;
     private static final Logger logger = LoggerFactory.getLogger(SynonymNodeHandler.class);
 
     public SynonymNodeHandler(int resourceId, int currentNodeGeneratedId){
@@ -29,7 +27,7 @@ public class SynonymNodeHandler {
         return true;
     }
 
-    public void handleSynonymNode(String acceptedNodeId, String rank, ArrayList<AncestorNode> ancestry){
+    public boolean handleSynonymNode(String acceptedNodeId, String rank){
         boolean success;
         boolean existsBefore = neo4jHandler.searchAcceptedNode(acceptedNodeId);
         if(existsBefore){
@@ -43,6 +41,7 @@ public class SynonymNodeHandler {
             logger.debug("created the node in Neo4j and add the relationship successfully");
         else
             logger.debug("Failure in the creation of the node in Neo4j OR adding the relationship");
+        return success;
     }
 
     public boolean handleSynonym_parentExist(String acceptedNodeId, String rank){
