@@ -27,24 +27,26 @@ public class ParentFormat implements Format {
     }
 
     private int createParent(String parentUsageId){
-        int parentGeneratedNodeId = neo4jHandler.getNode(parentUsageId, resourceId);
+        int parentGeneratedNodeId = neo4jHandler.getParentNodeIfExist_parentFormat(parentUsageId, resourceId);
         if(parentGeneratedNodeId > 0){
             logger.debug("parent exists");
         }else{
             logger.debug("parent does not exist");
             missingParents.add(parentUsageId);
-            neo4jHandler.createIfNotExist_node_parentFormat(resourceId, parentUsageId);
+            neo4jHandler.createIfNotExistNode_parentFormat(resourceId, parentUsageId);
         }
         return parentGeneratedNodeId;
     }
 
-    private boolean createOriginalNode(){
+    private boolean createOriginalNode(String nodeId, String scientificName, String rank, String taxonomicStatus,
+                                       int parentGeneratedNodeId){
         boolean success;
+        int generatedNodeId = createNodeIfNotExist(nodeId, scientificName, rank);
         SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, generatedNodeId);
         if(synonymNodeHandler.isSynonym(taxonomicStatus))
             success = synonymNodeHandler.handleSynonymNode(acceptedNodeId, rank);
         else
-            success = handleNonSynonymNode(scientificName, rank, parentGeneratedNodeId, nodeId, synonymNodeHandler);
+            success = handleNonSynonymNode(scientificName, rank, generatedNodeId, nodeId, synonymNodeHandler);
         if(success)
             logger.debug("created original node successfully");
         else
@@ -52,9 +54,19 @@ public class ParentFormat implements Format {
         return success;
     }
 
-    private boolean handleNonSynonymNode(String scientificName, String rank, int parentGeneratedNodeId,
-                                         SynonymNodeHandler synonymNodeHandler){
-        
+    private int createNodeIfNotExist(String nodeId, String scientificName, String rank){
+        int generatedNodeId = neo4jHandler.getNodeIfExist_parentFormat(nodeId, scientificName, resourceId);
+        if(generatedNodeId <= 0){
+            generatedNodeId = neo4jHandler.createIfNotExistNode_parentFormat(resourceId,
+                    nodeId, scientificName, rank);
+        }
+        return generatedNodeId;
+    }
+
+    private boolean handleNonSynonymNode(String scientificName, String rank, int generatedNodeId,
+                                         String nodeId, SynonymNodeHandler synonymNodeHandler){
+        boolean success = neo4jHandler.updateNode_parentFormat(generatedNodeId, nodeId, scientificName, rank);
+        if(missingParents.contains())
 
     }
 

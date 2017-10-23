@@ -61,16 +61,16 @@ public class AncestryFormat implements Format{
 
     private int createIfNotExist(AncestorNode ancestor, String taxonId,
                                  ArrayList<AncestorNode> currentAncestry){
-        return neo4jHandler.createIfNotExist_node_ancestryFormat(resourceId, ancestor.getScientificName(),
+        return neo4jHandler.createIfNotExistNode_ancestryFormat(resourceId, ancestor.getScientificName(),
                 ancestor.getRank(), taxonId, currentAncestry);
     }
 
     private boolean handleNonSynonymNode(String scientificName, String rank, ArrayList<AncestorNode> ancestry,
                                          String nodeId, SynonymNodeHandler synonymNodeHandler){
         boolean success;
-        int generatedNodeId = neo4jHandler.getNodeIfExist(scientificName, rank, ancestry);
+        int generatedNodeId = neo4jHandler.getNodeIfExist_ancestryFormat(scientificName, rank, ancestry);
         if(generatedNodeId > 0)
-            success = neo4jHandler.updateNode(nodeId, generatedNodeId);
+            success = neo4jHandler.updateNode_ancestryFormat(nodeId, generatedNodeId);
         else
             success = handleNonExistingNode(scientificName, rank, nodeId, ancestry, synonymNodeHandler);
         if(success)
@@ -85,7 +85,7 @@ public class AncestryFormat implements Format{
                                           SynonymNodeHandler synonymNodeHandler){
         boolean success;
         //can be changed
-        int generatedNodeId = neo4jHandler.createIfNotExist_node_ancestryFormat(resourceId, scientificName, rank,
+        int generatedNodeId = neo4jHandler.createIfNotExistNode_ancestryFormat(resourceId, scientificName, rank,
                 nodeId, currentAncestry);
         if(synonymNodeHandler.orphanSynonyms.containsKey(nodeId)){
             success = neo4jHandler.createRelationBetweenNodeAndSynonyms(generatedNodeId);
