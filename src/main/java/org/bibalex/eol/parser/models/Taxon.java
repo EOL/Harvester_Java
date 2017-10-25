@@ -1,12 +1,12 @@
 package org.bibalex.eol.parser.models;
 
-public class Taxa {
+public class Taxon {
     String identifier;
     String scientificName;
     String parentTaxonId;
     String kingdom;
     String phylum;
-    String taxonClass;
+    String class_;
     String order;
     String family;
     String genus;
@@ -16,16 +16,17 @@ public class Taxa {
     String taxonRemarks;
     String namePublishedIn;
     String referenceId;
+    String pageEolId;
 
-    public Taxa(String identifier, String scientificName, String parentTaxonId, String kingdom, String phylum, String taxonClass, String order,
-                String family, String genus, String taxonRank, String furtherInformationURI, String taxonomicStatus, String taxonRemarks,
-                String namePublishedIn, String referenceId) {
+    public Taxon(String identifier, String scientificName, String parentTaxonId, String kingdom, String phylum, String taxonClass, String order,
+                 String family, String genus, String taxonRank, String furtherInformationURI, String taxonomicStatus, String taxonRemarks,
+                 String namePublishedIn, String referenceId, String pageEolId) {
         this.identifier = identifier;
         this.scientificName = scientificName;
         this.parentTaxonId = parentTaxonId;
         this.kingdom = kingdom;
         this.phylum = phylum;
-        this.taxonClass = taxonClass;
+        this.class_ = taxonClass;
         this.order = order;
         this.family = family;
         this.genus = genus;
@@ -35,6 +36,7 @@ public class Taxa {
         this.taxonRemarks = taxonRemarks;
         this.namePublishedIn = namePublishedIn;
         this.referenceId = referenceId;
+        this.pageEolId = pageEolId;
     }
 
     public String getIdentifier() {
@@ -76,14 +78,6 @@ public class Taxa {
 
     public void setPhylum(String phylum) {
         this.phylum = phylum;
-    }
-
-    public String getTaxonClass() {
-        return taxonClass;
-    }
-
-    public void setTaxonClass(String taxonClass) {
-        this.taxonClass = taxonClass;
     }
 
     public String getOrder() {
@@ -156,5 +150,21 @@ public class Taxa {
 
     public void setReferenceId(String referenceId) {
         this.referenceId = referenceId;
+    }
+
+    public String getClass_() {
+        return class_;
+    }
+
+    public void setClass_(String class_) {
+        this.class_ = class_;
+    }
+
+    public String getPageEolId() {
+        return pageEolId;
+    }
+
+    public void setPageEolId(String pageEolId) {
+        this.pageEolId = pageEolId;
     }
 }

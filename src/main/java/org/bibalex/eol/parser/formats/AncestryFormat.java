@@ -3,7 +3,7 @@ package org.bibalex.eol.parser.formats;
 import org.bibalex.eol.parser.handlers.Neo4jHandler;
 import org.bibalex.eol.parser.handlers.SynonymNodeHandler;
 import org.bibalex.eol.parser.models.AncestorNode;
-import org.bibalex.eol.parser.models.AncestryFormatNode;
+import org.bibalex.eol.parser.models.Taxon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,12 +25,36 @@ public class AncestryFormat implements Format{
     }
 
     @Override
-    public void handleLines(ArrayList<AncestryFormatNode> nodes) {
-        for(AncestryFormatNode node : nodes)
-            handleLine(node);
+    public void handleLines(ArrayList<Taxon> nodes) {
+        for(Taxon node : nodes) {
+            if(handleLine(node)){
+                logger.debug("Handling line with taxon id: " + node.getIdentifier() + " is successful");
+            }else {
+                logger.debug("Error in handling line with taxon id: " + node.getIdentifier());
+            }
+        }
     }
 
-    private void handleLine(AncestryFormatNode node){
+    private boolean handleLine(Taxon node){
+        int parentGeneratedNodeId = createParent(node.getParentTaxonId());
+        return createOriginalNode(node.getIdentifier(), node.getScientificName(), node.getTaxonRank(),
+                node.getTaxonomicStatus(), node.getParentTaxonId(), parentGeneratedNodeId);
+    }
+
+    private ArrayList<AncestorNode> adjustNodeAncestry(Taxon taxon){
+        ArrayList<AncestorNode> result = new ArrayList<>();
+        if(taxon.getKingdom() != null && taxon.getKingdom() != "")
+            result.add(new AncestorNode("kingdom", taxon.getKingdom()));
+        if(taxon.getPhylum() != null && taxon.getPhylum() != "")
+            result.add(new AncestorNode("phylum", taxon.getPhylum()));
+        if(taxon.getClass_() != null && taxon.getClass_() != "")
+            result.add(new AncestorNode("class", taxon.getClass_()));
+        if(taxon.getOrder() != null && taxon.getOrder() != "")
+            result.add(new AncestorNode("order", taxon.getOrder()));
+        if(taxon.getFamily() != null && taxon.getFamily() != "")
+            result.add(new AncestorNode("family", taxon.getFamily()));
+        if(taxon.getGenus() != null && taxon.getGenus() != "")
+            result.add(new AncestorNode("genus", taxon.getGenus()));
 
     }
 
@@ -45,8 +69,8 @@ public class AncestryFormat implements Format{
         }
     }
 
-    private void createOriginalNode(String scientificName, String taxonomicStatus, int generatedNodeId, String acceptedNodeId,
-                                    String rank, ArrayList<AncestorNode> ancestry, String nodeId){
+    private void createOriginalNode(String scientificName, String taxonomicStatus, int generatedNodeId,
+                                    String acceptedNodeId, String rank, ArrayList<AncestorNode> ancestry, String nodeId){
         boolean success;
         SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, generatedNodeId);
         if(synonymNodeHandler.isSynonym(taxonomicStatus))
@@ -59,8 +83,7 @@ public class AncestryFormat implements Format{
             logger.debug("Failure in the creation of the original node");
     }
 
-    private int createIfNotExist(AncestorNode ancestor, String taxonId,
-                                 ArrayList<AncestorNode> currentAncestry){
+    private int createIfNotExist(AncestorNode ancestor, String taxonId, ArrayList<AncestorNode> currentAncestry){
         return neo4jHandler.createIfNotExistNode_ancestryFormat(resourceId, ancestor.getScientificName(),
                 ancestor.getRank(), taxonId, currentAncestry);
     }
@@ -81,8 +104,7 @@ public class AncestryFormat implements Format{
     }
 
     private boolean handleNonExistingNode(String scientificName, String rank, String nodeId,
-                                          ArrayList<AncestorNode> currentAncestry,
-                                          SynonymNodeHandler synonymNodeHandler){
+                                          ArrayList<AncestorNode> currentAncestry, SynonymNodeHandler synonymNodeHandler){
         boolean success;
         //can be changed
         int generatedNodeId = neo4jHandler.createIfNotExistNode_ancestryFormat(resourceId, scientificName, rank,

@@ -24,6 +24,7 @@ public class SynonymNodeHandler {
     }
 
     public boolean isSynonym(String taxonomicStatus){
+        //TODO implement isSynonym method
         return true;
     }
 
@@ -44,20 +45,15 @@ public class SynonymNodeHandler {
         return success;
     }
 
-    public boolean handleSynonym_parentExist(String acceptedNodeId, String rank){
+    private boolean handleSynonym_parentExist(String acceptedNodeId, String rank){
         int acceptedNodeGeneratedId = neo4jHandler.createNode_synonym(resourceId, acceptedNodeId, rank);
         return neo4jHandler.addSynonymRelationship(currentNodeGeneratedId, acceptedNodeGeneratedId);
     }
 
-    public boolean handleSynonym_parentNotExist(String acceptedNodeId, String rank){
+    private boolean handleSynonym_parentNotExist(String acceptedNodeId, String rank){
         int acceptedNodeGeneratedId = neo4jHandler.createNode_synonym(resourceId, acceptedNodeId, rank);
-        boolean success = neo4jHandler.addSynonymRelationship(currentNodeGeneratedId, acceptedNodeGeneratedId);
-        if(success){
-            orphanSynonyms.put(acceptedNodeId, acceptedNodeGeneratedId);
-            logger.debug("Add node with id = " + acceptedNodeId + " to the orphan nodes map");
-        }else
-            logger.debug("Error in handling synonym in case parent not exist");
-        return success;
+        orphanSynonyms.put(acceptedNodeId, acceptedNodeGeneratedId);
+        return true;
     }
 
 }

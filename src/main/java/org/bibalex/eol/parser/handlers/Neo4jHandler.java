@@ -43,8 +43,14 @@ public class Neo4jHandler {
         return 1;
     }
 
-    public int createIfNotExistNode_parentFormat(int resourceId, String taxonId, String scientificName, String rank){
+    public int createIfNotExistNode_parentFormat(int resourceId, String taxonId, String scientificName, String rank,
+                                                 int parentGeneratedNodeId){
         //TODO call the neo4j and return the id
+        return 1;
+    }
+
+    public int createParentWithPlaceholder(int resourceId, String parentUsageId){
+        //TODO call neo4j and create the parent with placeholder
         return 1;
     }
 
