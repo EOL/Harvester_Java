@@ -1,6 +1,11 @@
 package org.bibalex.eol.parser;
 
 import org.apache.commons.io.FilenameUtils;
+import org.bibalex.eol.handler.PropertiesHandler;
+import org.bibalex.eol.parser.formats.AncestryFormat;
+import org.bibalex.eol.parser.formats.Format;
+import org.bibalex.eol.parser.formats.ParentFormat;
+import org.bibalex.eol.parser.handlers.RestClientHandler;
 import org.bibalex.eol.parser.models.*;
 import org.bibalex.eol.parser.utils.CommonTerms;
 import org.bibalex.eol.parser.utils.TermURIs;
@@ -13,16 +18,12 @@ import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 public class DwcaParser {
 
@@ -35,6 +36,7 @@ public class DwcaParser {
     //this is used to save the associations without target occurrence
     HashMap<String, Association> oneSidedAccoiationsMap;
     private static final Logger logger = LoggerFactory.getLogger(DwcaParser.class);
+    int batchSize = 1000;
 
     public DwcaParser(Archive dwca) {
         this.dwca = dwca;
@@ -97,13 +99,15 @@ public class DwcaParser {
     }
 
     public void prepareNodesRecord(int resourceId) {
-        for (StarRecord rec : dwca) {
-            NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.scientificName),
-                    rec.core().value(DwcTerm.taxonID), resourceId);
 
-            Relation relation = parseTaxon(rec);
-            if(relation != null)
-                tableRecord.setRelation(relation);
+        buildGraph(resourceId);
+
+        for (StarRecord rec : dwca) {
+            NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID), resourceId);
+
+            Taxon taxon = parseTaxon(rec);
+            if(taxon != null)
+                tableRecord.setRelation(taxon);
 
             if (rec.hasExtension(GbifTerm.VernacularName)) {
                 tableRecord.setVernaculars(parseVernacularNames(rec));
@@ -116,9 +120,6 @@ public class DwcaParser {
             }
 
             adjustReferences(tableRecord);
-            adjustAgents(tableRecord);
-
-            //call matching algorithm to get pageId
 
             //Send to HBASE
             callHBase(tableRecord);
@@ -128,57 +129,27 @@ public class DwcaParser {
         }
     }
 
-    private void callHBase(NodeRecord nodeRecord){
-        //Adjust the proxy, if any
-        String uri = "http://172.16.0.99:80/hbase/api/addHEntry";//ResourceHandler.getPropertyValue("HBaseServer");
-        RestTemplate restTemplate;
-        if(!uri.equalsIgnoreCase("")) {
-//            if(ResourceHandler.getPropertyValue("proxyExists").equalsIgnoreCase("true")) {
-//                CredentialsProvider credsProvider = new BasicCredentialsProvider();
-//                credsProvider.setCredentials(new AuthScope(proxyUrl, port), new UsernamePasswordCredentials(username, password));
-//                HttpClientBuilder clientBuilder = HttpClientBuilder.create();
-//                clientBuilder.useSystemProperties();
-//                clientBuilder.setProxy(new HttpHost(proxyUrl, port));
-//                clientBuilder.setDefaultCredentialsProvider(credsProvider);
-//                clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
-//                CloseableHttpClient client = clientBuilder.build();
-//
-//                //set the HTTP client
-//                HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-//                factory.setHttpClient(client);
-//                restTemplate = new RestTemplate(factory);
-//            }else
-            restTemplate = new RestTemplate();
+    private void buildGraph(int resourceId){
+        ArrayList<Taxon> taxaList = new ArrayList<>();
+        int i = 0;
+        boolean parentFormat = dwca.getCore().hasTerm(DwcTerm.parentNameUsageID);
+        Format format = parentFormat ? new ParentFormat(resourceId) : new AncestryFormat(resourceId);
 
-            //create the json converter
-            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-            List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
-            list.add(converter);
-            restTemplate.setMessageConverters(list);
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("Accept", "application/json");
-
-            // Pass the object and the needed headers
-            HttpEntity<NodeRecord> entity = new HttpEntity<NodeRecord>(nodeRecord, headers);
-
-            System.out.println("=====================");
-            System.out.println("=====================");
-            System.out.println(entity.getBody());
-            System.out.println("=====================");
-            System.out.println("=====================");
-
-            // Send the request as POST
-            ResponseEntity response = restTemplate.exchange(uri, HttpMethod.POST, entity, HbaseResult.class);
-            if (response.getStatusCode() == HttpStatus.OK) {
-                System.out.println(response.getBody());
-            } else {
-                System.out.println("returned code(" + response.getStatusCode() + ")");
+        for (StarRecord rec : dwca) {
+            if (i >= batchSize){
+                format.handleLines(taxaList);
+                i = 0;
+                taxaList = new ArrayList<>();
+            }else{
+                i++;
+                taxaList.add(parseTaxon(rec));
             }
-        }else{
-            System.out.println("Empty uri for hbase");
         }
+    }
+
+    private void callHBase(NodeRecord nodeRecord){
+        RestClientHandler restClientHandler = new RestClientHandler();
+        restClientHandler.doConnection(PropertiesHandler.getProperty("addEntryHBase"), nodeRecord);
     }
 
     private void adjustReferences(NodeRecord nodeRecord) {
@@ -230,40 +201,46 @@ public class DwcaParser {
         }
     }
 
-    private void adjustAgents(NodeRecord nodeRecord) {
-        if (nodeRecord.getMedia() != null) {
-            ArrayList<Agent> agents = nodeRecord.getAgents();
-            ArrayList<String> agentsIds = new ArrayList<String>();
-
-            if (agents != null) {
-                for (Agent agent : agents)
-                    agentsIds.add(agent.getAgentId());
+    private void adjustAgents(Media media, String agents) {
+        if(agents != null && agents != "") {
+            String[] agentIds = agents.split(";");
+            ArrayList<Agent> tempAgents = new ArrayList<>();
+            for (String agentId : agentIds) {
+                tempAgents.add(agentsMap.get(agentId));
             }
-
-            for (Media media : nodeRecord.getMedia()) {
-                if (media.getAgentId() != null && !media.getAgentId().equals("") &&
-                        !agentsIds.contains(media.getAgentId()) &&
-                        agentsMap.get(media.getAgentId()) != null) {
-                    System.out.println("=========================");
-                    System.out.println("=========================");
-                    System.out.println(media.getAgentId());
-                    System.out.println(agentsMap.get(media.getAgentId()));
-                    addAgent(nodeRecord, agentsMap.get(media.getAgentId()));
-                }
-            }
+            media.setAgents(tempAgents);
         }
+//        ArrayList<Agent> agents = media.getAgents();
+//        ArrayList<String> agentsIds = new ArrayList<String>();
+
+//        if (agents != null) {
+//            for (Agent agent : agents)
+//                agentsIds.add(agent.getAgentId());
+//        }
+//
+//        for (Media media : nodeRecord.getMedia()) {
+//            if (media.getAgentId() != null && !media.getAgentId().equals("") &&
+//                    !agentsIds.contains(media.getAgentId()) &&
+//                    agentsMap.get(media.getAgentId()) != null) {
+//                System.out.println("=========================");
+//                System.out.println("=========================");
+//                System.out.println(media.getAgentId());
+//                System.out.println(agentsMap.get(media.getAgentId()));
+//                addAgent(nodeRecord, agentsMap.get(media.getAgentId()));
+//            }
+//        }
     }
 
-    private void addAgent(NodeRecord nodeRecord, Agent agent) {
-        ArrayList<Agent> agents = nodeRecord.getAgents();
-        if (nodeRecord.getAgents() != null)
-            agents.add(agent);
-        else {
-            agents = new ArrayList<Agent>();
-            agents.add(agent);
-            nodeRecord.setAgents(agents);
-        }
-    }
+//    private void addAgent(NodeRecord nodeRecord, Agent agent) {
+//        ArrayList<Agent> agents = nodeRecord.getAgents();
+//        if (nodeRecord.getAgents() != null)
+//            agents.add(agent);
+//        else {
+//            agents = new ArrayList<Agent>();
+//            agents.add(agent);
+//            nodeRecord.setAgents(agents);
+//        }
+//    }
 
     private ArrayList<VernacularName> parseVernacularNames(StarRecord record) {
         ArrayList<VernacularName> vernaculars = new ArrayList<VernacularName>();
@@ -281,19 +258,17 @@ public class DwcaParser {
         return vernaculars;
     }
 
-    private Relation parseTaxon(StarRecord record) {
-        if(!TaxonValidationFunctions.failedTaxa.contains(record.core().value(DwcTerm.taxonID))) {
-            Relation relation = new Relation(record.core().value(DwcTerm.parentNameUsageID),
-                    record.core().value(DwcTerm.kingdom), record.core().value(DwcTerm.phylum),
-                    record.core().value(DwcTerm.class_), record.core().value(DwcTerm.order),
-                    record.core().value(DwcTerm.family), record.core().value(DwcTerm.genus),
-                    record.core().value(CommonTerms.referenceIDTerm));
-//            ArrayList<Integer> pageIds = new ArrayList<Integer>();
-//            pageIds.add(Integer.parseInt(record.core().value(CommonTerms.eolPageTerm)));
-//            relation.setPageIds(pageIds);
-            return relation;
-        }
-        return null;
+    private Taxon parseTaxon(StarRecord record) {
+        Taxon taxonData = new Taxon(record.core().value(DwcTerm.taxonID), record.core().value(DwcTerm.scientificName),
+                record.core().value(DwcTerm.parentNameUsageID), record.core().value(DwcTerm.kingdom),
+                record.core().value(DwcTerm.phylum), record.core().value(DwcTerm.class_),
+                record.core().value(DwcTerm.order), record.core().value(DwcTerm.family),
+                record.core().value(DwcTerm.genus), record.core().value(DwcTerm.taxonRank),
+                record.core().value(CommonTerms.furtherInformationURL), record.core().value(DwcTerm.taxonomicStatus),
+                record.core().value(DwcTerm.taxonRemarks), record.core().value(DwcTerm.namePublishedIn),
+                record.core().value(CommonTerms.referenceIDTerm), record.core().value(CommonTerms.eolPageTerm),
+                record.core().value(DwcTerm.acceptedNameUsageID));
+        return taxonData;
     }
 
     private ArrayList<Occurrence> parseOccurrences(StarRecord record) {
@@ -387,40 +362,38 @@ public class DwcaParser {
     private ArrayList<Media> parseMedia(StarRecord record, NodeRecord rec) {
         ArrayList<Media> media = new ArrayList<Media>();
         for (Record extensionRecord : record.extension(CommonTerms.mediaTerm)) {
-            if(!MediaValidationFunctions.failedMedia.contains
-                    (extensionRecord.value(CommonTerms.identifierTerm))) {
-                Media med = new Media(extensionRecord.value(CommonTerms.identifierTerm),
-                        extensionRecord.value(CommonTerms.typeTerm),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaSubtypeURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaFormatURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaSubjectURI)),
-                        extensionRecord.value(CommonTerms.titleTerm),
-                        extensionRecord.value(CommonTerms.descriptionTerm),
-                        extensionRecord.value(CommonTerms.accessURITerm),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaFurtherInformationURLURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaDerivedFromURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaCreateDateURI)),
-                        extensionRecord.value(CommonTerms.modifiedDateTerm),
-                        extensionRecord.value(CommonTerms.languageTerm),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaRatingURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaAudienceURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.usageTermsURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaRightsURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaOwnerURI)),
-                        extensionRecord.value(CommonTerms.bibliographicCitationTerm),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.publisherURI)),
-                        extensionRecord.value(CommonTerms.contributorTerm),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaCreatorURI)),
-                        extensionRecord.value(CommonTerms.agentIDTerm),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLocationCreatedURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaSpatialURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLatURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLonURI)),
-                        extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaPosURI)),
-                        extensionRecord.value(CommonTerms.referenceIDTerm));
-                media.add(med);
-            }
+            Media med = new Media(extensionRecord.value(CommonTerms.identifierTerm),
+                    extensionRecord.value(CommonTerms.typeTerm),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaSubtypeURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaFormatURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaSubjectURI)),
+                    extensionRecord.value(CommonTerms.titleTerm),
+                    extensionRecord.value(CommonTerms.descriptionTerm),
+                    extensionRecord.value(CommonTerms.accessURITerm),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaFurtherInformationURLURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaDerivedFromURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaCreateDateURI)),
+                    extensionRecord.value(CommonTerms.modifiedDateTerm),
+                    extensionRecord.value(CommonTerms.languageTerm),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaRatingURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaAudienceURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.usageTermsURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaRightsURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaOwnerURI)),
+                    extensionRecord.value(CommonTerms.bibliographicCitationTerm),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.publisherURI)),
+                    extensionRecord.value(CommonTerms.contributorTerm),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaCreatorURI)),
+                    extensionRecord.value(CommonTerms.agentIDTerm),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLocationCreatedURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaSpatialURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLatURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLonURI)),
+                    extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaPosURI)),
+                    extensionRecord.value(CommonTerms.referenceIDTerm));
+            adjustAgents(med, extensionRecord.value(CommonTerms.agentIDTerm));
+            media.add(med);
         }
         return media;
     }
@@ -430,7 +403,7 @@ public class DwcaParser {
         System.out.print("===================================================");
         System.out.print("===================================================");
         System.out.println("-------------scientific name---------------");
-        System.out.println(nodeRecord.getScientificName());
+        System.out.println(nodeRecord.getRelation().getScientificName());
         System.out.println(" " + nodeRecord.getTaxonId());
         System.out.println("-------------Media---------------");
         if (nodeRecord.getMedia() != null && nodeRecord.getMedia().size() > 0)
@@ -462,8 +435,10 @@ public class DwcaParser {
                     get(0).getAssociationId() + " " + nodeRecord.getAssociations().get(0).getContributor());
 
         System.out.println("------------------agents------------------");
-        if (nodeRecord.getAgents() != null && nodeRecord.getAgents().size() > 0)
-            System.out.println(nodeRecord.getAgents().size() + "\n" + nodeRecord.getAgents().get(0).getAgentId());
+        if (nodeRecord.getMedia() != null && nodeRecord.getMedia().size() > 0 && nodeRecord.getMedia().get(0) != null &&
+            nodeRecord.getMedia().get(0).getAgents() != null && nodeRecord.getMedia().get(0).getAgents().size() > 0)
+            System.out.println(nodeRecord.getMedia().get(0).getAgents().size() + "\n" +
+                    nodeRecord.getMedia().get(0).getAgents().get(0).getAgentId());
 
         System.out.println("---------------------refs----------------");
 
@@ -474,9 +449,9 @@ public class DwcaParser {
         System.out.print("===================================================");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Archive dwcArchive = null;
-        ResourceHandler.initialize("configs.properties");
+        PropertiesHandler.initializeProperties();
         String path = "/home/ba/EOL_Recources/4.tar.gz";
         try {
             File myArchiveFile = new File(path);

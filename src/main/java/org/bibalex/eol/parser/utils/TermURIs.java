@@ -120,6 +120,8 @@ public class TermURIs {
 
     public static final String parentTaxonIDURL = "http://rs.tdwg.org/dwc/terms/parentNameUsageID";
 
-    public static final String eolPageTerm = "http://eol.org/schema/eolID";
+    public static final String eolPageTerm = "http://eol.org/schema/EOLid";
+
+    public static final String furtherInformationURL = "http://rs.tdwg.org/ac/terms/furtherInformationURL";
 }
 

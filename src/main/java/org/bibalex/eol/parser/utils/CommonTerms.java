@@ -23,4 +23,6 @@ public class CommonTerms {
     public static final Term contributorTerm = TermFactory.instance().findTerm(TermURIs.contributorURI);
     public static final Term occurrenceTerm = TermFactory.instance().findTerm(TermURIs.occurrenceURI);
     public static final Term associationTerm = TermFactory.instance().findTerm(TermURIs.associationURI);
+    public static final Term furtherInformationURL = TermFactory.instance().findTerm(TermURIs.furtherInformationURL);
+    public static final Term parentId = TermFactory.instance().findTerm(TermURIs.furtherInformationURL);
 }

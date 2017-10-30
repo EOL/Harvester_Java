@@ -13,11 +13,10 @@ import java.util.HashSet;
  * Created by Amr Morad
  */
 
-public class ParentFormat implements Format {
+public class ParentFormat extends Format {
 
     private int resourceId;
     private Neo4jHandler neo4jHandler;
-    private static final String ancestorTaxonId = "placeholder";
     private static final Logger logger = LoggerFactory.getLogger(ParentFormat.class);
     private HashSet<String> missingParents;
 
@@ -27,7 +26,6 @@ public class ParentFormat implements Format {
         this.missingParents = new HashSet<>();
     }
 
-    @Override
     public void handleLines(ArrayList<Taxon> nodes) {
         for(Taxon node : nodes) {
             if(handleLine(node)){
@@ -39,13 +37,20 @@ public class ParentFormat implements Format {
     }
 
     private boolean handleLine(Taxon node){
-        int parentGeneratedNodeId = createParent(node.getParentTaxonId());
-        return createOriginalNode(node.getIdentifier(), node.getScientificName(), node.getTaxonRank(),
-                node.getTaxonomicStatus(), node.getParentTaxonId(), parentGeneratedNodeId);
+        int parentGeneratedNodeId = createParentIfNotExist(node.getParentTaxonId());
+        int originalGeneratedNodeId = createOriginalNode(node.getIdentifier(), node.getScientificName(),
+                node.getTaxonRank(), node.getTaxonomicStatus(), node.getAcceptedNodeId(), parentGeneratedNodeId);
+        if(originalGeneratedNodeId > 0){
+            logger.debug("Successfully created the original node");
+            return true;
+        }else{
+            logger.debug("failure in creation of original node");
+            return false;
+        }
     }
 
-    private int createParent(String parentUsageId){
-        int parentGeneratedNodeId = neo4jHandler.getParentNodeIfExist_parentFormat(parentUsageId, resourceId);
+    private int createParentIfNotExist(String parentUsageId){
+        int parentGeneratedNodeId = neo4jHandler.getNodeIfExist(parentUsageId, resourceId);
         if(parentGeneratedNodeId > 0){
             logger.debug("parent exists");
         }else{
@@ -56,53 +61,24 @@ public class ParentFormat implements Format {
         return parentGeneratedNodeId;
     }
 
-    private boolean createOriginalNode(String nodeId, String scientificName, String rank, String taxonomicStatus,
-                                       String parentNameUsageId, int parentGeneratedNodeId){
-        deleteFromMissingParentsIfNeeded(nodeId);
-        int generatedNodeId = createNodeIfNotExist(nodeId, scientificName, rank, parentGeneratedNodeId);
-        boolean success = handleBeingSynonym(taxonomicStatus, rank, generatedNodeId, nodeId, scientificName,
-                parentNameUsageId);
-        if(success)
-            logger.debug("created original node successfully");
-        else
-            logger.debug("Failure in the creation of the original node");
-        return success;
-    }
-
-    private void deleteFromMissingParentsIfNeeded(String nodeId){
-        if(missingParents.contains(nodeId))
-            missingParents.remove(nodeId);
-    }
-
-    private int createNodeIfNotExist(String nodeId, String scientificName, String rank, int parentGeneratedNodeId){
-        int generatedNodeId = neo4jHandler.getNodeIfExist_parentFormat(nodeId, scientificName, resourceId);
-        if(generatedNodeId <= 0){
-            generatedNodeId = neo4jHandler.createIfNotExistNode_parentFormat(resourceId,
-                    nodeId, scientificName, rank, parentGeneratedNodeId);
+    private int createOriginalNode(String nodeId, String scientificName, String rank, String taxonomicStatus,
+                                       String acceptedNodeId, int parentGeneratedNodeId){
+        deleteFromMissingParentsIfExist(nodeId);
+        int generatedNodeId;
+        if(isSynonym(taxonomicStatus)){
+            logger.debug("The node is synonym");
+            SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
+            generatedNodeId = synonymNodeHandler.handleSynonymNode(nodeId, scientificName, rank, acceptedNodeId);
+        }else{
+            logger.debug("The node is not synonym");
+            generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
+                    neo4jHandler);
         }
         return generatedNodeId;
     }
 
-    private boolean handleBeingSynonym(String taxonomicStatus, String rank, int generatedNodeId,
-                                       String nodeId, String scientificName, String parentNameUsageId){
-        SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, generatedNodeId);
-        return synonymNodeHandler.isSynonym(taxonomicStatus) ? synonymNodeHandler.handleSynonymNode(parentNameUsageId,
-                rank) : handleNonSynonymNode(scientificName, rank, generatedNodeId, nodeId, synonymNodeHandler);
-    }
-
-    private boolean handleNonSynonymNode(String scientificName, String rank, int generatedNodeId,
-                                         String nodeId, SynonymNodeHandler synonymNodeHandler){
-        boolean success = neo4jHandler.updateNode_parentFormat(generatedNodeId, nodeId, scientificName, rank);
-        if(success){
-            success = deleteFromOrphanSynonymsIfExist(synonymNodeHandler, nodeId, generatedNodeId);
-        }
-        return success;
-    }
-
-    private boolean deleteFromOrphanSynonymsIfExist(SynonymNodeHandler synonymNodeHandler, String nodeId,
-                                                    int generatedNodeId){
-        if(synonymNodeHandler.orphanSynonyms.containsKey(nodeId))
-            return neo4jHandler.createRelationBetweenNodeAndSynonyms(generatedNodeId);
-        return true;
+    private void deleteFromMissingParentsIfExist(String nodeId){
+        if(missingParents.contains(nodeId))
+            missingParents.remove(nodeId);
     }
 }

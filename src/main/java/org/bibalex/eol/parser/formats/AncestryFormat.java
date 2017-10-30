@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by Amr Morad
  */
-public class AncestryFormat implements Format{
+public class AncestryFormat extends Format{
 
     private int resourceId;
     private Neo4jHandler neo4jHandler;
@@ -24,7 +24,7 @@ public class AncestryFormat implements Format{
         this.neo4jHandler = new Neo4jHandler();
     }
 
-    @Override
+
     public void handleLines(ArrayList<Taxon> nodes) {
         for(Taxon node : nodes) {
             if(handleLine(node)){
@@ -36,9 +36,17 @@ public class AncestryFormat implements Format{
     }
 
     private boolean handleLine(Taxon node){
-        int parentGeneratedNodeId = createParent(node.getParentTaxonId());
-        return createOriginalNode(node.getIdentifier(), node.getScientificName(), node.getTaxonRank(),
-                node.getTaxonomicStatus(), node.getParentTaxonId(), parentGeneratedNodeId);
+        ArrayList<AncestorNode> currentAncestry = adjustNodeAncestry(node);
+        int lastNodeGeneratedId = createAncestors(currentAncestry);
+        int originalGeneratedNodeId = createOriginalNode(node.getScientificName(), node.getTaxonomicStatus(), node.getAcceptedNodeId(),
+                node.getTaxonRank(), lastNodeGeneratedId, node.getIdentifier());
+        if(originalGeneratedNodeId > 0){
+            logger.debug("Successfully created the original node");
+            return true;
+        }else{
+            logger.debug("failure in creation of original node");
+            return false;
+        }
     }
 
     private ArrayList<AncestorNode> adjustNodeAncestry(Taxon taxon){
@@ -55,64 +63,36 @@ public class AncestryFormat implements Format{
             result.add(new AncestorNode("family", taxon.getFamily()));
         if(taxon.getGenus() != null && taxon.getGenus() != "")
             result.add(new AncestorNode("genus", taxon.getGenus()));
-
+        return result;
     }
 
     //This method assumes the sorting of the records according to the rank
-    private void createAncestors(ArrayList<AncestorNode> ancestors){
-        //This list will have the ancestors starting from the beginning till that node
-        ArrayList<AncestorNode> currentNodeAncestors = new ArrayList<>();
+    private int createAncestors(ArrayList<AncestorNode> ancestors){
         int parentGeneratedId = 0; //zero because Neo4j starts from one
         for(AncestorNode ancestor : ancestors){
-            parentGeneratedId = createIfNotExist(ancestor, ancestorTaxonId, currentNodeAncestors);
-            currentNodeAncestors.add(ancestor);
+            parentGeneratedId = createAncestorIfNotExist(ancestor, ancestorTaxonId, parentGeneratedId);
         }
+        //return the last created one
+        return parentGeneratedId;
     }
 
-    private void createOriginalNode(String scientificName, String taxonomicStatus, int generatedNodeId,
-                                    String acceptedNodeId, String rank, ArrayList<AncestorNode> ancestry, String nodeId){
-        boolean success;
-        SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, generatedNodeId);
-        if(synonymNodeHandler.isSynonym(taxonomicStatus))
-            success = synonymNodeHandler.handleSynonymNode(acceptedNodeId, rank);
-        else
-            success = handleNonSynonymNode(scientificName, rank, ancestry, nodeId, synonymNodeHandler);
-        if(success)
-            logger.debug("created original node successfully");
-        else
-            logger.debug("Failure in the creation of the original node");
+    private int createAncestorIfNotExist(AncestorNode ancestor, String taxonId, int parentGeneratedId){
+        return neo4jHandler.createAncestorIfNotExist(resourceId, ancestor.getScientificName(),
+                ancestor.getRank(), taxonId, parentGeneratedId);
     }
 
-    private int createIfNotExist(AncestorNode ancestor, String taxonId, ArrayList<AncestorNode> currentAncestry){
-        return neo4jHandler.createIfNotExistNode_ancestryFormat(resourceId, ancestor.getScientificName(),
-                ancestor.getRank(), taxonId, currentAncestry);
-    }
-
-    private boolean handleNonSynonymNode(String scientificName, String rank, ArrayList<AncestorNode> ancestry,
-                                         String nodeId, SynonymNodeHandler synonymNodeHandler){
-        boolean success;
-        int generatedNodeId = neo4jHandler.getNodeIfExist_ancestryFormat(scientificName, rank, ancestry);
-        if(generatedNodeId > 0)
-            success = neo4jHandler.updateNode_ancestryFormat(nodeId, generatedNodeId);
-        else
-            success = handleNonExistingNode(scientificName, rank, nodeId, ancestry, synonymNodeHandler);
-        if(success)
-            logger.debug("created original node successfully");
-        else
-            logger.debug("Failure in the creation of the original node");
-        return success;
-    }
-
-    private boolean handleNonExistingNode(String scientificName, String rank, String nodeId,
-                                          ArrayList<AncestorNode> currentAncestry, SynonymNodeHandler synonymNodeHandler){
-        boolean success;
-        //can be changed
-        int generatedNodeId = neo4jHandler.createIfNotExistNode_ancestryFormat(resourceId, scientificName, rank,
-                nodeId, currentAncestry);
-        if(synonymNodeHandler.orphanSynonyms.containsKey(nodeId)){
-            success = neo4jHandler.createRelationBetweenNodeAndSynonyms(generatedNodeId);
-        }else
-            success = true;
-        return success;
+    private int createOriginalNode(String scientificName, String taxonomicStatus, String acceptedNodeId, String rank,
+                                    int parentGeneratedNodeId, String nodeId){
+        int generatedNodeId;
+        if(isSynonym(taxonomicStatus)){
+            logger.debug("The node is synonym");
+            SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
+            generatedNodeId = synonymNodeHandler.handleSynonymNode(nodeId, scientificName, rank, acceptedNodeId);
+        }else{
+            logger.debug("The node is not synonym");
+            generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
+                    neo4jHandler);
+        }
+        return generatedNodeId;
     }
 }

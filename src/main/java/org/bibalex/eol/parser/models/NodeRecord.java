@@ -15,7 +15,7 @@ public class NodeRecord {
     ArrayList<MeasurementOrFact> measurementOrFacts;
     ArrayList<Media> media;
     String generatedNodeId;
-    Relation relation;
+    Taxon taxon;
 
     public NodeRecord(String taxonId, int resourceId) {
         this.taxonId = taxonId;
@@ -34,12 +34,12 @@ public class NodeRecord {
         return associations;
     }
 
-    public Relation getRelation() {
-        return relation;
+    public Taxon getRelation() {
+        return taxon;
     }
 
-    public void setRelation(Relation relation) {
-        this.relation = relation;
+    public void setRelation(Taxon taxon) {
+        this.taxon = taxon;
     }
 
     public void setAssociations(ArrayList<Association> associations) {

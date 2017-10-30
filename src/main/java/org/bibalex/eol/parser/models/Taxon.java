@@ -17,10 +17,11 @@ public class Taxon {
     String namePublishedIn;
     String referenceId;
     String pageEolId;
+    String acceptedNodeId;
 
     public Taxon(String identifier, String scientificName, String parentTaxonId, String kingdom, String phylum, String taxonClass, String order,
                  String family, String genus, String taxonRank, String furtherInformationURI, String taxonomicStatus, String taxonRemarks,
-                 String namePublishedIn, String referenceId, String pageEolId) {
+                 String namePublishedIn, String referenceId, String pageEolId, String acceptedNodeId) {
         this.identifier = identifier;
         this.scientificName = scientificName;
         this.parentTaxonId = parentTaxonId;
@@ -37,6 +38,16 @@ public class Taxon {
         this.namePublishedIn = namePublishedIn;
         this.referenceId = referenceId;
         this.pageEolId = pageEolId;
+        this.acceptedNodeId = acceptedNodeId;
+
+    }
+
+    public String getAcceptedNodeId() {
+        return acceptedNodeId;
+    }
+
+    public void setAcceptedNodeId(String acceptedNodeId) {
+        this.acceptedNodeId = acceptedNodeId;
     }
 
     public String getIdentifier() {

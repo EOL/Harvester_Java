@@ -12,48 +12,42 @@ public class SynonymNodeHandler {
 
     private Neo4jHandler neo4jHandler;
     private int resourceId;
-    private int currentNodeGeneratedId;
     public HashMap<String, Integer> orphanSynonyms;
+    private static final String placeholder = "placeholder";
     private static final Logger logger = LoggerFactory.getLogger(SynonymNodeHandler.class);
 
-    public SynonymNodeHandler(int resourceId, int currentNodeGeneratedId){
-        this.neo4jHandler = new Neo4jHandler();
+    public SynonymNodeHandler(int resourceId, Neo4jHandler neo4jHandler){
+        this.neo4jHandler = neo4jHandler;
         this.resourceId = resourceId;
-        this.currentNodeGeneratedId = currentNodeGeneratedId;
         this.orphanSynonyms = new HashMap<>();
     }
 
-    public boolean isSynonym(String taxonomicStatus){
-        //TODO implement isSynonym method
-        return true;
+    public int handleSynonymNode(String nodeId, String scientificName, String rank, String acceptedNodeId){
+        int acceptedNodeGeneratedId = neo4jHandler.getNodeIfExist(acceptedNodeId, resourceId);
+        int synonymNodeGeneratedId;
+        if(acceptedNodeGeneratedId <= 0)
+            acceptedNodeGeneratedId = handleSynonym_acceptedNodeNotExist(acceptedNodeId);
+        synonymNodeGeneratedId = createSynonymIfNotExist(nodeId, scientificName, rank, acceptedNodeId,
+                acceptedNodeGeneratedId);
+        return synonymNodeGeneratedId;
     }
 
-    public boolean handleSynonymNode(String acceptedNodeId, String rank){
-        boolean success;
-        boolean existsBefore = neo4jHandler.searchAcceptedNode(acceptedNodeId);
-        if(existsBefore){
-            logger.debug("Accepted Node exists before");
-            success = handleSynonym_parentExist(acceptedNodeId, rank);
-        }else{
-            logger.debug("Accepted Node does not exist before");
-            success = handleSynonym_parentNotExist(acceptedNodeId, rank);
+    private int createSynonymIfNotExist(String nodeId, String scientificName, String rank, String acceptedNodeId,
+                                        int acceptedNodeGeneratedId){
+        int generatedNodeId = neo4jHandler.getSynonymNodeIfExist(nodeId, scientificName, resourceId, acceptedNodeId,
+                acceptedNodeGeneratedId);
+        if(generatedNodeId <= 0){
+            generatedNodeId = neo4jHandler.createSynonymNode(resourceId, nodeId, scientificName, rank, acceptedNodeId,
+                    acceptedNodeGeneratedId);
         }
-        if(success)
-            logger.debug("created the node in Neo4j and add the relationship successfully");
-        else
-            logger.debug("Failure in the creation of the node in Neo4j OR adding the relationship");
-        return success;
+        return generatedNodeId;
     }
 
-    private boolean handleSynonym_parentExist(String acceptedNodeId, String rank){
-        int acceptedNodeGeneratedId = neo4jHandler.createNode_synonym(resourceId, acceptedNodeId, rank);
-        return neo4jHandler.addSynonymRelationship(currentNodeGeneratedId, acceptedNodeGeneratedId);
-    }
-
-    private boolean handleSynonym_parentNotExist(String acceptedNodeId, String rank){
-        int acceptedNodeGeneratedId = neo4jHandler.createNode_synonym(resourceId, acceptedNodeId, rank);
+    private int handleSynonym_acceptedNodeNotExist(String acceptedNodeId){
+        int acceptedNodeGeneratedId = neo4jHandler.createAcceptedNode(resourceId, acceptedNodeId, placeholder, "",
+                0);
         orphanSynonyms.put(acceptedNodeId, acceptedNodeGeneratedId);
-        return true;
+        return acceptedNodeGeneratedId;
     }
 
 }
