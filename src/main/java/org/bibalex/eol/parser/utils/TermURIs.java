@@ -123,5 +123,10 @@ public class TermURIs {
     public static final String eolPageTerm = "http://eol.org/schema/EOLid";
 
     public static final String furtherInformationURL = "http://rs.tdwg.org/ac/terms/furtherInformationURL";
+    public static final String canonicalNameURL = "http://rs.gbif.org/terms/1.0/canonicalName";
+    public static final String scientificNameAuthorship = "http://rs.tdwg.org/dwc/terms/scientificNameAuthorship";
+    public static final String scientificNameID = "http://rs.tdwg.org/dwc/terms/scientificNameID";
+    public static final String datasetID = "http://rs.tdwg.org/dwc/terms/datasetID";
+    public static final String eolIdAnnotations = "http://eol.org/schema/EOLidAnnotations";
 }
 

@@ -102,31 +102,31 @@ public class DwcaParser {
 
         buildGraph(resourceId);
 
-//        for (StarRecord rec : dwca) {
-//            NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID), resourceId);
-//
-//            Taxon taxon = parseTaxon(rec);
-//            if(taxon != null)
-//                tableRecord.setRelation(taxon);
-//
-//            if (rec.hasExtension(GbifTerm.VernacularName)) {
-//                tableRecord.setVernaculars(parseVernacularNames(rec));
-//            }
-//            if (rec.hasExtension(CommonTerms.occurrenceTerm)) {
-//                tableRecord.setOccurrences(parseOccurrences(rec));
-//            }
-//            if (rec.hasExtension(CommonTerms.mediaTerm)) {
-//                tableRecord.setMedia(parseMedia(rec, tableRecord));
-//            }
-//
-//            adjustReferences(tableRecord);
-//
-//            //Send to HBASE
-//            callHBase(tableRecord);
-//            ////////
-//            printRecord(tableRecord);
-//            System.out.println();
-//        }
+        for (StarRecord rec : dwca) {
+            NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID), resourceId);
+
+            Taxon taxon = parseTaxon(rec);
+            if(taxon != null)
+                tableRecord.setTaxon(taxon);
+
+            if (rec.hasExtension(GbifTerm.VernacularName)) {
+                tableRecord.setVernaculars(parseVernacularNames(rec));
+            }
+            if (rec.hasExtension(CommonTerms.occurrenceTerm)) {
+                tableRecord.setOccurrences(parseOccurrences(rec));
+            }
+            if (rec.hasExtension(CommonTerms.mediaTerm)) {
+                tableRecord.setMedia(parseMedia(rec, tableRecord));
+            }
+
+            adjustReferences(tableRecord);
+
+            //Send to HBASE
+            callHBase(tableRecord);
+            ////////
+            printRecord(tableRecord);
+            System.out.println();
+        }
     }
 
     private void buildGraph(int resourceId){
@@ -166,9 +166,9 @@ public class DwcaParser {
                 refIds.add(ref.getReferenceId());
         }
 
-        if (nodeRecord.getRelation().getReferenceId() != null &&
-                !refIds.contains(nodeRecord.getRelation().getReferenceId()))
-            addReference(nodeRecord, referencesMap.get(nodeRecord.getRelation().getReferenceId()));
+        if (nodeRecord.getTaxon().getReferenceId() != null &&
+                !refIds.contains(nodeRecord.getTaxon().getReferenceId()))
+            addReference(nodeRecord, referencesMap.get(nodeRecord.getTaxon().getReferenceId()));
 
         if (nodeRecord.getMedia() != null) {
             for (Media media : nodeRecord.getMedia()) {
@@ -272,7 +272,13 @@ public class DwcaParser {
                 record.core().value(CommonTerms.furtherInformationURL), record.core().value(DwcTerm.taxonomicStatus),
                 record.core().value(DwcTerm.taxonRemarks), record.core().value(DwcTerm.namePublishedIn),
                 record.core().value(CommonTerms.referenceIDTerm), record.core().value(CommonTerms.eolPageTerm),
-                record.core().value(DwcTerm.acceptedNameUsageID));
+                record.core().value(DwcTerm.acceptedNameUsageID), record.core().value(CommonTerms.sourceTerm),
+                record.core().value(TermFactory.instance().findTerm(TermURIs.canonicalNameURL)),
+                record.core().value(TermFactory.instance().findTerm(TermURIs.scientificNameAuthorship)),
+                record.core().value(TermFactory.instance().findTerm(TermURIs.scientificNameID)),
+                record.core().value(TermFactory.instance().findTerm(TermURIs.datasetID)),
+                record.core().value(TermFactory.instance().findTerm(TermURIs.eolIdAnnotations))
+                );
         return taxonData;
     }
 
@@ -408,7 +414,7 @@ public class DwcaParser {
         System.out.print("===================================================");
         System.out.print("===================================================");
         System.out.println("-------------scientific name---------------");
-        System.out.println(nodeRecord.getRelation().getScientificName());
+        System.out.println(nodeRecord.getTaxon().getScientificName());
         System.out.println(" " + nodeRecord.getTaxonId());
         System.out.println("-------------Media---------------");
         if (nodeRecord.getMedia() != null && nodeRecord.getMedia().size() > 0)
@@ -466,7 +472,7 @@ public class DwcaParser {
             System.out.println("Failure");
         }
         DwcaParser dwcaP = new DwcaParser(dwcArchive);
-        dwcaP.prepareNodesRecord(1);
+        dwcaP.prepareNodesRecord(3456);
 //        dwcaP.callHBase(new NodeRecord("name", "1", 1));
 
 

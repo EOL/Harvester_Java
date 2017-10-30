@@ -18,10 +18,17 @@ public class Taxon {
     String referenceId;
     String pageEolId;
     String acceptedNodeId;
+    String source;
+    String canonicalName;
+    String scientificNameAuthorship;
+    String scientificNameID;
+    String datasetId;
+    String eolIdAnnotations;
 
     public Taxon(String identifier, String scientificName, String parentTaxonId, String kingdom, String phylum, String taxonClass, String order,
                  String family, String genus, String taxonRank, String furtherInformationURI, String taxonomicStatus, String taxonRemarks,
-                 String namePublishedIn, String referenceId, String pageEolId, String acceptedNodeId) {
+                 String namePublishedIn, String referenceId, String pageEolId, String acceptedNodeId, String source, String canonicalName,
+                 String scientificNameAuthorship, String scientificNameID, String datasetId, String eolIdAnnotations) {
         this.identifier = identifier;
         this.scientificName = scientificName;
         this.parentTaxonId = parentTaxonId;
@@ -39,7 +46,60 @@ public class Taxon {
         this.referenceId = referenceId;
         this.pageEolId = pageEolId;
         this.acceptedNodeId = acceptedNodeId;
+        this.source = source;
+        this.canonicalName = canonicalName;
+        this.scientificNameAuthorship = scientificNameAuthorship;
+        this.scientificNameID = scientificNameID;
+        this.datasetId = datasetId;
+        this.eolIdAnnotations = eolIdAnnotations;
+    }
 
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getCanonicalName() {
+        return canonicalName;
+    }
+
+    public void setCanonicalName(String canonicalName) {
+        this.canonicalName = canonicalName;
+    }
+
+    public String getScientificNameAuthorship() {
+        return scientificNameAuthorship;
+    }
+
+    public void setScientificNameAuthorship(String scientificNameAuthorship) {
+        this.scientificNameAuthorship = scientificNameAuthorship;
+    }
+
+    public String getScientificNameID() {
+        return scientificNameID;
+    }
+
+    public void setScientificNameID(String scientificNameID) {
+        this.scientificNameID = scientificNameID;
+    }
+
+    public String getDatasetId() {
+        return datasetId;
+    }
+
+    public void setDatasetId(String datasetId) {
+        this.datasetId = datasetId;
+    }
+
+    public String getEolIdAnnotations() {
+        return eolIdAnnotations;
+    }
+
+    public void setEolIdAnnotations(String eolIdAnnotations) {
+        this.eolIdAnnotations = eolIdAnnotations;
     }
 
     public String getAcceptedNodeId() {

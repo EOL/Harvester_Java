@@ -34,11 +34,11 @@ public class NodeRecord {
         return associations;
     }
 
-    public Taxon getRelation() {
+    public Taxon getTaxon() {
         return taxon;
     }
 
-    public void setRelation(Taxon taxon) {
+    public void setTaxon(Taxon taxon) {
         this.taxon = taxon;
     }
 
