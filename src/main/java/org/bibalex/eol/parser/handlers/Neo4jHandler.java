@@ -26,7 +26,7 @@ public class Neo4jHandler {
     /**
      * General Methods
      */
-    public boolean createRelationBetweenNodeAndSynonyms(int acceptedNodeGeneratedId){
+    public boolean createRelationBetweenNodeAndSynonyms(int acceptedNodeGeneratedId, int synonymNodeId){
         //TODO call neo4j to adjust the relations between the accepted node and its synonyms
         return true;
     }

@@ -3,6 +3,7 @@ package org.bibalex.eol.parser.handlers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -12,7 +13,7 @@ public class SynonymNodeHandler {
 
     private Neo4jHandler neo4jHandler;
     private int resourceId;
-    public HashMap<String, Integer> orphanSynonyms;
+    public HashMap<String, ArrayList<Integer>> orphanSynonyms;
     private static final String placeholder = "placeholder";
     private static final Logger logger = LoggerFactory.getLogger(SynonymNodeHandler.class);
 
@@ -25,10 +26,18 @@ public class SynonymNodeHandler {
     public int handleSynonymNode(String nodeId, String scientificName, String rank, String acceptedNodeId){
         int acceptedNodeGeneratedId = neo4jHandler.getNodeIfExist(acceptedNodeId, resourceId);
         int synonymNodeGeneratedId;
-        if(acceptedNodeGeneratedId <= 0)
+        boolean acceptedNotExist = false;
+        if(acceptedNodeGeneratedId <= 0) {
+            acceptedNotExist = true;
             acceptedNodeGeneratedId = handleSynonym_acceptedNodeNotExist(acceptedNodeId);
+        }
         synonymNodeGeneratedId = createSynonymIfNotExist(nodeId, scientificName, rank, acceptedNodeId,
                 acceptedNodeGeneratedId);
+        if(acceptedNotExist) {
+            ArrayList<Integer> synonyms = orphanSynonyms.get(acceptedNodeId);
+            synonyms.add(synonymNodeGeneratedId);
+            orphanSynonyms.put(acceptedNodeId, synonyms);
+        }
         return synonymNodeGeneratedId;
     }
 
@@ -46,7 +55,7 @@ public class SynonymNodeHandler {
     private int handleSynonym_acceptedNodeNotExist(String acceptedNodeId){
         int acceptedNodeGeneratedId = neo4jHandler.createAcceptedNode(resourceId, acceptedNodeId, placeholder, "",
                 0);
-        orphanSynonyms.put(acceptedNodeId, acceptedNodeGeneratedId);
+        orphanSynonyms.put(acceptedNodeId, new ArrayList<>());
         return acceptedNodeGeneratedId;
     }
 

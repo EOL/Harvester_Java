@@ -50,7 +50,9 @@ public abstract class Format {
         SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
         if(synonymNodeHandler.orphanSynonyms.containsKey(nodeId)) {
             logger.debug("The accepted node was mentioned before");
-            return neo4jHandler.createRelationBetweenNodeAndSynonyms(generatedNodeId);
+            ArrayList<Integer> synonyms = synonymNodeHandler.orphanSynonyms.get(nodeId);
+            for(Integer synonymGeneratedId : synonyms)
+                neo4jHandler.createRelationBetweenNodeAndSynonyms(generatedNodeId, synonymGeneratedId);
         }
         return true;
     }
