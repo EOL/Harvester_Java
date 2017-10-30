@@ -102,41 +102,45 @@ public class DwcaParser {
 
         buildGraph(resourceId);
 
-        for (StarRecord rec : dwca) {
-            NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID), resourceId);
-
-            Taxon taxon = parseTaxon(rec);
-            if(taxon != null)
-                tableRecord.setRelation(taxon);
-
-            if (rec.hasExtension(GbifTerm.VernacularName)) {
-                tableRecord.setVernaculars(parseVernacularNames(rec));
-            }
-            if (rec.hasExtension(CommonTerms.occurrenceTerm)) {
-                tableRecord.setOccurrences(parseOccurrences(rec));
-            }
-            if (rec.hasExtension(CommonTerms.mediaTerm)) {
-                tableRecord.setMedia(parseMedia(rec, tableRecord));
-            }
-
-            adjustReferences(tableRecord);
-
-            //Send to HBASE
-            callHBase(tableRecord);
-            ////////
-            printRecord(tableRecord);
-            System.out.println();
-        }
+//        for (StarRecord rec : dwca) {
+//            NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID), resourceId);
+//
+//            Taxon taxon = parseTaxon(rec);
+//            if(taxon != null)
+//                tableRecord.setRelation(taxon);
+//
+//            if (rec.hasExtension(GbifTerm.VernacularName)) {
+//                tableRecord.setVernaculars(parseVernacularNames(rec));
+//            }
+//            if (rec.hasExtension(CommonTerms.occurrenceTerm)) {
+//                tableRecord.setOccurrences(parseOccurrences(rec));
+//            }
+//            if (rec.hasExtension(CommonTerms.mediaTerm)) {
+//                tableRecord.setMedia(parseMedia(rec, tableRecord));
+//            }
+//
+//            adjustReferences(tableRecord);
+//
+//            //Send to HBASE
+//            callHBase(tableRecord);
+//            ////////
+//            printRecord(tableRecord);
+//            System.out.println();
+//        }
     }
 
     private void buildGraph(int resourceId){
+        System.out.println("BUILD");
         ArrayList<Taxon> taxaList = new ArrayList<>();
         int i = 0;
         boolean parentFormat = dwca.getCore().hasTerm(DwcTerm.parentNameUsageID);
+        logger.debug("parent format: " + parentFormat);
         Format format = parentFormat ? new ParentFormat(resourceId) : new AncestryFormat(resourceId);
 
         for (StarRecord rec : dwca) {
+            logger.debug("for loop i is: " + i);
             if (i >= batchSize){
+                logger.debug("create batch: " + parentFormat);
                 format.handleLines(taxaList);
                 i = 0;
                 taxaList = new ArrayList<>();
@@ -145,6 +149,7 @@ public class DwcaParser {
                 taxaList.add(parseTaxon(rec));
             }
         }
+        format.handleLines(taxaList);
     }
 
     private void callHBase(NodeRecord nodeRecord){
