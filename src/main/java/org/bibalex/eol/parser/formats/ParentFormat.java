@@ -81,4 +81,11 @@ public class ParentFormat extends Format {
         if(missingParents.contains(nodeId))
             missingParents.remove(nodeId);
     }
+
+    public void deleteTaxonFile(String nodeID){
+        if(deleteTaxon(nodeID, neo4jHandler)){
+            neo4jHandler.deleteNodeWithoutRlink(nodeID);
+        }
+
+    }
 }

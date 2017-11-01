@@ -95,4 +95,11 @@ public class AncestryFormat extends Format{
         }
         return generatedNodeId;
     }
+
+    public void deleteTaxonFile(String nodeID){
+        if(deleteTaxon(nodeID, neo4jHandler)){
+            neo4jHandler.markNodeAsPlaceholder(nodeID);
+        }
+
+    }
 }

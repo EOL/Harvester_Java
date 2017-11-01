@@ -57,5 +57,26 @@ public abstract class Format {
         return true;
     }
 
+    protected boolean deleteTaxon(String nodeId, Neo4jHandler neo4jHandler){
+        if (neo4jHandler.checkForChildren(nodeId)){
+            return true;
+        }
+        else{
+            deleteNodeHasNoChildren(String nodeId, Neo4jHandler neo4jHandler);
+        }
+        return false;
+    }
+
+    private void deleteNodeHasNoChildren(String nodeId, Neo4jHandler neo4jHandler){
+        String parent_id = neo4jHandler.deleteNode(nodeId);
+        //then delete from H-base
+        if(!neo4jHandler.checkForSibling(nodeId)){
+            if(!neo4jHandler.nodeHasTaxonID(parent_id)){
+                deleteNodeHasNoChildren(nodeId, neo4jHandler);
+            }
+        }
+
+    }
+
 
 }
