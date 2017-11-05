@@ -1,5 +1,7 @@
 package org.bibalex.eol.parser.models;
 
+import java.util.ArrayList;
+
 public class Taxon {
     String identifier;
     String scientificName;
@@ -25,6 +27,7 @@ public class Taxon {
     String datasetId;
     String eolIdAnnotations;
     String deltaStatus;
+    ArrayList<String> guids;
 
     public Taxon(String identifier, String scientificName, String parentTaxonId, String kingdom, String phylum, String taxonClass, String order,
                  String family, String genus, String taxonRank, String furtherInformationURI, String taxonomicStatus, String taxonRemarks,
@@ -53,6 +56,14 @@ public class Taxon {
         this.scientificNameID = scientificNameID;
         this.datasetId = datasetId;
         this.eolIdAnnotations = eolIdAnnotations;
+    }
+
+    public ArrayList<String> getGuids() {
+        return guids;
+    }
+
+    public void setGuids(ArrayList<String> guids) {
+        this.guids = guids;
     }
 
     public String getDeltaStatus() {
