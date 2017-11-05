@@ -59,6 +59,16 @@ public class Neo4jHandler {
         return 1;
     }
 
+    public boolean hasChildren (String nodeId){
+        //TODO check if node has childern or not
+        return false;
+    }
+
+    public boolean hasSibling (String nodeID){
+        //TODO check if node has siblings
+        return true;
+    }
+
     public boolean nodeHasTaxonID(String nodeId) {
         //TODO check if node has taxon_id or not
         return true;
