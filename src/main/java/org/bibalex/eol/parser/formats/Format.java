@@ -73,10 +73,8 @@ public abstract class Format {
         if(!neo4jHandler.hasSibling(nodeId) &&
             !neo4jHandler.nodeHasTaxonID(parentID)){
                 deleteNodeHasNoChildren(parentID, neo4jHandler);
-            }
+
         }
 
     }
-
-
 }
