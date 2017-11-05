@@ -59,12 +59,12 @@ public class Neo4jHandler {
         return 1;
     }
 
-    public boolean checkForChildren (String nodeId){
+    public boolean hasChildren (String nodeId){
         //TODO check if node has childern or not
         return false;
     }
 
-    public boolean checkForSibling (String nodeID){
+    public boolean hasSibling (String nodeID){
         //TODO check if node has siblings
         return true;
     }
@@ -77,10 +77,6 @@ public class Neo4jHandler {
     public boolean nodeHasTaxonID(String nodeId) {
         //TODO check if node has taxon_id or not
         return true;
-    }
-
-    public void deleteNodeWithoutRlink(String nodeID) {
-        //TODO delete node without relink its children
     }
 
     public void markNodeAsPlaceholder(String nodeID) {

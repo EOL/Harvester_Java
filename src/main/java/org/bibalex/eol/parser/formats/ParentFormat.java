@@ -84,7 +84,7 @@ public class ParentFormat extends Format {
 
     public void deleteTaxonFile(String nodeID){
         if(deleteTaxon(nodeID, neo4jHandler)){
-            neo4jHandler.deleteNodeWithoutRlink(nodeID);
+            neo4jHandler.deleteNode(nodeID);
         }
 
     }
