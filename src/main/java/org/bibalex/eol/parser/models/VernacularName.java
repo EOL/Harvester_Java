@@ -9,6 +9,7 @@ public class VernacularName {
     //String as it will be saved to Hbase as string and it is read from file as string. No need to save it as boolean
     String isPreferred;
     String taxonRemarks;
+    String deltaStatus;
 
     public VernacularName(String name, String source, String language, String locality, String countryCode, String isPreferred, String taxonRemarks) {
         this.name = name;
@@ -23,6 +24,14 @@ public class VernacularName {
     public void setName(String name) {
 
         this.name = name;
+    }
+
+    public String getDeltaStatus() {
+        return deltaStatus;
+    }
+
+    public void setDeltaStatus(String deltaStatus) {
+        this.deltaStatus = deltaStatus;
     }
 
     public void setSource(String source) {

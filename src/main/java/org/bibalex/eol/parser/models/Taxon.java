@@ -24,6 +24,7 @@ public class Taxon {
     String scientificNameID;
     String datasetId;
     String eolIdAnnotations;
+    String deltaStatus;
 
     public Taxon(String identifier, String scientificName, String parentTaxonId, String kingdom, String phylum, String taxonClass, String order,
                  String family, String genus, String taxonRank, String furtherInformationURI, String taxonomicStatus, String taxonRemarks,
@@ -52,6 +53,14 @@ public class Taxon {
         this.scientificNameID = scientificNameID;
         this.datasetId = datasetId;
         this.eolIdAnnotations = eolIdAnnotations;
+    }
+
+    public String getDeltaStatus() {
+        return deltaStatus;
+    }
+
+    public void setDeltaStatus(String deltaStatus) {
+        this.deltaStatus = deltaStatus;
     }
 
     public String getSource() {

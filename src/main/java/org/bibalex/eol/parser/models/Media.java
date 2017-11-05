@@ -33,6 +33,7 @@ public class Media {
     String longitude;
     String altitude;
     String referenceId;
+    String deltaStatus;
 
     public Media(String mediaId, String type, String subType, String format, String subject, String title, String description, String accessURI,
                  String thumbnailURI, String furtherInformationURI, String derivedFrom, String createDate, String modified, String language, String rating,
@@ -73,6 +74,14 @@ public class Media {
     public String getMediaId() {
 
         return mediaId;
+    }
+
+    public String getDeltaStatus() {
+        return deltaStatus;
+    }
+
+    public void setDeltaStatus(String deltaStatus) {
+        this.deltaStatus = deltaStatus;
     }
 
     public void setMediaId(String mediaId) {

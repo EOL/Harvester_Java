@@ -13,6 +13,7 @@ public class Association {
     String citation;
     String contributor;
     String referenceId;
+    String deltaStatus;
 
     public Association(String associationId, String occurrenceId, String associationType, String targetOccurrenceId, String determinedDate,
                        String determinedBy, String measurementMethod, String remarks, String source, String citation, String contributor, String referenceId) {
@@ -28,6 +29,14 @@ public class Association {
         this.citation = citation;
         this.contributor = contributor;
         this.referenceId = referenceId;
+    }
+
+    public String getDeltaStatus() {
+        return deltaStatus;
+    }
+
+    public void setDeltaStatus(String deltaStatus) {
+        this.deltaStatus = deltaStatus;
     }
 
     public String getAssociationId() {

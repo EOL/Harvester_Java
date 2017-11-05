@@ -14,6 +14,7 @@ public class Agent {
     String organization;
     String accountName;
     String openId;
+    String deltaStatus;
 
     public Agent(String agentId, String fullName, String firstName, String familyName, String role,
                  String email, String homepage, String logoURL, String project, String organization, String accountName, String openId) {
@@ -34,6 +35,14 @@ public class Agent {
     public String getAgentId() {
 
         return agentId;
+    }
+
+    public String getDeltaStatus() {
+        return deltaStatus;
+    }
+
+    public void setDeltaStatus(String deltaStatus) {
+        this.deltaStatus = deltaStatus;
     }
 
     public void setAgentId(String agentId) {

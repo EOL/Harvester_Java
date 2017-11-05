@@ -14,13 +14,19 @@ import java.util.ArrayList;
 public abstract class Format {
 
 //    protected static final String ancestorTaxonId = "placeholder";
+    private final static String acceptedNodesStatuses[] = {"accepted", "accepted name", "valid", "valid name",
+        "provisionally accepted name"};
     private static final Logger logger = LoggerFactory.getLogger(Format.class);
+//    private static ArrayList<String> acceptedNodesStatuses = Arrays.asList(accepted);
 
     public abstract void handleLines(ArrayList<Taxon> nodes);
 
     public static boolean isSynonym(String taxonomicStatus){
-        //TODO implement isSynonym method
-        return true;
+        for(String acceptedNodeStatus : acceptedNodesStatuses){
+            if(acceptedNodeStatus.equalsIgnoreCase(taxonomicStatus))
+                return true;
+        }
+        return false;
     }
 
     protected int handleNonSynonymNode(String scientificName, String rank, String nodeId, int resourceId,

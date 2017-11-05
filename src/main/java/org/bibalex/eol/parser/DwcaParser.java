@@ -206,46 +206,16 @@ public class DwcaParser {
         }
     }
 
-    private void adjustAgents(Media media, String agents) {
+    private ArrayList<Agent> adjustAgents(String agents) {
+        ArrayList<Agent> tempAgents = new ArrayList<>();
         if(agents != null && agents != "") {
             String[] agentIds = agents.split(";");
-            ArrayList<Agent> tempAgents = new ArrayList<>();
             for (String agentId : agentIds) {
                 tempAgents.add(agentsMap.get(agentId));
             }
-            media.setAgents(tempAgents);
         }
-//        ArrayList<Agent> agents = media.getAgents();
-//        ArrayList<String> agentsIds = new ArrayList<String>();
-
-//        if (agents != null) {
-//            for (Agent agent : agents)
-//                agentsIds.add(agent.getAgentId());
-//        }
-//
-//        for (Media media : nodeRecord.getMedia()) {
-//            if (media.getAgentId() != null && !media.getAgentId().equals("") &&
-//                    !agentsIds.contains(media.getAgentId()) &&
-//                    agentsMap.get(media.getAgentId()) != null) {
-//                System.out.println("=========================");
-//                System.out.println("=========================");
-//                System.out.println(media.getAgentId());
-//                System.out.println(agentsMap.get(media.getAgentId()));
-//                addAgent(nodeRecord, agentsMap.get(media.getAgentId()));
-//            }
-//        }
+        return tempAgents;
     }
-
-//    private void addAgent(NodeRecord nodeRecord, Agent agent) {
-//        ArrayList<Agent> agents = nodeRecord.getAgents();
-//        if (nodeRecord.getAgents() != null)
-//            agents.add(agent);
-//        else {
-//            agents = new ArrayList<Agent>();
-//            agents.add(agent);
-//            nodeRecord.setAgents(agents);
-//        }
-//    }
 
     private ArrayList<VernacularName> parseVernacularNames(StarRecord record) {
         ArrayList<VernacularName> vernaculars = new ArrayList<VernacularName>();
@@ -403,7 +373,7 @@ public class DwcaParser {
                     extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLonURI)),
                     extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaPosURI)),
                     extensionRecord.value(CommonTerms.referenceIDTerm));
-            adjustAgents(med, extensionRecord.value(CommonTerms.agentIDTerm));
+            med.setAgents(adjustAgents(extensionRecord.value(CommonTerms.agentIDTerm)));
             media.add(med);
         }
         return media;

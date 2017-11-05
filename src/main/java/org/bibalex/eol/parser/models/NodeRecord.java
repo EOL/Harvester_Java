@@ -16,10 +16,20 @@ public class NodeRecord {
     ArrayList<Media> media;
     String generatedNodeId;
     Taxon taxon;
+    String deltaStatus;
 
-    public NodeRecord(String taxonId, int resourceId) {
+    public NodeRecord(String taxonId, String generatedNodeId, int resourceId) {
         this.taxonId = taxonId;
+        this.generatedNodeId = generatedNodeId;
         this.resourceId = resourceId;
+    }
+
+    public String getDeltaStatus() {
+        return deltaStatus;
+    }
+
+    public void setDeltaStatus(String deltaStatus) {
+        this.deltaStatus = deltaStatus;
     }
 
     public int getResourceId() {

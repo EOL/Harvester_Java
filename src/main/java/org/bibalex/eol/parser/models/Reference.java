@@ -23,6 +23,7 @@ public class Reference {
     String url;
     String doi;
     String localityOfPublisher;
+    String deltaStatus;
 
     public Reference(String referenceId, String publicationType, String fullReference, String primaryTitle, String secondaryTitle,
                      String pages, String pageStart, String pageEnd, String volume, String edition, String publisher, String authorsList,
@@ -45,6 +46,14 @@ public class Reference {
         this.url = url;
         this.doi = doi;
         this.localityOfPublisher = localityOfPublisher;
+    }
+
+    public String getDeltaStatus() {
+        return deltaStatus;
+    }
+
+    public void setDeltaStatus(String deltaStatus) {
+        this.deltaStatus = deltaStatus;
     }
 
     public String getReferenceId() {

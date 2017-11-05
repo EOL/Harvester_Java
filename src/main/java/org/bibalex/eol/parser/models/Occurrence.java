@@ -28,6 +28,7 @@ public class Occurrence {
     String verbatimLatitude;
     String verbatimLongitude;
     String verbatimElevation;
+    String deltaStatus;
 
     public Occurrence(String occurrenceId, String eventId, String institutionCode, String collectionCode, String catalogNumber, String sex, String lifeStage,
                       String reproductiveCondition, String behavior, String establishmentMeans, String remarks, String countOfIndividuals,
@@ -67,6 +68,14 @@ public class Occurrence {
     public String getOccurrenceId() {
 
         return occurrenceId;
+    }
+
+    public String getDeltaStatus() {
+        return deltaStatus;
+    }
+
+    public void setDeltaStatus(String deltaStatus) {
+        this.deltaStatus = deltaStatus;
     }
 
     public void setOccurrenceId(String occurrenceId) {
