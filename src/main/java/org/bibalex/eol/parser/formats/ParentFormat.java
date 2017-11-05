@@ -107,8 +107,8 @@ public class ParentFormat extends Format {
             missingParents.add(newParentGeneratedNodeId);
         }
 
-        if(!neo4jHandler.nodeHasTaxonID(newParentGeneratedNodeId)){
-            neo4jHandler.deleteNode(newParentGeneratedNodeId);
+        if(//!neo4jHandler.nodeHasTaxonID(newParentGeneratedNodeId)){
+            //neo4jHandler.deleteNode(newParentGeneratedNodeId);
         }
 
     }

@@ -59,34 +59,6 @@ public class Neo4jHandler {
         return 1;
     }
 
-    public boolean hasChildren (String nodeId){
-        //TODO check if node has childern or not
-        return false;
-    }
-
-    public boolean checkForSibling (String nodeID){
-        //TODO check if node has siblings
-        return true;
-    }
-
-    public String deleteNode (String nodeID){
-        //TODO delete node and return its parent id
-        return "1";
-    }
-
-    public boolean nodeHasTaxonID(String nodeId) {
-        //TODO check if node has taxon_id or not
-        return true;
-    }
-
-    public void deleteNodeWithoutRelink(String nodeID) {
-        //TODO delete node without relink its children
-    }
-
-    public void markNodeAsPlaceholder(String nodeID) {
-        //TODO mark this node as placeholder
-    }
-
     public String getNodeByRank(String newScientificName, String rank, String ancestry) {
         //TODO search for this node if found return its id else return negative number
         return "-1";
