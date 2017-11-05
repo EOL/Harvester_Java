@@ -82,7 +82,7 @@ public class ParentFormat extends Format {
             missingParents.remove(nodeId);
     }
 
-    public void deleteTaxonFile(String nodeID){
+    public void deleteFromTaxonFile(String nodeID){
         if(deleteTaxon(nodeID, neo4jHandler)){
             neo4jHandler.deleteNode(nodeID);
         }
