@@ -96,6 +96,13 @@ public class AncestryFormat extends Format{
         return generatedNodeId;
     }
 
+    public void deleteFromTaxonFile(String nodeID){
+        if(deleteTaxon(nodeID, neo4jHandler)){
+            neo4jHandler.markNodeAsPlaceholder(nodeID);
+        }
+
+    }
+
     public void updateScientificName(String newScientificName, String oldScientificName, String rank, String ancestry){
         String nodeID = neo4jHandler.getNodeByRank(newScientificName, rank, ancestry);
 
@@ -114,6 +121,6 @@ public class AncestryFormat extends Format{
     public void updateAncestry(String scientificName, String rank, String oldAnsetry, String newAncestry){
         String nodeID = neo4jHandler.getNodeByRank(scientificName, rank, oldAnsetry);
         neo4jHandler.createBranch(nodeID, newAncestry);
-        //deleteFromTaxonFile(nodeID);
+        deleteFromTaxonFile(nodeID);
     }
 }
