@@ -1,10 +1,19 @@
 package org.bibalex.eol.parser.handlers;
 
+import org.bibalex.eol.handler.PropertiesHandler;
+import org.bibalex.eol.parser.models.Node;
+
 /**
  * Created by AmrMorad
  * This class will be used to call Neo4j and obtain the results
  */
 public class Neo4jHandler {
+
+    RestClientHandler restClientHandler;
+
+    public Neo4jHandler(){
+        restClientHandler = new RestClientHandler();
+    }
 
     /**
      * Methods for ancestry format
@@ -32,7 +41,7 @@ public class Neo4jHandler {
     }
 
     public int getNodeIfExist(String nodeId, int resourceId){
-        //TODO call Neo4j to get the node using parentUsageId and resourceId
+        //TODO call Neo4j to get the node using nodeId and resourceId
         return 1;
     }
 
@@ -44,6 +53,12 @@ public class Neo4jHandler {
     public int createAcceptedNode(int resourceId, String taxonId, String scientificName, String rank,
                                                  int parentGeneratedNodeId){
         //TODO call the neo4j and return the id
+        Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedNodeId);
+
+        String k = restClientHandler.doConnection(PropertiesHandler.getProperty("addEntryHBase"), node);
+        System.out.println("===============================");
+        System.out.println(k);
+        System.out.println("===============================");
         return 1;
     }
 

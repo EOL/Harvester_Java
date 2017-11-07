@@ -5,6 +5,7 @@ import org.bibalex.eol.handler.PropertiesHandler;
 import org.bibalex.eol.parser.formats.AncestryFormat;
 import org.bibalex.eol.parser.formats.Format;
 import org.bibalex.eol.parser.formats.ParentFormat;
+import org.bibalex.eol.parser.handlers.Neo4jHandler;
 import org.bibalex.eol.parser.handlers.RestClientHandler;
 import org.bibalex.eol.parser.models.*;
 import org.bibalex.eol.parser.utils.CommonTerms;
@@ -100,10 +101,17 @@ public class DwcaParser {
 
     public void prepareNodesRecord(int resourceId) {
 
-        buildGraph(resourceId);
+        Neo4jHandler neo4jHandler = new Neo4jHandler();
+        int generatedNodeId;
+
+//        buildGraph(resourceId);
 
         for (StarRecord rec : dwca) {
-            NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID), resourceId);
+
+            generatedNodeId = neo4jHandler.getNodeIfExist
+                    (rec.core().value(DwcTerm.taxonID), resourceId);
+            NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID),
+                    generatedNodeId + "", resourceId);
 
             Taxon taxon = parseTaxon(rec);
             if(taxon != null)
@@ -122,7 +130,7 @@ public class DwcaParser {
             adjustReferences(tableRecord);
 
             //Send to HBASE
-            callHBase(tableRecord);
+            callHBaseToCreate(tableRecord);
             ////////
             printRecord(tableRecord);
             System.out.println();
@@ -152,7 +160,7 @@ public class DwcaParser {
         format.handleLines(taxaList);
     }
 
-    private void callHBase(NodeRecord nodeRecord){
+    private void callHBaseToCreate(NodeRecord nodeRecord){
         RestClientHandler restClientHandler = new RestClientHandler();
         restClientHandler.doConnection(PropertiesHandler.getProperty("addEntryHBase"), nodeRecord);
     }
@@ -167,30 +175,42 @@ public class DwcaParser {
         }
 
         if (nodeRecord.getTaxon().getReferenceId() != null &&
-                !refIds.contains(nodeRecord.getTaxon().getReferenceId()))
-            addReference(nodeRecord, referencesMap.get(nodeRecord.getTaxon().getReferenceId()));
+                !refIds.contains(nodeRecord.getTaxon().getReferenceId())) {
+            String[] references = nodeRecord.getTaxon().getReferenceId().split(";");
+            for(String reference : references)
+                addReference(nodeRecord, referencesMap.get(reference));
+        }
 
         if (nodeRecord.getMedia() != null) {
             for (Media media : nodeRecord.getMedia()) {
                 if (media.getReferenceId() != null && !refIds.contains(media.getReferenceId()) &&
-                        referencesMap.get(media.getReferenceId()) != null)
-                    addReference(nodeRecord, referencesMap.get(media.getReferenceId()));
+                        referencesMap.get(media.getReferenceId()) != null){
+                    String[] references = media.getReferenceId().split(";");
+                    for(String reference : references)
+                        addReference(nodeRecord, referencesMap.get(reference));
+                }
             }
         }
 
         if (nodeRecord.getAssociations() != null) {
             for (Association association : nodeRecord.getAssociations()) {
                 if (association.getReferenceId() != null && !refIds.contains(association.getReferenceId()) &&
-                        referencesMap.get(association.getReferenceId()) != null)
-                    addReference(nodeRecord, referencesMap.get(association.getReferenceId()));
+                        referencesMap.get(association.getReferenceId()) != null){
+                    String[] references = association.getReferenceId().split(";");
+                    for(String reference : references)
+                        addReference(nodeRecord, referencesMap.get(reference));
+                }
             }
         }
 
         if (nodeRecord.getMeasurementOrFacts() != null) {
             for (MeasurementOrFact measurementOrFact : nodeRecord.getMeasurementOrFacts()) {
                 if (measurementOrFact.getReferenceId() != null && !refIds.contains(measurementOrFact.getReferenceId())
-                        && referencesMap.get(measurementOrFact.getReferenceId()) != null)
-                    addReference(nodeRecord, referencesMap.get(measurementOrFact.getReferenceId()));
+                        && referencesMap.get(measurementOrFact.getReferenceId()) != null){
+                    String[] references = measurementOrFact.getReferenceId().split(";");
+                    for(String reference : references)
+                        addReference(nodeRecord, referencesMap.get(reference));
+                }
             }
         }
     }
@@ -433,7 +453,7 @@ public class DwcaParser {
     public static void main(String[] args) throws IOException {
         Archive dwcArchive = null;
         PropertiesHandler.initializeProperties();
-        String path = "/home/ba/EOL_Recources/4.tar.gz";
+        String path = "/home/ba/EOL_Recources/EOL_dynamic_hierarchyV1Revised.tar.gz";
         try {
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
@@ -442,7 +462,7 @@ public class DwcaParser {
             System.out.println("Failure");
         }
         DwcaParser dwcaP = new DwcaParser(dwcArchive);
-        dwcaP.prepareNodesRecord(3456);
+        dwcaP.prepareNodesRecord(2);
 //        dwcaP.callHBase(new NodeRecord("name", "1", 1));
 
 

@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class RestClientHandler {
 
-    public void doConnection(String uri, NodeRecord nodeRecord){
+    public String doConnection(String uri, Object object){
         RestTemplate restTemplate;
         if(!uri.equalsIgnoreCase("")) {
             if(PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
@@ -48,24 +48,22 @@ public class RestClientHandler {
             headers.set("Accept", "application/json");
 
             // Pass the object and the needed headers
-            HttpEntity<NodeRecord> entity = new HttpEntity<NodeRecord>(nodeRecord, headers);
-
-            System.out.println("=====================");
-            System.out.println("=====================");
-            System.out.println(entity.getBody());
-            System.out.println("=====================");
-            System.out.println("=====================");
-
-            // Send the request as POST
-            ResponseEntity response = restTemplate.exchange(uri, HttpMethod.POST, entity, HbaseResult.class);
+            ResponseEntity response = null;
+            if(object instanceof NodeRecord) {
+                HttpEntity<NodeRecord> entity = new HttpEntity<NodeRecord>((NodeRecord) object, headers);
+                // Send the request as POST
+                response = restTemplate.exchange(uri, HttpMethod.POST, entity, HbaseResult.class);
+            }
             if (response.getStatusCode() == HttpStatus.OK) {
                 System.out.println(response.getBody());
+                return ((HbaseResult)response.getBody()).getStatus()+"";
             } else {
                 System.out.println("returned code(" + response.getStatusCode() + ")");
             }
         }else{
-            System.out.println("Empty uri for hbase");
+            System.out.println("Empty uri");
         }
+        return "";
     }
 
     private RestTemplate handleProxy(String proxyUrl, int port, String username, String password){
