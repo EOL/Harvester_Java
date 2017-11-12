@@ -42,24 +42,33 @@ public class Neo4jHandler {
 
     public int getNodeIfExist(String nodeId, int resourceId){
         //TODO call Neo4j to get the node using nodeId and resourceId
-        return 1;
+        Node node = new Node(resourceId, nodeId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNeo4jNode"), node);
+        System.out.println("===============================");
+        System.out.println(response);
+        System.out.println("===============================");
+        return Integer.parseInt(response);
     }
 
     public int getAcceptedNodeIfExist(String nodeId, String scientificName, int resourceId){
         //TODO call neo4j and return true if it exists; false otherwise
-        return 1;
+        Node node = new Node(nodeId, scientificName, resourceId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNeo4jNode"), node);
+        System.out.println("===============================");
+        System.out.println(response);
+        System.out.println("===============================");
+        return Integer.parseInt(response);
     }
 
     public int createAcceptedNode(int resourceId, String taxonId, String scientificName, String rank,
                                                  int parentGeneratedNodeId){
         //TODO call the neo4j and return the id
         Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedNodeId);
-
-        String k = restClientHandler.doConnection(PropertiesHandler.getProperty("addEntryHBase"), node);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNeo4jNode"), node);
         System.out.println("===============================");
-        System.out.println(k);
+        System.out.println(response);
         System.out.println("===============================");
-        return 1;
+        return Integer.parseInt(response);
     }
 
     public int createSynonymNode(int resourceId, String nodeId, String scientificName, String rank,

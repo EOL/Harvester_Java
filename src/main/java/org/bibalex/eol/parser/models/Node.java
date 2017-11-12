@@ -36,6 +36,18 @@ public class Node {
         this.parentGeneratedNodeId = parentGeneratedNodeId;
     }
 
+    public Node(int resourceId, String nodeId){
+        this.resourceId = resourceId;
+        this.nodeId = nodeId;
+    }
+
+    public Node(String nodeId, String scientificName, int resourceId){
+        this.resourceId = resourceId;
+        this.nodeId = nodeId;
+        this.scientificName = scientificName;
+    }
+
+
     public String getNodeId() {
         return nodeId;
     }

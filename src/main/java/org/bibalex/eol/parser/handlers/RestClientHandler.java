@@ -10,6 +10,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.ProxyAuthenticationStrategy;
 import org.bibalex.eol.handler.PropertiesHandler;
 import org.bibalex.eol.parser.models.HbaseResult;
+import org.bibalex.eol.parser.models.Node;
 import org.bibalex.eol.parser.models.NodeRecord;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -37,6 +38,12 @@ public class RestClientHandler {
                 restTemplate = new RestTemplate();
             }
 
+            // added to solve the max connections problem
+//            SimpleClientHttpRequestFactory rf =
+//                    (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
+//            rf.setReadTimeout(1 * 10000);
+//            rf.setConnectTimeout(1 * 10000);
+
             //create the json converter
             MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
             List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
@@ -53,13 +60,28 @@ public class RestClientHandler {
                 HttpEntity<NodeRecord> entity = new HttpEntity<NodeRecord>((NodeRecord) object, headers);
                 // Send the request as POST
                 response = restTemplate.exchange(uri, HttpMethod.POST, entity, HbaseResult.class);
+
+                if (response.getStatusCode() == HttpStatus.OK) {
+                    System.out.println(response.getBody());
+                    return ((HbaseResult)response.getBody()).getStatus()+"";
+                } else {
+                    System.out.println("returned code(" + response.getStatusCode() + ")");
+                }
+
+            }else if(object instanceof Node) {
+                HttpEntity<Node> entity = new HttpEntity<Node>((Node) object, headers);
+                // Send the request as POST
+                response = restTemplate.exchange(uri, HttpMethod.POST, entity, Integer.class);
+
+                if (response.getStatusCode() == HttpStatus.OK) {
+                    System.out.println(response.getBody());
+                    return Integer.toString((Integer)response.getBody());
+                } else {
+                    System.out.println("returned code(" + response.getStatusCode() + ")");
+                }
+
             }
-            if (response.getStatusCode() == HttpStatus.OK) {
-                System.out.println(response.getBody());
-                return ((HbaseResult)response.getBody()).getStatus()+"";
-            } else {
-                System.out.println("returned code(" + response.getStatusCode() + ")");
-            }
+
         }else{
             System.out.println("Empty uri");
         }

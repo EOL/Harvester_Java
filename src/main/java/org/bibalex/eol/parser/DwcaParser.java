@@ -104,7 +104,7 @@ public class DwcaParser {
         Neo4jHandler neo4jHandler = new Neo4jHandler();
         int generatedNodeId;
 
-//        buildGraph(resourceId);
+        buildGraph(resourceId);
 
         for (StarRecord rec : dwca) {
 
@@ -453,7 +453,9 @@ public class DwcaParser {
     public static void main(String[] args) throws IOException {
         Archive dwcArchive = null;
         PropertiesHandler.initializeProperties();
-        String path = "/home/ba/EOL_Recources/EOL_dynamic_hierarchyV1Revised.tar.gz";
+//        String path = "/home/ba/EOL_Recources/EOL_dynamic_hierarchyV1Revised.tar.gz";
+//        String path = "/home/ba/EOL_Recources/4.tar.gz";
+        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
         try {
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
@@ -462,7 +464,7 @@ public class DwcaParser {
             System.out.println("Failure");
         }
         DwcaParser dwcaP = new DwcaParser(dwcArchive);
-        dwcaP.prepareNodesRecord(2);
+        dwcaP.prepareNodesRecord(26);
 //        dwcaP.callHBase(new NodeRecord("name", "1", 1));
 
 
