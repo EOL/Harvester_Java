@@ -38,12 +38,6 @@ public class RestClientHandler {
                 restTemplate = new RestTemplate();
             }
 
-            // added to solve the max connections problem
-//            SimpleClientHttpRequestFactory rf =
-//                    (SimpleClientHttpRequestFactory) restTemplate.getRequestFactory();
-//            rf.setReadTimeout(1 * 10000);
-//            rf.setConnectTimeout(1 * 10000);
-
             //create the json converter
             MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
             List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
@@ -72,6 +66,8 @@ public class RestClientHandler {
                 HttpEntity<Node> entity = new HttpEntity<Node>((Node) object, headers);
                 // Send the request as POST
                 response = restTemplate.exchange(uri, HttpMethod.POST, entity, Integer.class);
+                System.out.println("IIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+                System.out.println(response);
 
                 if (response.getStatusCode() == HttpStatus.OK) {
                     System.out.println(response.getBody());

@@ -47,6 +47,11 @@ public class Node {
         this.scientificName = scientificName;
     }
 
+    public Node(String parentNodeId, int resourceId){
+        this.resourceId = resourceId;
+        this.parentNodeId = parentNodeId;
+    }
+
 
     public String getNodeId() {
         return nodeId;

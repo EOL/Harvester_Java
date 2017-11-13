@@ -24,9 +24,9 @@ public abstract class Format {
     public static boolean isSynonym(String taxonomicStatus){
         for(String acceptedNodeStatus : acceptedNodesStatuses){
             if(acceptedNodeStatus.equalsIgnoreCase(taxonomicStatus))
-                return true;
+                return false;
         }
-        return false;
+        return true;
     }
 
     protected int handleNonSynonymNode(String scientificName, String rank, String nodeId, int resourceId,

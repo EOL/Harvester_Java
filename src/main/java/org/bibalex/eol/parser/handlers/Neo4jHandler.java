@@ -29,7 +29,12 @@ public class Neo4jHandler {
      */
     public int createParentWithPlaceholder(int resourceId, String parentUsageId){
         //TODO call neo4j and create the parent with placeholder
-        return 1;
+        Node node = new Node(parentUsageId, resourceId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createParentPlaceholder"), node);
+        System.out.println("===============================");
+        System.out.println("The node is " + response);
+        System.out.println("===============================");
+        return Integer.parseInt(response);
     }
 
     /**
@@ -43,9 +48,9 @@ public class Neo4jHandler {
     public int getNodeIfExist(String nodeId, int resourceId){
         //TODO call Neo4j to get the node using nodeId and resourceId
         Node node = new Node(resourceId, nodeId);
-        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNeo4jNode"), node);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("getNeo4jNode"), node);
         System.out.println("===============================");
-        System.out.println(response);
+        System.out.println("The node is " + response);
         System.out.println("===============================");
         return Integer.parseInt(response);
     }
@@ -53,9 +58,9 @@ public class Neo4jHandler {
     public int getAcceptedNodeIfExist(String nodeId, String scientificName, int resourceId){
         //TODO call neo4j and return true if it exists; false otherwise
         Node node = new Node(nodeId, scientificName, resourceId);
-        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNeo4jNode"), node);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("getAcceptedNode"), node);
         System.out.println("===============================");
-        System.out.println(response);
+        System.out.println("The accepted node is: " + response);
         System.out.println("===============================");
         return Integer.parseInt(response);
     }
@@ -66,7 +71,7 @@ public class Neo4jHandler {
         Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedNodeId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNeo4jNode"), node);
         System.out.println("===============================");
-        System.out.println(response);
+        System.out.println("A node is created with id " + response);
         System.out.println("===============================");
         return Integer.parseInt(response);
     }
