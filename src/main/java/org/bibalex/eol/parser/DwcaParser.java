@@ -1,6 +1,7 @@
 package org.bibalex.eol.parser;
 
 import org.apache.commons.io.FilenameUtils;
+import org.bibalex.eol.harvester.StorageLayerClient;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
 import org.bibalex.eol.parser.formats.AncestryFormat;
 import org.bibalex.eol.parser.formats.Format;
@@ -37,6 +38,7 @@ public class DwcaParser {
     //this is used to save the associations without target occurrence
     HashMap<String, Association> oneSidedAccoiationsMap;
     private static final Logger logger = LoggerFactory.getLogger(DwcaParser.class);
+    private int resourceID;
     int batchSize = 1000;
 
     public DwcaParser(Archive dwca) {
@@ -100,7 +102,7 @@ public class DwcaParser {
     }
 
     public void prepareNodesRecord(int resourceId) {
-
+        this.resourceID = resourceId;
         Neo4jHandler neo4jHandler = new Neo4jHandler();
         int generatedNodeId;
 
@@ -366,6 +368,12 @@ public class DwcaParser {
     private ArrayList<Media> parseMedia(StarRecord record, NodeRecord rec) {
         ArrayList<Media> media = new ArrayList<Media>();
         for (Record extensionRecord : record.extension(CommonTerms.mediaTerm)) {
+
+            ArrayList<String> paths = new ArrayList<String>();
+            paths.add(extensionRecord.value(CommonTerms.accessURITerm));
+            paths.add(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)));
+            String storageLayerPath =getMediaPath(resourceID, paths);
+
             Media med = new Media(extensionRecord.value(CommonTerms.identifierTerm),
                     extensionRecord.value(CommonTerms.typeTerm),
                     extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaSubtypeURI)),
@@ -395,13 +403,33 @@ public class DwcaParser {
                     extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLatURI)),
                     extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLonURI)),
                     extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaPosURI)),
-                    extensionRecord.value(CommonTerms.referenceIDTerm));
+                    extensionRecord.value(CommonTerms.referenceIDTerm), storageLayerPath);
             med.setAgents(adjustAgents(extensionRecord.value(CommonTerms.agentIDTerm)));
             media.add(med);
         }
         return media;
     }
 
+    public String getMediaPath(int resourceID, ArrayList<String> mediaFiles){
+        try {
+            StorageLayerClient client = new StorageLayerClient();
+            ArrayList<String> SLPaths = client.downloadMedia(String.valueOf(resourceID), mediaFiles);
+            return convertArrayListToString(SLPaths);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    private String convertArrayListToString (ArrayList<String> SLPaths){
+        String path = "";
+        for(int i=0; i<SLPaths.size();i++){
+            path += SLPaths.get(i);
+            if((i+1) != SLPaths.size())
+                path += ",";
+        }
+        return path;
+    }
     private void printRecord(NodeRecord nodeRecord) {
 
         System.out.print("===================================================");
@@ -470,6 +498,14 @@ public class DwcaParser {
         }
         DwcaParser dwcaP = new DwcaParser(dwcArchive);
         dwcaP.prepareNodesRecord(75);
+
+//        ArrayList<String> urls = new ArrayList<String>();
+////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");
+////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/031.mp3");
+//        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/2018012915070314586_eternity.jpg");
+//        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
+//        String paths = dwcaP.getMediaPath(5, urls );
+//        System.out.println(paths);
 //        dwcaP.callHBase(new NodeRecord("name", "1", 1));
 
 

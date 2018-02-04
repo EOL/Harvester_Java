@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
 import java.util.*;
+import org.json.*;
 
 public class StorageLayerClient {
 
@@ -172,10 +173,9 @@ public class StorageLayerClient {
 
     }
 
-    public void downloadMedia(String resId, ArrayList<String> mediaFiles) throws IOException {
+    public ArrayList<String> downloadMedia(String resId, ArrayList<String> mediaFiles) throws IOException {
         logger.debug("Request to storage layer to download media of resource (" + resId + ").");
         final String uri = PropertiesHandler.getProperty("storage.layer.api.url") + PropertiesHandler.getProperty("media.resource.url");
-
 
 //        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 //        Proxy proxy= new Proxy(Proxy.Type.HTTP, new InetSocketAddress("my.host.com", 8080));
@@ -233,6 +233,7 @@ public class StorageLayerClient {
             logger.error("org.bibalex.eol.harvester.client.StorageLayerClient.uploadDWCAResource:" +
                     " returned code(" + response.getStatusCode() + ")");
         }
+        return parseJson(response.getBody(), mediaFiles);
     }
 
     private String getJson(ArrayList<String> mediaFiles) {
@@ -246,14 +247,32 @@ public class StorageLayerClient {
         return out + "]";
     }
 
+    private ArrayList<String> parseJson(String json, ArrayList<String> urls){
+        ArrayList<String> paths = new ArrayList<String>();
+        JSONObject obj = new JSONObject(json);
+        for(String url : urls){
+            String path = obj.getString(url);
+            System.out.println(path);
+
+            String[] parts = path.split(",");
+            if(parts[1].equalsIgnoreCase("true"))
+                paths.add(parts[0]);
+        }
+        System.out.println(paths);
+        return paths;
+    }
+
     public static void main(String[] args) throws IOException {
+        PropertiesHandler.initializeProperties();
         StorageLayerClient client = new StorageLayerClient();
-        client.downloadResource("100", "1");
+//        client.downloadResource("100", "1");
 //        client.uploadDWCAResource("107", "3.tar.gz");
-//        ArrayList<String> urls = new ArrayList<String>();
+        ArrayList<String> urls = new ArrayList<String>();
 //        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");
 //        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/031.mp3");
-//        client.downloadMedia("105", urls);
+        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/2018012915070314586_eternity.jpg");
+        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
+        client.downloadMedia("105", urls);
     }
 
 }
