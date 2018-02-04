@@ -368,11 +368,18 @@ public class DwcaParser {
     private ArrayList<Media> parseMedia(StarRecord record, NodeRecord rec) {
         ArrayList<Media> media = new ArrayList<Media>();
         for (Record extensionRecord : record.extension(CommonTerms.mediaTerm)) {
-
+            String storageLayerPath = "", storageLayerThumbnailPath ="";
             ArrayList<String> paths = new ArrayList<String>();
-            paths.add(extensionRecord.value(CommonTerms.accessURITerm));
-            paths.add(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)));
-            String storageLayerPath =getMediaPath(resourceID, paths);
+
+            if(extensionRecord.value(CommonTerms.accessURITerm) != null){
+                paths.add(extensionRecord.value(CommonTerms.accessURITerm));
+                storageLayerPath =getMediaPath(resourceID, paths);
+            }
+            paths.clear();
+            if(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)) != null) {
+                paths.add(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)));
+                storageLayerThumbnailPath = getMediaPath(resourceID, paths);
+            }
 
             Media med = new Media(extensionRecord.value(CommonTerms.identifierTerm),
                     extensionRecord.value(CommonTerms.typeTerm),
@@ -403,7 +410,8 @@ public class DwcaParser {
                     extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLatURI)),
                     extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLonURI)),
                     extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaPosURI)),
-                    extensionRecord.value(CommonTerms.referenceIDTerm), storageLayerPath);
+                    extensionRecord.value(CommonTerms.referenceIDTerm),
+                    storageLayerPath, storageLayerThumbnailPath);
             med.setAgents(adjustAgents(extensionRecord.value(CommonTerms.agentIDTerm)));
             media.add(med);
         }
