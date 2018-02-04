@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ValidationRules>
+
+    <RulesList RowType="http://eol.org/schema/media/Document">
+
+        <FieldValidationRule>
+            <FieldUri>http://purl.org/dc/terms/identifier</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Media must have identifiers</FailureMessage>
+        </FieldValidationRule>
+
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/dwc/terms/taxonID</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Media must have taxonIDs</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://purl.org/dc/terms/language</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkLanguageIsValid_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Language should use standardized ISO 639 language codes</FailureMessage>
+        </FieldValidationRule>
+
+
+        <FieldValidationRule>
+            <FieldUri>http://purl.org/dc/terms/type</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>DataType must be present</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://purl.org/dc/terms/type</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkValidMediaType_FieldValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Invalid DataType</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/audubon_core/subtype</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkValidMediaSubType_FieldValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Invalid Data SubType</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://iptc.org/std/Iptc4xmpExt/1.0/xmlns/CVterm</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkValidSubject_FieldValidator
+            </ValidationFunction>
+            <FailureType>warning</FailureType>
+            <FailureMessage>Unrecognized Subject</FailureMessage>
+        </FieldValidationRule>
+
+
+        <FieldValidationRule>
+            <FieldUri>http://ns.adobe.com/xap/1.0/rights/UsageTerms</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>License should be present</FailureMessage>
+        </FieldValidationRule>
+
+
+        <FieldValidationRule>
+            <FieldUri>http://ns.adobe.com/xap/1.0/rights/UsageTerms</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkValidLicense_FieldValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Invalid license</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/ac/terms/accessURI</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkMediaHasValidURL_FieldValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Invalid URL</FailureMessage>
+        </FieldValidationRule>
+
+
+        <FieldValidationRule>
+            <FieldUri>http://eol.org/schema/media/thumbnailURL</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkMediaHasValidURL_FieldValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Invalid URL</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/ac/terms/furtherInformationURL</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkMediaHasValidURL_FieldValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Invalid URL</FailureMessage>
+        </FieldValidationRule>
+
+
+        <FieldValidationRule>
+            <FieldUri>http://purl.org/dc/terms/description</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkTermOfFieldURIisUTF8_FieldValidator
+            </ValidationFunction>
+            <FailureType>warning</FailureType>
+            <FailureMessage>Descriptions should be encoded in UTF-8</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://purl.org/dc/terms/title</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkTermOfFieldURIisUTF8_FieldValidator
+            </ValidationFunction>
+            <FailureType>warning</FailureType>
+            <FailureMessage>Titles should be encoded in UTF-8</FailureMessage>
+        </FieldValidationRule>
+
+        <RowValidationRule>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkMediaHasURL_RowValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Multimedia must have accessURIs</FailureMessage>
+        </RowValidationRule>
+
+        <RowValidationRule>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkTextHasDescription_RowValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Text must have descriptions</FailureMessage>
+        </RowValidationRule>
+
+        <RowValidationRule>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkTextHasSubject_RowValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Text must have subjects</FailureMessage>
+        </RowValidationRule>
+
+    </RulesList>
+
+    <RulesList RowType="http://rs.tdwg.org/dwc/terms/Taxon">
+
+        <!--<FieldValidationRule>-->
+            <!--<FieldUri>http://rs.tdwg.org/dwc/terms/taxonRank</FieldUri>-->
+            <!--<ValidationFunction>-->
+                <!--org.bibalex.eol.validator.functions.TaxonValidationFunctions.checkTaxonHasValidRank_FieldValidator-->
+            <!--</ValidationFunction>-->
+            <!--<FailureType>warning</FailureType>-->
+            <!--<FailureMessage>Unrecognized taxonomicStatus</FailureMessage>-->
+        <!--</FieldValidationRule>-->
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/dwc/terms/scientificName</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Taxa should have scientificNames</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/dwc/terms/scientificName</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkTermOfFieldURIisUTF8_FieldValidator
+            </ValidationFunction>
+            <FailureType>warning</FailureType>
+            <FailureMessage>Names should be encoded in UTF-8</FailureMessage>
+        </FieldValidationRule>
+
+        <RowValidationRule>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.TaxonValidationFunctions.checkTaxonHasValidIdentifier_RowValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Taxa must have identifiers</FailureMessage>
+        </RowValidationRule>
+
+        <RowValidationRule>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.TaxonValidationFunctions.validatePresenceOfAnyName_RowValidator
+            </ValidationFunction>
+            <FailureType>warning</FailureType>
+            <FailureMessage>Taxa should contain a scientificName or minimally a kingdom, phylum, class, order, family or
+                genus
+            </FailureMessage>
+        </RowValidationRule>
+    </RulesList>
+
+    <RulesList RowType="http://eol.org/schema/reference/Reference">
+
+        <FieldValidationRule>
+            <FieldUri>http://purl.org/dc/terms/identifier</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>References must have identifiers</FailureMessage>
+        </FieldValidationRule>
+
+        <RowValidationRule>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ReferenceValidationFunctions.checkReferencesHasTitles_RowValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>References must minimally contain a full_reference or title
+            </FailureMessage>
+        </RowValidationRule>
+    </RulesList>
+
+    <RulesList RowType="http://eol.org/schema/agent/Agent">
+
+        <FieldValidationRule>
+            <FieldUri>http://purl.org/dc/terms/identifier</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Agents must have identifiers</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://xmlns.com/foaf/spec/#term_logo</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.AgentValidationFunctions.checkAgentHasValidURL_FieldValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Invalid URL</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://eol.org/schema/agent/agentRole</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.AgentValidationFunctions.checkAgentHasValidRole_FieldValidator
+            </ValidationFunction>
+            <FailureType>warning</FailureType>
+            <FailureMessage>Unrecognized agent role</FailureMessage>
+        </FieldValidationRule>
+
+        <RowValidationRule>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.AgentValidationFunctions.checkAgentsHaveNames_RowValidator
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Agents must minimally contain a term_name, term_firstName or
+                term_familyName
+            </FailureMessage>
+        </RowValidationRule>
+    </RulesList>
+
+    <RulesList RowType="http://rs.gbif.org/terms/1.0/VernacularName">
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/dwc/terms/taxonID</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Vernacular names must have taxonIDs</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/dwc/terms/vernacularName</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Vernacular names must have name strings </FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://purl.org/dc/terms/language</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Warning
+            </ValidationFunction>
+            <FailureType>warning</FailureType>
+            <FailureMessage>Vernacular names should have languages</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://purl.org/dc/terms/language</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkLanguageIsValid_FieldValidator_Warning
+            </ValidationFunction>
+            <FailureType>warning</FailureType>
+            <FailureMessage>Vernacular name languages should use standardized ISO 639 language codes</FailureMessage>
+        </FieldValidationRule>
+
+    </RulesList>
+
+    <RulesList RowType="http://rs.tdwg.org/dwc/terms/MeasurementOrFact">
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/dwc/terms/measurementType</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>MeasurementOrFacts must have measurementTypes</FailureMessage>
+        </FieldValidationRule>
+
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/dwc/terms/measurementValue</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>MeasurementOrFacts must have measurementValues</FailureMessage>
+        </FieldValidationRule>
+
+    </RulesList>
+
+    <RulesList RowType="http://eol.org/schema/Association">
+
+        <FieldValidationRule>
+            <FieldUri>http://eol.org/schema/associationType</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Associations must have associationTypes </FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://eol.org/schema/targetOccurrenceID</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Associations must have targetOccurrenceIDs</FailureMessage>
+        </FieldValidationRule>
+
+        <FieldValidationRule>
+            <FieldUri>http://rs.tdwg.org/dwc/terms/occurrenceID</FieldUri>
+            <ValidationFunction>
+                org.bibalex.eol.validator.functions.ValidationFunctions.checkArchiveFileHasField_FieldValidator_Error
+            </ValidationFunction>
+            <FailureType>error</FailureType>
+            <FailureMessage>Associations must have occurrenceIDs</FailureMessage>
+        </FieldValidationRule>
+
+    </RulesList>
+
+    <RulesList RowType="http://rs.tdwg.org/dwc/terms/Occurrence">
+    </RulesList>
+
+    <RulesList RowType="http://rs.tdwg.org/dwc/terms/Event">
+    </RulesList>
+
+</ValidationRules>
