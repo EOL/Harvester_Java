@@ -169,10 +169,18 @@ public class DwcaParser {
                     String taxonID = rec.core().value(DwcTerm.taxonID);
                     String action = actions.get(taxonID);
 
-                    if(action != null && action.equalsIgnoreCase(Constants.INSERT)){
-                        System.out.println("insert that action is insert");
-                        i++;
-                        taxaList.add(parseTaxon(rec));
+                    if(action != null ){
+                        if (action.equalsIgnoreCase(Constants.INSERT)) {
+                            System.out.println("insert that action is insert");
+                            i++;
+                            taxaList.add(parseTaxon(rec));
+                        }
+                        else if(action.equalsIgnoreCase(Constants.UPDATE)){
+                            format.updateTaxon(taxonID, resourceId, new Neo4jHandler());
+                        }
+                        else if(action.equalsIgnoreCase(Constants.DELETE)){
+                            format.deleteFromTaxonFile(taxonID);
+                        }
                     }
                     else{
                         System.out.println("insert from else of action is null");

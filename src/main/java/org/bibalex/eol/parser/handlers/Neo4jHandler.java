@@ -90,4 +90,67 @@ public class Neo4jHandler {
         return 1;
     }
 
+    public boolean hasChildren (String nodeId, int resourceId){
+        //TODO check if node has childern or not
+        return false;
+    }
+
+    public boolean hasSibling (String nodeID, int resourceId){
+        //TODO check if node has siblings
+        return true;
+    }
+
+    public boolean nodeHasTaxonID(String nodeId, int resourceId) {
+        //TODO check if node has taxon_id or not
+        return true;
+    }
+
+    public String deleteNode (String nodeID, int resourceId){
+        //TODO delete node and return its parent id not generated parent id
+        return "1";
+    }
+
+    public void deleteNodeWithGeneratedID (String generatedNodeID){
+        //TODO delete node that has this generatedNodeID
+    }
+
+    public void markNodeAsPlaceholder(String nodeID, int resourceId) {
+        //TODO mark this node as placeholder
+    }
+
+    public void updateTaxon(String nodeID, int resourceId){
+        //TODO update taxon
+    }
+
+    public String getNodeByRank(String newScientificName, String rank, String ancestry, int resourceId) {
+        //TODO search for this node if found return its resource id else return null
+        return "-1";
+    }
+
+    public void updateScientificName(String nodeID, String newScientificName, int resourceId) {
+        //TODO update scientific name of this node
+    }
+
+    public void updateRank(String nodeID, String newRank, int resourceId) {
+        //TODO update rank of this node
+    }
+
+    public void createBranch(String nodeID, String newAncestry, int resourceId) {
+        //TODO create a new branch with new ancestry
+    }
+
+    public String getNodeByAncestry(String newScientificName, String ancestry, int resourceId) {
+        //TODO search for this node if found return its taxon_id else return null
+        return "-1";
+    }
+
+    public String getNodebyTaxonID(String taxonID, int resourceId) {
+        //TODO search for node by only taxon_id
+        return "1";
+    }
+
+    public void addLinkBetweenParentAndNode(int parentGeneratedNodeId, String nodeID, int resourceId) {
+        //TODO link between parent and node
+    }
+
 }
