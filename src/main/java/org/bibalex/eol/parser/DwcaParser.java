@@ -18,6 +18,7 @@ import org.gbif.dwc.terms.GbifTerm;
 import org.gbif.dwc.terms.TermFactory;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFactory;
+import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
 import org.slf4j.Logger;
@@ -129,7 +130,10 @@ public class DwcaParser {
                     else if(action.equalsIgnoreCase(Constants.DELETE)){
                         //TODO call delete
                     }
-                    // if unchanged then ignore it
+                    else if(action.equalsIgnoreCase(Constants.UNCHANGED)){
+                        //TODO check for updates in other extensions
+                        checkIfOccurrencesChanged(rec);
+                    }
                 }
                 else{
                     System.out.println("insert from else of action is null");
@@ -231,6 +235,16 @@ public class DwcaParser {
     private void callHBaseToCreate(NodeRecord nodeRecord){
         RestClientHandler restClientHandler = new RestClientHandler();
         restClientHandler.doConnection(PropertiesHandler.getProperty("addEntryHBase"), nodeRecord);
+    }
+
+    private void checkIfOccurrencesChanged(StarRecord rec){
+        ArchiveFile occurrencesFile = dwca.getExtension(CommonTerms.occurrenceTerm);
+        Map<String, String> actions = actionFiles.get(occurrencesFile.getLocation()+"_action");
+        for(Record extensionRecord : rec.extension(CommonTerms.occurrenceTerm)){
+            if(actions.get(extensionRecord.id()) != null){
+                
+            }
+        }
     }
 
     private void adjustReferences(NodeRecord nodeRecord) {
