@@ -1,5 +1,6 @@
 package org.bibalex.eol.parser;
 
+import com.sun.javafx.collections.MappingChange;
 import org.apache.commons.io.FilenameUtils;
 import org.bibalex.eol.harvester.StorageLayerClient;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class DwcaParser {
 
@@ -39,6 +41,7 @@ public class DwcaParser {
     HashMap<String, Association> oneSidedAccoiationsMap;
     private static final Logger logger = LoggerFactory.getLogger(DwcaParser.class);
     private int resourceID;
+    private Map<String, Map<String, String>> actionFiles;
     int batchSize = 1000;
 
     public DwcaParser(Archive dwca) {
@@ -52,6 +55,7 @@ public class DwcaParser {
         loadAllAgents();
         loadAllMeasurementOrFacts();
         loadAllAssociations();
+        actionFiles = ActionFiles.loadActionFiles(dwca);
     }
 
     private void loadAllReferences() {

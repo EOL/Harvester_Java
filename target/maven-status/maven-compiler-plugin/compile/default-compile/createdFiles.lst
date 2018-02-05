@@ -23,6 +23,7 @@ org/gbif/dwca/record/RecordImpl.class
 org/bibalex/eol/parser/handlers/Neo4jHandler.class
 org/gbif/dwc/SupplierWithIO.class
 org/gbif/tabular/TermTabularFiles.class
+org/bibalex/eol/parser/ActionFiles.class
 org/gbif/xml/SAXUtils.class
 org/gbif/dwca/record/RecordIterator.class
 org/bibalex/eol/validator/functions/MeasurementOrFactValidationFunctions.class

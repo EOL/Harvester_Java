@@ -32,6 +32,7 @@
 /home/ba/IdeaProjects/harvester/src/main/java/org/gbif/dwc/DwcLayout.java
 /home/ba/IdeaProjects/harvester/src/main/java/org/bibalex/eol/parser/handlers/Neo4jHandler.java
 /home/ba/IdeaProjects/harvester/src/main/java/org/bibalex/eol/utils/TermURIs.java
+/home/ba/IdeaProjects/harvester/src/main/java/org/bibalex/eol/parser/ActionFiles.java
 /home/ba/IdeaProjects/harvester/src/main/java/org/gbif/dwca/tools/IntSequenceGenerator.java
 /home/ba/IdeaProjects/harvester/src/main/java/org/gbif/util/CSVReaderHelper.java
 /home/ba/IdeaProjects/harvester/src/main/java/org/gbif/dwca/record/RecordIterator.java
