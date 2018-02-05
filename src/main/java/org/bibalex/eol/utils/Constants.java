@@ -15,6 +15,12 @@ import java.util.Map;
 
 public class Constants {
     public static final int ChunkSize = 1000;
+    public static final String INSERT = "insert";
+    public static final String UPDATE = "update";
+    public static final String DELETE = "delete";
+    public static final String UNCHANGED = "unchanged";
+
+
 
     public static boolean copyContentOfArchiveFileToDisk(ArrayList<Record> records, ArchiveFile archiveFile) {
         System.out.println("debug " + archiveFile.getTitle() + " size " +records.size());

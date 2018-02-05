@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eed71ae0-16b5-45c1-b66f-1279bc55d5dd" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/ActionFiles.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/ActionFiles.class" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/DwcaParser.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/DwcaParser.class" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -15,31 +20,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
+      <file leaf-file-name="DwcaParser.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
-              <caret line="186" column="29" lean-forward="false" selection-start-line="186" selection-start-column="29" selection-end-line="186" selection-end-column="29" />
-              <folding />
+            <state relative-caret-position="-246">
+              <caret line="172" column="75" lean-forward="false" selection-start-line="172" selection-start-column="75" selection-end-line="172" selection-end-column="75" />
+              <folding>
+                <element signature="e#22435#22443#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StorageLayerClient.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java">
+      <file leaf-file-name="ActionFiles.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="273" column="119" lean-forward="false" selection-start-line="269" selection-start-column="8" selection-end-line="273" selection-end-column="119" />
+            <state relative-caret-position="-455">
+              <caret line="16" column="48" lean-forward="false" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3294#3310#0" expanded="true" />
-                <element signature="e#3643#3651#0" expanded="true" />
-                <element signature="e#6742#6758#0" expanded="true" />
-                <element signature="e#7603#7640#0" expanded="true" />
-                <element signature="e#10190#10206#0" expanded="true" />
-                <element signature="e#10580#10588#0" expanded="true" />
-                <element signature="e#11654#11662#0" expanded="true" />
-                <element signature="e#12362#12370#0" expanded="true" />
+                <element signature="e#376#405#0" expanded="true" />
+                <element signature="e#1079#1095#0" expanded="true" />
+                <element signature="e#1953#1961#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -51,60 +53,6 @@
             <state relative-caret-position="288">
               <caret line="16" column="1" lean-forward="false" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DwcaParser.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="57" column="54" lean-forward="false" selection-start-line="57" selection-start-column="54" selection-end-line="57" selection-end-column="54" />
-              <folding>
-                <element signature="e#20203#20211#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ActionFiles.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
-              <caret line="26" column="76" lean-forward="false" selection-start-line="26" selection-start-column="76" selection-end-line="26" selection-end-column="76" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#376#405#0" expanded="true" />
-                <element signature="e#689#705#0" expanded="true" />
-                <element signature="e#1722#1730#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="testValidator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/testValidator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="21" column="58" lean-forward="false" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="58" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Media.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Media.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="499">
-              <caret line="339" column="8" lean-forward="false" selection-start-line="339" selection-start-column="8" selection-end-line="339" selection-end-column="67" />
-              <folding>
-                <element signature="e#7826#7827#0" expanded="true" />
-                <element signature="e#7865#7866#0" expanded="true" />
-                <element signature="e#7929#7930#0" expanded="true" />
-                <element signature="e#7985#7986#0" expanded="true" />
-                <element signature="e#8037#8038#0" expanded="true" />
-                <element signature="e#8085#8086#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -162,7 +110,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Node.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/NodeRecord.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Occurrence.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Reference.java" />
@@ -211,8 +158,9 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Media.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" />
       </list>
     </option>
   </component>
@@ -337,6 +285,16 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="org" type="462c0819:PsiDirectoryNode" />
               <item name="eol" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harvester" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harvester" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
+              <item name="eol" type="462c0819:PsiDirectoryNode" />
               <item name="validator" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -384,7 +342,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ActionFiles">
+  <component name="RunManager" selected="Application.DwcaParser">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -570,8 +528,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.ActionFiles" />
-        <item index="1" class="java.lang.String" itemvalue="Application.DwcaParser" />
+        <item index="0" class="java.lang.String" itemvalue="Application.DwcaParser" />
+        <item index="1" class="java.lang.String" itemvalue="Application.ActionFiles" />
         <item index="2" class="java.lang.String" itemvalue="Application.StorageLayerClient" />
         <item index="3" class="java.lang.String" itemvalue="Application.MainHarvester" />
         <item index="4" class="java.lang.String" itemvalue="Application.HarvesterTest" />
@@ -596,7 +554,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1922" height="1054" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -606,7 +563,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32994652" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34216335" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2030905" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35430464" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -855,16 +812,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9">
-          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/TermURIs.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -959,13 +906,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/Neo4jHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="51" column="50" lean-forward="false" selection-start-line="51" selection-start-column="50" selection-end-line="51" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterAPI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -995,39 +935,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/RestClientHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="72" column="26" lean-forward="false" selection-start-line="72" selection-start-column="16" selection-end-line="72" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="186" column="29" lean-forward="false" selection-start-line="186" selection-start-column="29" selection-end-line="186" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="273" column="119" lean-forward="false" selection-start-line="269" selection-start-column="8" selection-end-line="273" selection-end-column="119" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3294#3310#0" expanded="true" />
-            <element signature="e#3643#3651#0" expanded="true" />
-            <element signature="e#6742#6758#0" expanded="true" />
-            <element signature="e#7603#7640#0" expanded="true" />
-            <element signature="e#10190#10206#0" expanded="true" />
-            <element signature="e#10580#10588#0" expanded="true" />
-            <element signature="e#11654#11662#0" expanded="true" />
-            <element signature="e#12362#12370#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Media.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="499">
@@ -1043,14 +950,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/configs.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="16" column="1" lean-forward="false" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/testValidator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="215">
@@ -1059,25 +958,86 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="20" column="53" lean-forward="false" selection-start-line="20" selection-start-column="53" selection-end-line="20" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/RestClientHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="26" column="13" lean-forward="false" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/Neo4jHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="14" column="41" lean-forward="true" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
+          <folding>
+            <element signature="e#335#336#0" expanded="true" />
+            <element signature="e#394#395#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="463">
+          <caret line="273" column="119" lean-forward="false" selection-start-line="269" selection-start-column="8" selection-end-line="273" selection-end-column="119" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3294#3310#0" expanded="true" />
+            <element signature="e#3643#3651#0" expanded="true" />
+            <element signature="e#6742#6758#0" expanded="true" />
+            <element signature="e#7603#7640#0" expanded="true" />
+            <element signature="e#10190#10206#0" expanded="true" />
+            <element signature="e#10580#10588#0" expanded="true" />
+            <element signature="e#11654#11662#0" expanded="true" />
+            <element signature="e#12362#12370#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="186" column="29" lean-forward="false" selection-start-line="186" selection-start-column="29" selection-end-line="186" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/configs.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="1" lean-forward="false" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="26" column="76" lean-forward="false" selection-start-line="26" selection-start-column="76" selection-end-line="26" selection-end-column="76" />
+        <state relative-caret-position="-455">
+          <caret line="16" column="48" lean-forward="false" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#376#405#0" expanded="true" />
-            <element signature="e#689#705#0" expanded="true" />
-            <element signature="e#1722#1730#0" expanded="true" />
+            <element signature="e#1079#1095#0" expanded="true" />
+            <element signature="e#1953#1961#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="57" column="54" lean-forward="false" selection-start-line="57" selection-start-column="54" selection-end-line="57" selection-end-column="54" />
+        <state relative-caret-position="-246">
+          <caret line="172" column="75" lean-forward="false" selection-start-line="172" selection-start-column="75" selection-end-line="172" selection-end-column="75" />
           <folding>
-            <element signature="e#20203#20211#0" expanded="true" />
+            <element signature="e#22435#22443#0" expanded="true" />
           </folding>
         </state>
       </provider>

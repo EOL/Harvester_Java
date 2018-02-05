@@ -11,6 +11,7 @@ import org.bibalex.eol.parser.handlers.Neo4jHandler;
 import org.bibalex.eol.parser.handlers.RestClientHandler;
 import org.bibalex.eol.parser.models.*;
 import org.bibalex.eol.utils.CommonTerms;
+import org.bibalex.eol.utils.Constants;
 import org.bibalex.eol.utils.TermURIs;
 import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwc.terms.GbifTerm;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
 
 public class DwcaParser {
 
@@ -108,42 +110,43 @@ public class DwcaParser {
     public void prepareNodesRecord(int resourceId) {
         this.resourceID = resourceId;
         Neo4jHandler neo4jHandler = new Neo4jHandler();
-        int generatedNodeId;
 
         buildGraph(resourceId);
+        Map<String, String> actions = actionFiles.get(dwca.getCore().getLocation()+"_action");
+        if(actions != null){
+            for (StarRecord rec : dwca) {
+                String taxonID = rec.core().value(DwcTerm.taxonID);
+                String action = actions.get(taxonID);
 
-        for (StarRecord rec : dwca) {
-
-            generatedNodeId = neo4jHandler.getNodeIfExist
-                    (rec.core().value(DwcTerm.taxonID), resourceId);
-            NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID),
-                    generatedNodeId + "", resourceId);
-
-            Taxon taxon = parseTaxon(rec);
-            if(taxon != null)
-                tableRecord.setTaxon(taxon);
-
-            if (rec.hasExtension(GbifTerm.VernacularName)) {
-                tableRecord.setVernaculars(parseVernacularNames(rec));
+                if(action != null){
+                    if(action.equalsIgnoreCase(Constants.INSERT)){
+                        System.out.println("insert that action is insert");
+                        insertTaxon(rec, resourceId, neo4jHandler);
+                    }
+                    else if(action.equalsIgnoreCase(Constants.UPDATE)){
+                        //TODO call update
+                    }
+                    else if(action.equalsIgnoreCase(Constants.DELETE)){
+                        //TODO call delete
+                    }
+                    // if unchanged then ignore it
+                }
+                else{
+                    System.out.println("insert from else of action is null");
+                    insertTaxon(rec, resourceId, neo4jHandler);
+                }
             }
-            if (rec.hasExtension(CommonTerms.occurrenceTerm)) {
-                tableRecord.setOccurrences(parseOccurrences(rec));
+        }
+        else {
+            for (StarRecord rec : dwca) {
+                System.out.println("insert from else of actions is null");
+                insertTaxon(rec, resourceId, neo4jHandler);
             }
-            if (rec.hasExtension(CommonTerms.mediaTerm)) {
-                tableRecord.setMedia(parseMedia(rec, tableRecord));
-            }
-
-            adjustReferences(tableRecord);
-
-            //Send to HBASE
-            callHBaseToCreate(tableRecord);
-            ////////
-            printRecord(tableRecord);
-            System.out.println();
         }
     }
 
     private void buildGraph(int resourceId){
+        Map<String, String> actions = actionFiles.get(dwca.getCore().getLocation()+"_action");
         System.out.println("BUILD");
         ArrayList<Taxon> taxaList = new ArrayList<>();
         int i = 0;
@@ -162,11 +165,59 @@ public class DwcaParser {
                 i = 0;
                 taxaList = new ArrayList<>();
             }else{
-                i++;
-                taxaList.add(parseTaxon(rec));
+                if(actions != null){
+                    String taxonID = rec.core().value(DwcTerm.taxonID);
+                    String action = actions.get(taxonID);
+
+                    if(action != null && action.equalsIgnoreCase(Constants.INSERT)){
+                        System.out.println("insert that action is insert");
+                        i++;
+                        taxaList.add(parseTaxon(rec));
+                    }
+                    else{
+                        System.out.println("insert from else of action is null");
+                        i++;
+                        taxaList.add(parseTaxon(rec));
+                    }
+                }
+                else{
+                    System.out.println("insert from else of actions is null");
+                    i++;
+                    taxaList.add(parseTaxon(rec));
+                }
+
             }
         }
         format.handleLines(taxaList);
+    }
+
+    private void insertTaxon(StarRecord rec, int resourceId, Neo4jHandler neo4jHandler){
+        int generatedNodeId = neo4jHandler.getNodeIfExist
+                (rec.core().value(DwcTerm.taxonID), resourceId);
+        NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID),
+                generatedNodeId + "", resourceId);
+
+        Taxon taxon = parseTaxon(rec);
+        if (taxon != null)
+            tableRecord.setTaxon(taxon);
+
+        if (rec.hasExtension(GbifTerm.VernacularName)) {
+            tableRecord.setVernaculars(parseVernacularNames(rec));
+        }
+        if (rec.hasExtension(CommonTerms.occurrenceTerm)) {
+            tableRecord.setOccurrences(parseOccurrences(rec));
+        }
+        if (rec.hasExtension(CommonTerms.mediaTerm)) {
+            tableRecord.setMedia(parseMedia(rec, tableRecord));
+        }
+
+        adjustReferences(tableRecord);
+
+        //Send to HBASE
+        callHBaseToCreate(tableRecord);
+        ////////
+        printRecord(tableRecord);
+        System.out.println();
     }
 
     private void callHBaseToCreate(NodeRecord nodeRecord){
@@ -509,7 +560,7 @@ public class DwcaParser {
             System.out.println("Failure");
         }
         DwcaParser dwcaP = new DwcaParser(dwcArchive);
-        dwcaP.prepareNodesRecord(75);
+        dwcaP.prepareNodesRecord(5000);
 
 //        ArrayList<String> urls = new ArrayList<String>();
 ////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");

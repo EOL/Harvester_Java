@@ -11,30 +11,35 @@ public class ActionFiles {
 
     public static Map<String, Map<String, String>> loadActionFiles(Archive dwcaArchive){
         Map<String, Map<String, String>> pathsAndIDsWithAction = new HashMap<String, Map<String, String>>();
-        //TODO call core file
-        for (ArchiveFile archiveFile : dwcaArchive.getExtensions()){
-            String actionFilePath = archiveFile.getLocationFile()+"_action";
-            System.out.println(actionFilePath);
-            Map<String, String> IDsActions = new HashMap<String, String>();
-            try {
-                FileReader fileReader = new FileReader(actionFilePath);
-                BufferedReader bufferedReader = new BufferedReader(fileReader);
-                String line = null;
-                while((line = bufferedReader.readLine()) != null){
-                    String [] coulmns = line.split(archiveFile.getFieldsTerminatedBy());
-                    IDsActions.put(coulmns[0], coulmns[1]);
-                }
-                pathsAndIDsWithAction.put(archiveFile.getLocation()+"_action", IDsActions);
-            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-                continue;
-            } catch (IOException e) {
-//                e.printStackTrace();
-                continue;
-            }
+        ArchiveFile coreFile = dwcaArchive.getCore();
+        parseActionOfArchiveFile(coreFile, pathsAndIDsWithAction);
+        for (ArchiveFile archiveFile : dwcaArchive.getExtensions()) {
+            parseActionOfArchiveFile(archiveFile, pathsAndIDsWithAction);
         }
         System.out.println(pathsAndIDsWithAction);
         return pathsAndIDsWithAction;
+    }
+
+    public static void parseActionOfArchiveFile(ArchiveFile archiveFile, Map<String, Map<String, String>> pathsAndIDsWithAction){
+        String actionFilePath = archiveFile.getLocationFile()+"_action";
+        System.out.println(actionFilePath);
+        Map<String, String> IDsActions = new HashMap<String, String>();
+        try {
+            FileReader fileReader = new FileReader(actionFilePath);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = null;
+            while((line = bufferedReader.readLine()) != null){
+                String [] coulmns = line.split(archiveFile.getFieldsTerminatedBy());
+                IDsActions.put(coulmns[0], coulmns[1]);
+            }
+            pathsAndIDsWithAction.put(archiveFile.getLocation()+"_action", IDsActions);
+        } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+            return;
+        } catch (IOException e) {
+//                e.printStackTrace();
+            return;
+        }
     }
 
     public static void main (String [] args){
@@ -50,7 +55,14 @@ public class ActionFiles {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        actionFiles.loadActionFiles(archive);
+        Map<String, Map<String, String>> actions= actionFiles.loadActionFiles(archive);
+        Map<String, String> action = actions.get(archive.getCore().getLocation()+"_action");
+        System.out.println(action);
+        if (action != null)
+            System.out.println("noooooo");
+        else
+            System.out.println("yessssss");
+
 //        actionFiles.loadActionFiles(paths, "\t");
     }
 }
