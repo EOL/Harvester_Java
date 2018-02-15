@@ -15,6 +15,7 @@ public class Agent {
     String accountName;
     String openId;
     String deltaStatus;
+    String action;
 
     public Agent(String agentId, String fullName, String firstName, String familyName, String role,
                  String email, String homepage, String logoURL, String project, String organization, String accountName, String openId) {
@@ -135,5 +136,13 @@ public class Agent {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 }

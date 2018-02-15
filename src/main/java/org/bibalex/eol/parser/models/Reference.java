@@ -24,6 +24,7 @@ public class Reference {
     String doi;
     String localityOfPublisher;
     String deltaStatus;
+    String action;
 
     public Reference(String referenceId, String publicationType, String fullReference, String primaryTitle, String secondaryTitle,
                      String pages, String pageStart, String pageEnd, String volume, String edition, String publisher, String authorsList,
@@ -198,5 +199,13 @@ public class Reference {
 
     public void setLocalityOfPublisher(String localityOfPublisher) {
         this.localityOfPublisher = localityOfPublisher;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 }

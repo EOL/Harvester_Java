@@ -23,7 +23,7 @@ public class TermURIs {
     public static final String familyURI = "http://rs.tdwg.org/dwc/terms/family";
     public static final String genusURI = "http://rs.tdwg.org/dwc/terms/genus";
 
-    public static final String referenceURI = "http://eol.org/schema/reference/";
+    public static final String referenceURI = "http://eol.org/schema/reference/full_reference";
     public static final String EOLReferenceURI = "http://eol.org/schema/reference/Reference";
     public static final String primaryTitleURI = "http://eol.org/schema/reference/primaryTitle";
     public static final String titleURI = "http://purl.org/dc/terms/title";

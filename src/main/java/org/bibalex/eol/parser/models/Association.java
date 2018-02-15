@@ -14,6 +14,7 @@ public class Association {
     String contributor;
     String referenceId;
     String deltaStatus;
+    String action;
 
     public Association(String associationId, String occurrenceId, String associationType, String targetOccurrenceId, String determinedDate,
                        String determinedBy, String measurementMethod, String remarks, String source, String citation, String contributor, String referenceId) {
@@ -134,5 +135,13 @@ public class Association {
 
     public void setReferenceId(String referenceId) {
         this.referenceId = referenceId;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 }

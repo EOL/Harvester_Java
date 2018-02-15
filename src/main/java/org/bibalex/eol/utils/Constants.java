@@ -19,7 +19,7 @@ public class Constants {
     public static final String UPDATE = "update";
     public static final String DELETE = "delete";
     public static final String UNCHANGED = "unchanged";
-
+    public static final String SEPARATOR = "+";
 
 
     public static boolean copyContentOfArchiveFileToDisk(ArrayList<Record> records, ArchiveFile archiveFile) {
@@ -54,30 +54,6 @@ public class Constants {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        System.out.println("debug");
-
-//        FileOutputStream fop = null;
-//        try {
-//            if (!backup_file.exists()) {
-//                backup_file.createNewFile();
-//            }
-//            fop = new FileOutputStream(backup_file, true);
-//            String content = "";
-//            for(Record record: records){
-//                Map<Term, String> termStringMap = DwcaWriter.recordToMap(record, archiveFile);
-//                content += record.toString();
-//                content += "\n";
-//            }
-//            byte [] fileContent = content.getBytes();
-//            fop.write(fileContent);
-//            fop.flush();
-//            fop.close();
-//            return true;
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         return false;
     }

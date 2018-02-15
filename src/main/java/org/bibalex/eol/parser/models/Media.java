@@ -36,12 +36,13 @@ public class Media {
     String deltaStatus;
     String storageLayerPath;
     String storageLayerThumbnailPath;
+    String action;
 
     public Media(String mediaId, String type, String subType, String format, String subject, String title, String description, String accessURI,
                  String thumbnailURI, String furtherInformationURI, String derivedFrom, String createDate, String modified, String language, String rating,
                  String audience, String license, String rights, String owner, String bibliographicCitation, String publisher, String contributor,
                  String creator, String agentId, String locationCreated, String genericLocation, String latitude, String longitude, String altitude,
-                 String referenceId, String storageLayerPath, String storageLayerThumbnailPath) {
+                 String referenceId, String storageLayerPath, String storageLayerThumbnailPath, String action) {
         this.mediaId = mediaId;
         this.type = type;
         this.subType = subType;
@@ -73,6 +74,7 @@ public class Media {
         this.referenceId = referenceId;
         this.storageLayerPath = storageLayerPath;
         this.storageLayerThumbnailPath = storageLayerThumbnailPath;
+        this.action = action;
     }
 
     public String getMediaId() {
@@ -338,5 +340,13 @@ public class Media {
 
     public void setStorageLayerThumbnailPath(String storageLayerThumbnailPath) {
         this.storageLayerThumbnailPath = storageLayerThumbnailPath;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 }
