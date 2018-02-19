@@ -10,7 +10,7 @@ import org.bibalex.eol.validator.rules.ValidationRulesLoader;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.*;
@@ -20,7 +20,7 @@ public class DwcaValidator {
 
     //    private Logger logger;
     private ValidationRulesLoader rulesLoader;
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DwcaValidator.class);
+    private static final Logger logger = Logger.getLogger(DwcaValidator.class);
     private static int chunkSize = Constants.ChunkSize;
 
     /**

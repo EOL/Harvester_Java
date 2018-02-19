@@ -21,8 +21,7 @@ import org.gbif.dwca.io.ArchiveFactory;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +42,7 @@ public class DwcaParser {
     //this is used to save the associations without target occurrence
     HashMap<String, Association> oneSidedAccoiationsMap;
     HashMap<String, Association> associationHashMap;
-    private static final Logger logger = LoggerFactory.getLogger(DwcaParser.class);
+    private static final Logger logger = Logger.getLogger(DwcaParser.class);
     private int resourceID;
     private Map<String, Map<String, String>> actionFiles;
     int batchSize = 1000;

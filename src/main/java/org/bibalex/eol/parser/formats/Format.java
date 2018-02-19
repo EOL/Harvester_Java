@@ -3,8 +3,8 @@ package org.bibalex.eol.parser.formats;
 import org.bibalex.eol.parser.handlers.Neo4jHandler;
 import org.bibalex.eol.parser.handlers.SynonymNodeHandler;
 import org.bibalex.eol.parser.models.Taxon;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+
 
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ public abstract class Format {
 //    protected static final String ancestorTaxonId = "placeholder";
     private final static String acceptedNodesStatuses[] = {"accepted", "accepted name", "valid", "valid name",
         "provisionally accepted name"};
-    private static final Logger logger = LoggerFactory.getLogger(Format.class);
+    private static final Logger logger = Logger.getLogger(Format.class);
 //    private static ArrayList<String> acceptedNodesStatuses = Arrays.asList(accepted);
 
     public abstract void handleLines(ArrayList<Taxon> nodes);

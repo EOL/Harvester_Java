@@ -2,7 +2,7 @@ package org.bibalex.eol.validator.rules;
 
 //import org.eol.handlers.LogHandler;
 import org.bibalex.eol.validator.handlers.XMLHandler;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ValidationRulesLoader {
 //    protected static Logger logger;
-private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ValidationRulesLoader.class);
+private static final Logger logger = Logger.getLogger(ValidationRulesLoader.class);
     private static List<String> rowTypeList = new ArrayList<String>();
     private static List<FieldValidationRule> fieldValidationRuleList = new
             ArrayList<FieldValidationRule>();

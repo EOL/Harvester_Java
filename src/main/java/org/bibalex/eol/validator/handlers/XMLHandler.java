@@ -1,7 +1,7 @@
 package org.bibalex.eol.validator.handlers;
 
 import org.bibalex.eol.validator.DwcaValidator;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -21,7 +21,7 @@ import java.util.Properties;
 public class XMLHandler {
     private static boolean initialized = false;
 //    protected static Logger logger;
-private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DwcaValidator.class);
+private static final Logger logger = Logger.getLogger(DwcaValidator.class);
     private static String xmlFilePath;
     private static DocumentBuilderFactory factory;
     private static DocumentBuilder builder;

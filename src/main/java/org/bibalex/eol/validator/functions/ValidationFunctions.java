@@ -8,7 +8,7 @@ import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwc.terms.Term;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.*;
@@ -17,7 +17,7 @@ import java.util.*;
 
 public class ValidationFunctions {
     private static int chunkSize = Constants.ChunkSize;
-    private static org.slf4j.Logger logger = LoggerFactory.getLogger(ValidationFunctions.class.getName());
+    private static Logger logger = Logger.getLogger(ValidationFunctions.class.getName());
 
     /**
      * Check whether ArchiveFile have field or not and remove record as it is error

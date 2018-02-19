@@ -3,8 +3,7 @@ package org.bibalex.eol.parser.formats;
 import org.bibalex.eol.parser.handlers.Neo4jHandler;
 import org.bibalex.eol.parser.handlers.SynonymNodeHandler;
 import org.bibalex.eol.parser.models.Taxon;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,7 +16,7 @@ public class ParentFormat extends Format {
 
     private int resourceId;
     private Neo4jHandler neo4jHandler;
-    private static final Logger logger = LoggerFactory.getLogger(ParentFormat.class);
+    private static final Logger logger = Logger.getLogger(ParentFormat.class);
     private HashSet<String> missingParents;
 
     public ParentFormat(int resourceId){

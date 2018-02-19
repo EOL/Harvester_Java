@@ -9,8 +9,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.ProxyAuthenticationStrategy;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -25,7 +24,7 @@ import org.json.*;
 
 public class StorageLayerClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(StorageLayerClient.class);
+    private static final Logger logger = Logger.getLogger(StorageLayerClient.class);
 
     public StorageLayerClient() throws IOException {
     }

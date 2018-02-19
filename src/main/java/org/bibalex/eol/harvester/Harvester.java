@@ -5,9 +5,7 @@ import org.bibalex.eol.parser.handlers.PropertiesHandler;
 import org.bibalex.eol.parser.DwcaParser;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +17,7 @@ import java.io.IOException;
 
 public class Harvester {
 
-    private static final Logger logger = LoggerFactory.getLogger(Harvester.class);
+    private static final Logger logger = Logger.getLogger(Harvester.class);
 
     public static void main(String[] args) throws IOException {
 //        String dwcArchivePath = "/home/ba/EOL_Recources/4.tar.gz";
