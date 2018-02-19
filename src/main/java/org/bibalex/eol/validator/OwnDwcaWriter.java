@@ -13,8 +13,9 @@ import org.gbif.dwc.terms.Term;
 import org.gbif.dwca.io.*;
 import org.gbif.dwca.record.Record;
 import org.gbif.io.TabWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.*;
@@ -26,7 +27,7 @@ import java.util.*;
  * For usage of this class please @see DwcaWriterTest.
  */
 public class OwnDwcaWriter {
-    private Logger log = LoggerFactory.getLogger(OwnDwcaWriter.class);
+    private Logger log = Logger.getLogger(OwnDwcaWriter.class);
     private final File dir;
     private final boolean useHeaders;
     private long recordNum;
@@ -141,7 +142,7 @@ public class OwnDwcaWriter {
 
         // make sure coreId is not null for extensions
         if (coreRowType != rowType && coreId == null){
-            log.warn("Adding an {} extension record to a core without an Id! Skip this record", rowType);
+            log.warn("Adding an {} extension record to a core without an Id! Skip this record", (Throwable) rowType);
 
         } else {
             String[] row = new String[columns.size() + 1];
@@ -209,7 +210,7 @@ public class OwnDwcaWriter {
 
         // make sure coreId is not null for extensions
         if (coreRowType != rowType && coreId == null){
-            log.warn("Adding an {} extension record to a core without an Id! Skip this record", rowType);
+            log.warn("Adding an {} extension record to a core without an Id! Skip this record", (Throwable) rowType);
 
         } else {
             String[] row = new String[columns.size()];
