@@ -22,9 +22,9 @@ public class HarvesterController {
     public boolean harvest(@RequestParam(value = "resourceID") String resourceID){
         try {
             PropertiesHandler.initializeProperties();
-            StorageLayerClient.downloadResource(resourceID+"", "0");
+            StorageLayerClient.downloadResource(resourceID+"", "1");
             String path = PropertiesHandler.getProperty
-                    ("storage.output.directory") + File.separator + resourceID + "_core";
+                    ("storage.output.directory") + File.separator + resourceID + "_org";
             System.out.println("henaaaaaaaaaaaaaa "+ path);
 
 //            return true;

@@ -131,7 +131,7 @@ public class DwcaParser {
         this.resourceID = resourceId;
         Neo4jHandler neo4jHandler = new Neo4jHandler();
 
-//        buildGraph(resourceId);
+        buildGraph(resourceId);
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
         for (StarRecord rec : dwca) {
 //            int generatedNodeId = neo4jHandler.getNodeIfExist
@@ -646,8 +646,8 @@ public class DwcaParser {
         System.out.println("-------------Occ---------------");
 
         if (nodeRecord.getOccurrences() != null && nodeRecord.getOccurrences().size() > 0)
-            System.out.println(nodeRecord.getReferences().size() + "\n" + nodeRecord.getOccurrences().
-                    get(0).getSex() + " " + nodeRecord.getOccurrences().get(0).getBehavior());
+//            System.out.println(nodeRecord.getReferences().size() + "\n" + nodeRecord.getOccurrences().
+//                    get(0).getSex() + " " + nodeRecord.getOccurrences().get(0).getBehavior());
 
         System.out.println("----------------Vernaculars---------------");
 

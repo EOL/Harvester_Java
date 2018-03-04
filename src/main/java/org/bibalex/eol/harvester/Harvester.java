@@ -21,8 +21,21 @@ public class Harvester {
 
     public static void main(String[] args) throws IOException {
 //        String dwcArchivePath = "/home/ba/EOL_Recources/4.tar.gz";
-        Harvester harvester = new Harvester();
-        harvester.processHarvesting(4);
+//        Harvester harvester = new Harvester();
+//        harvester.processHarvesting(4);
+        HarvesterAPI harvesterAPI= new HarvesterAPI();
+        try {
+            PropertiesHandler.initializeProperties();
+            StorageLayerClient.downloadResource(146+"", "1");
+            String path = PropertiesHandler.getProperty
+                    ("storage.output.directory") + File.separator + 146 + "_org";
+            System.out.println("henaaaaaaaaaaaaaa "+ path);
+
+//            return true;
+            harvesterAPI.callValidation(path, 146);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String processHarvesting(int resourceId) throws IOException {
