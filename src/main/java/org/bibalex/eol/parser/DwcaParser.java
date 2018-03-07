@@ -94,7 +94,7 @@ public class DwcaParser {
                 logger.debug("Adding Measurement or fact to the map with id: " + measurementOrFact.getMeasurementId());
                 ArrayList<MeasurementOrFact> measurementOrFacts = measurementOrFactHashMap.get(measurementOrFact.getOccurrenceId());
                 if (!(measurementOrFacts != null))
-                    measurementOrFacts = new ArrayList<MeasurementOrFact>();
+                    measurementOrFacts = new ArrayList<>();
                 measurementOrFacts.add(measurementOrFact);
                 measurementOrFactHashMap.put(measurementOrFact.getOccurrenceId(), measurementOrFacts);
             }
@@ -124,14 +124,13 @@ public class DwcaParser {
                 associationHashMap.put(association.getAssociationId(), association);
             }
         }
-        System.out.println(associationHashMap);
     }
 
     public void prepareNodesRecord(int resourceId) {
         this.resourceID = resourceId;
         Neo4jHandler neo4jHandler = new Neo4jHandler();
 
-        buildGraph(resourceId);
+//        buildGraph(resourceId);
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
         for (StarRecord rec : dwca) {
 //            int generatedNodeId = neo4jHandler.getNodeIfExist
@@ -148,17 +147,38 @@ public class DwcaParser {
             }
             if (rec.hasExtension(CommonTerms.occurrenceTerm)) {
                 tableRecord.setOccurrences(parseOccurrences(rec));
+                tableRecord.setMeasurementOrFacts(parseMeasurementOrFactOfTaxon(rec));
+                tableRecord.setAssociations(parseAssociationOfTaxon(tableRecord));
             }
             if (rec.hasExtension(CommonTerms.mediaTerm)) {
                 tableRecord.setMedia(parseMedia(rec, tableRecord));
             }
+
             System.out.println("before adjust refe");
             adjustReferences(tableRecord);
             checkActionFiles(rec, actions, tableRecord);
-
-
         }
 //
+    }
+
+    private ArrayList<Association> parseAssociationOfTaxon(NodeRecord tableRecord) {
+        ArrayList<Association> associations = new ArrayList<>();
+        for(MeasurementOrFact measurementOrFact : tableRecord.getMeasurementOrFacts()){
+            if(measurementOrFact.getAssociationId()!= null){
+                associations.add(associationHashMap.get(measurementOrFact.getAssociationId()));
+            }
+        }
+        return associations;
+    }
+
+    private ArrayList<MeasurementOrFact> parseMeasurementOrFactOfTaxon(StarRecord rec) {
+        ArrayList<MeasurementOrFact> measurementOrFacts = new ArrayList<>();
+        for(Record record: rec.extension(CommonTerms.occurrenceTerm)){
+            ArrayList<MeasurementOrFact> measurementOrFactsOfOcc = measurementOrFactHashMap.get(record.value(DwcTerm.occurrenceID));
+            if(measurementOrFactsOfOcc!= null)
+                measurementOrFacts.addAll(measurementOrFactsOfOcc);
+        }
+        return measurementOrFacts;
     }
 
     private void buildGraph(int resourceId) {
@@ -693,7 +713,7 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/eol_resources/8.tar.gz";
+        String path = "/home/ba/eol_resources/dwca12858.tar.gz";
         try {
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
