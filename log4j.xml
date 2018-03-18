@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="ConsoleOut" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        </Console>
+        <RollingFile name="RollingFile" fileName="logs/deltaCalculator.log"
+                     filePattern="logs/app-%i.log.gz">
+            <PatternLayout>
+                <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="24 MB"/>
+            </Policies>
+            <ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+            <DefaultRolloverStrategy max="500"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="all">
+            <AppenderRef ref="ConsoleOut"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
+
+
+
+        <!--<?xml version="1.0" encoding="UTF-8"?>-->
+        <!--<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >-->
+<!--<log4j:configuration>-->
+
+    <!--<appender name="CA" class="org.apache.log4j.ConsoleAppender">-->
+        <!--<layout class="org.apache.log4j.PatternLayout">-->
+            <!--<param name="ConversionPattern" value="%m%n"/>-->
+        <!--</layout>-->
+    <!--</appender>-->
+
+    <!--&lt;!&ndash; -->
+        <!--If you want to enable logging for the application-->
+        <!--but wish to disable logging for a specific package-->
+        <!--then use this, where org.jboss is the package-->
+        <!--for which you wish to disable logging.-->
+    <!--&ndash;&gt;-->
+    <!--<category name="org.jboss">-->
+        <!--<priority value="off"/>-->
+    <!--</category>-->
+
+    <!--<root>-->
+        <!--<priority value="off"/> &lt;!&ndash;Notice this disables all logging&ndash;&gt;-->
+        <!--<appender-ref ref="CA"/>-->
+    <!--</root>-->
+
+<!--</log4j:configuration>-->
