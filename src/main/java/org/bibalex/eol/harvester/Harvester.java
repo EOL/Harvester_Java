@@ -26,13 +26,13 @@ public class Harvester {
         HarvesterAPI harvesterAPI= new HarvesterAPI();
         try {
             PropertiesHandler.initializeProperties();
-            StorageLayerClient.downloadResource(146+"", "1");
+            StorageLayerClient.downloadResource(176+"", "1");
             String path = PropertiesHandler.getProperty
-                    ("storage.output.directory") + File.separator + 146 + "_org";
+                    ("storage.output.directory") + File.separator + 176 + "_org";
             System.out.println("henaaaaaaaaaaaaaa "+ path);
 
 //            return true;
-            harvesterAPI.callValidation(path, 146);
+            harvesterAPI.callValidation(path, 176);
         } catch (IOException e) {
             e.printStackTrace();
         }

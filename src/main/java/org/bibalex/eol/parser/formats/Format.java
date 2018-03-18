@@ -26,7 +26,9 @@ public abstract class Format {
             if(acceptedNodeStatus.equalsIgnoreCase(taxonomicStatus))
                 return false;
         }
-        return true;
+        if(taxonomicStatus != null)
+            return true;
+        return false;
     }
 
     protected int handleNonSynonymNode(String scientificName, String rank, String nodeId, int resourceId,

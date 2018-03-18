@@ -178,7 +178,7 @@ public class DwcaValidator {
                         chunks++;
                         logger.info("start applying " + rowValidationRules.size() + " row Validations on archive file " + rowType + "on " + chunks + "chunk");
                         rowSuccess &= applyRowValidationRules(archiveFile, validationResult, rowType, rowValidationRules, recordsToValid);
-                        logger.info("start applying " + rowValidationRules.size() + " field Validations on archive file " + rowType + "on " + chunks + "chunk");
+                        logger.info("start applying " + fieldValidationRules.size() + " field Validations on archive file " + rowType + "on " + chunks + "chunk");
                         fieldSuccess &= applyFieldValidationRules(archiveFile, validationResult, rowType, fieldValidationRules, recordsToValid);
                         if (Constants.copyContentOfArchiveFileToDisk(recordsToValid, archiveFile)) {
                             recordsToValid.clear();
@@ -191,7 +191,7 @@ public class DwcaValidator {
                 chunks++;
                 logger.info("start applying " + rowValidationRules.size() + " row Validations on archive file " + rowType + "on " + chunks + "chunk");
                 rowSuccess &= applyRowValidationRules(archiveFile, validationResult, rowType, rowValidationRules, recordsToValid);
-                logger.info("start applying " + rowValidationRules.size() + " field Validations on archive file " + rowType + "on " + chunks + "chunk");
+                logger.info("start applying " + fieldValidationRules.size() + " field Validations on archive file " + rowType + "on " + chunks + "chunk");
                 fieldSuccess &= applyFieldValidationRules(archiveFile, validationResult, rowType, fieldValidationRules, recordsToValid);
                 if (Constants.copyContentOfArchiveFileToDisk(recordsToValid, archiveFile)) {
                     recordsToValid.clear();

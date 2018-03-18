@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/harvest/")
+@RequestMapping("/")
 public class HarvesterController {
 
     @Autowired

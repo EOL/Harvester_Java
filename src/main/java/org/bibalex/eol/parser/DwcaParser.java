@@ -130,13 +130,14 @@ public class DwcaParser {
         this.resourceID = resourceId;
         Neo4jHandler neo4jHandler = new Neo4jHandler();
 
-//        buildGraph(resourceId);
+        buildGraph(resourceId);
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
         for (StarRecord rec : dwca) {
-//            int generatedNodeId = neo4jHandler.getNodeIfExist
-//                    (rec.core().value(DwcTerm.taxonID), resourceId);
+            int generatedNodeId = neo4jHandler.getNodeIfExist
+                    (rec.core().value(DwcTerm.taxonID), resourceId);
+            System.out.println(rec.core().value(DwcTerm.taxonID));
             NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID),
-                    0 + "", resourceId);
+                    generatedNodeId + "", resourceId);
 
             Taxon taxon = parseTaxon(rec);
             if (taxon != null)
@@ -151,6 +152,7 @@ public class DwcaParser {
                 tableRecord.setAssociations(parseAssociationOfTaxon(tableRecord));
             }
             if (rec.hasExtension(CommonTerms.mediaTerm)) {
+                System.out.println("==============>  parse media");
                 tableRecord.setMedia(parseMedia(rec, tableRecord));
             }
 
@@ -482,6 +484,7 @@ public class DwcaParser {
                 record.core().value(TermFactory.instance().findTerm(TermURIs.eolIdAnnotations)),
                 action
         );
+        System.out.println("taxon ------>" + taxonData.getIdentifier());
         return taxonData;
     }
 
@@ -578,6 +581,7 @@ public class DwcaParser {
     private ArrayList<Media> parseMedia(StarRecord record, NodeRecord rec) {
         ArrayList<Media> media = new ArrayList<Media>();
         for (Record extensionRecord : record.extension(CommonTerms.mediaTerm)) {
+            System.out.println("===> has mediaaaaaaaaaaa");
             String storageLayerPath = "", storageLayerThumbnailPath = "";
             ArrayList<String> paths = new ArrayList<String>();
 
