@@ -39,83 +39,6 @@ public class StorageLayerClient {
         return PropertiesHandler.getProperty("storage.output.directory") + File.separator + resourceId + "_org";
     }
 
-//    public static void downloadResource(String resId, String isOrg) throws IOException {
-//        logger.debug("Downloading resource into harvester: " + resId);
-//        final String uri = PropertiesHandler.getProperty("storage.layer.api.url") +
-//                PropertiesHandler.getProperty("download.resource.url");
-//
-//        RestTemplate restTemplate;
-//        if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
-//            CredentialsProvider credsProvider = new BasicCredentialsProvider();
-//
-//            String proxyUrl = PropertiesHandler.getProperty("proxy");
-//            System.out.println(proxyUrl);
-//
-//            int port = Integer.parseInt(PropertiesHandler.getProperty("port"));
-//            System.out.println(port);
-//
-//
-//            credsProvider.setCredentials(new AuthScope(proxyUrl, port),
-//                    new UsernamePasswordCredentials(PropertiesHandler.getProperty("proxyUserName"),
-//                            PropertiesHandler.getProperty("password")));
-//
-//            HttpClientBuilder clientBuilder = HttpClientBuilder.create();
-//            clientBuilder.useSystemProperties();
-//            clientBuilder.setProxy(new HttpHost(proxyUrl, port));
-//            clientBuilder.setDefaultCredentialsProvider(credsProvider);
-//            clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
-//            CloseableHttpClient client = clientBuilder.build();
-//
-//            HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-//            factory.setHttpClient(client);
-//            restTemplate = new RestTemplate(factory);
-//        } else {
-//            restTemplate = new RestTemplate();
-//        }
-//        System.out.println("done proxy");
-//        restTemplate.getMessageConverters().add(
-//                new ByteArrayHttpMessageConverter());
-//
-//        Map<String, String> params = new HashMap<String, String>();
-//        params.put(PropertiesHandler.getProperty("download.var1"), resId);
-//        params.put(PropertiesHandler.getProperty("download.var2"), isOrg);
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-//
-//        HttpEntity<String> entity = new HttpEntity<String>(headers);
-//        System.out.println("before send request");
-//        System.out.println(uri);
-//        System.out.println(params);
-//        ResponseEntity<byte[]> response = restTemplate.exchange(
-//                uri,
-//                HttpMethod.GET, entity, byte[].class, params);
-//        System.out.println("after request");
-//        HttpHeaders outHeaders = response.getHeaders();
-//        System.out.println(outHeaders.get("Content-disposition").size() + "_----------------------");
-//        String fileName = "";
-//
-//        StorageLayerClient storageLayerClient = new StorageLayerClient();
-//        storageLayerClient.getArchiveToValidate();
-//
-//
-//        if (outHeaders.get("Content-disposition").size() > 0) {
-//            fileName = outHeaders.get("Content-disposition").get(0);
-//            fileName = fileName.substring(fileName.indexOf("=") + 1);
-//        }
-//        if (response.getStatusCode() == HttpStatus.OK) {
-//            System.out.println("creating file");
-//            FileOutputStream fos = new FileOutputStream(PropertiesHandler.getProperty
-//                    ("storage.output.directory") + File.separator + resId + "_" +
-//                    (isOrg.equalsIgnoreCase("1") ? "org" : "core"));
-//            fos.write(response.getBody());
-//            fos.close();
-//        } else {
-//            logger.error("org.bibalex.eol.harvester.client.StorageLayerClient.downloadResource: returned code(" + response.getStatusCode() + ")");
-//        }
-//
-//    }
-
     public static void downloadResource(String resId, String isOrg, String isNew) {
         logger.debug("Downloading resource into harvester: " + resId);
         final String uri = PropertiesHandler.getProperty("storage.layer.api.url") +
@@ -156,7 +79,7 @@ public class StorageLayerClient {
         Map<String, String> params = new HashMap<String, String>();
         params.put(PropertiesHandler.getProperty("download.var1"), resId);
         params.put(PropertiesHandler.getProperty("download.var2"), isOrg);
-        params.put(PropertiesHandler.getProperty("download.var3"),isNew);
+        params.put(PropertiesHandler.getProperty("download.var3"), isNew);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
@@ -165,42 +88,42 @@ public class StorageLayerClient {
         System.out.println("before send request");
         System.out.println(uri);
         System.out.println(params);
-        try{
-        ResponseEntity<byte[]> response = restTemplate.exchange(
-                uri,
-                HttpMethod.GET, entity, byte[].class, params);
-        System.out.println("3AAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        System.out.println("after request");
-        HttpHeaders outHeaders = response.getHeaders();
-        System.out.println(outHeaders.get("Content-disposition").size() + "_----------------------");
-        String fileName = "";
-        if (outHeaders.get("Content-disposition").size() > 0) {
-            fileName = outHeaders.get("Content-disposition").get(0);
-            fileName = fileName.substring(fileName.indexOf("=") + 1);
-        }
-        if (response.getStatusCode() == HttpStatus.OK) {
-            System.out.println("creating file");
-            File directory = new File (PropertiesHandler.getProperty
-                    ("storage.output.directory") + File.separator + resId +(isNew.equalsIgnoreCase("1") ? "":"_old")+ "_" +
-                    (isOrg.equalsIgnoreCase("1") ? "org" : "core"));
-
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(directory);
-                fos.write(response.getBody());
-                fos.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            ResponseEntity<byte[]> response = restTemplate.exchange(
+                    uri,
+                    HttpMethod.GET, entity, byte[].class, params);
+            System.out.println("after request");
+            HttpHeaders outHeaders = response.getHeaders();
+            System.out.println(outHeaders.get("Content-disposition").size() + "_----------------------");
+            String fileName = "";
+            if (outHeaders.get("Content-disposition").size() > 0) {
+                fileName = outHeaders.get("Content-disposition").get(0);
+                fileName = fileName.substring(fileName.indexOf("=") + 1);
             }
+            if (response.getStatusCode() == HttpStatus.OK) {
+                System.out.println("creating file");
+                File directory = new File(PropertiesHandler.getProperty
+                        ("storage.output.directory") + File.separator + resId + (isNew.equalsIgnoreCase("1") ? "" : "_old") + "_" +
+                        (isOrg.equalsIgnoreCase("1") ? "org" : "core"));
+
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(directory);
+                    fos.write(response.getBody());
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
 
+            }
+        } catch (HttpClientErrorException ex) {
+            logger.error(ex + ": Resource Version not found");
+            return;
         }
-        }
-    catch (HttpClientErrorException ex)
-    {logger.error("XXXXXXXXXX "+ex+": Resource Version not found XXXXXXXXX");
-    return;}}
+    }
 
 
     public static void uploadDWCAResource(String resId, String fileName) throws IOException {
@@ -378,13 +301,13 @@ public class StorageLayerClient {
 
         File oldVersion = new File(oldPath);
         File updatedVersion = new File(updatedPath),
-                oldVersionArchive = new File(oldVersion.getName()+".tar.gz"),
-                updatedVersionArchive = new File(updatedVersion.getName()+".tar.gz");
+                oldVersionArchive = new File(oldVersion.getName() + ".tar.gz"),
+                updatedVersionArchive = new File(updatedVersion.getName() + ".tar.gz");
         Files.copy(oldVersion.toPath(), oldVersionArchive.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(updatedVersion.toPath(),updatedVersionArchive.toPath(),StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(updatedVersion.toPath(), updatedVersionArchive.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-            System.out.println("################Updated Version of the existing resource found - calling Delta Calculator#####################");
-            deltaCalculator.deltaCalculatorMain(oldVersionArchive, updatedVersionArchive);
+        logger.info("Updated Version of the existing resource found - calling Delta Calculator");
+        deltaCalculator.deltaCalculatorMain(oldVersionArchive, updatedVersionArchive);
     }
 
 }
