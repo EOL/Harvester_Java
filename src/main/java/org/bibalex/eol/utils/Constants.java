@@ -15,10 +15,10 @@ import java.util.Map;
 
 public class Constants {
     public static final int ChunkSize = 1000;
-    public static final String INSERT = "insert";
-    public static final String UPDATE = "update";
-    public static final String DELETE = "delete";
-    public static final String UNCHANGED = "unchanged";
+    public static final String INSERT = "I";
+    public static final String UPDATE = "U";
+    public static final String DELETE = "D";
+    public static final String UNCHANGED = "N";
     public static final String SEPARATOR = "+";
 
 

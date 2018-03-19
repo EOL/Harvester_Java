@@ -100,5 +100,6 @@
     <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.25-incubating" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.21" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20171018" level="project" />
+    <orderEntry type="library" name="Maven: org.gbif:dwca-io:1.23" level="project" />
   </component>
 </module>

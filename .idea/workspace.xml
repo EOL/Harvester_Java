@@ -2,25 +2,191 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eed71ae0-16b5-45c1-b66f-1279bc55d5dd" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/Harvester.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/Harvester.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterController.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterController.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/DwcaValidator.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/DwcaValidator.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/configs.properties" afterPath="$PROJECT_DIR$/src/main/resources/configs.properties" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" afterPath="$PROJECT_DIR$/target/classes/application.properties" />
-      <change beforePath="$PROJECT_DIR$/target/classes/configs.properties" afterPath="$PROJECT_DIR$/target/classes/configs.properties" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/harvester/Harvester.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/harvester/Harvester.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/harvester/HarvesterController.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/harvester/HarvesterController.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/DwcaParser.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/DwcaParser.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/formats/Format.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/formats/Format.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/validator/DwcaValidator.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/validator/DwcaValidator.class" />
-      <change beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT.jar" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT.jar.original" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/digester/CallParamNoNSRule.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/digester/ThesaurusHandlingRule.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/DwcFiles.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/DwcLayout.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/DwcRecordIterator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/InternalDwcFileFactory.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/NormalizedDwcArchive.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/StarRecordIterator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/SupplierWithIO.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/Extension.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/ExtensionFactory.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/ExtensionProperty.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/VocabulariesManager.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/Vocabulary.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/VocabularyConcept.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/VocabularyFactory.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/VocabularyTerm.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/package-info.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/meta/DwcMetaFiles.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwc/meta/MetaXMLSaxHandler.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/Archive.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/ArchiveFactory.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/ArchiveField.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/ArchiveFile.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/DwcaStreamWriter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/DwcaWriter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/MetaDescriptorWriter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/MetadataException.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/SimpleSaxHandler.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/UnsupportedArchiveException.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/record/CleanUtils.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/record/DarwinCoreRecord.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/record/DarwinCoreTaxon.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/record/Record.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/record/RecordImpl.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/record/RecordIterator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/record/StarRecord.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/record/StarRecordImpl.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/tools/ArchiveScanner.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/tools/IdGenerator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/tools/IntSequenceGenerator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/dwca/tools/MetaValidator.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/io/TabWriter.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/tabular/DwcTabularDataFileReader.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/tabular/TermTabularDataFileReader.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/tabular/TermTabularDataLine.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/tabular/TermTabularFiles.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/util/CSVReaderHelper.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/util/DownloadUtil.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/gbif/xml/SAXUtils.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/digester/CallParamNoNSRule.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/digester/ThesaurusHandlingRule.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/DwcFiles.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/DwcLayout.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/DwcRecordIterator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/InternalDwcFileFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/NormalizedDwcArchive.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/StarRecordIterator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/SupplierWithIO.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/extensions/Extension.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/extensions/ExtensionFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/extensions/ExtensionProperty.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/extensions/VocabulariesManager.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/extensions/Vocabulary.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/extensions/VocabularyConcept.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/extensions/VocabularyFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/extensions/VocabularyTerm.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/meta/DwcMetaFiles.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwc/meta/MetaXMLSaxHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/Archive$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/Archive$ArchiveDwcIterator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/Archive$ArchiveIterator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/Archive.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/ArchiveFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/ArchiveField$DataType.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/ArchiveField.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/ArchiveFile.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/DwcaStreamWriter$RowWriteHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/DwcaStreamWriter$RowWriteHandlerImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/DwcaStreamWriter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/DwcaWriter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/MetaDescriptorWriter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/MetadataException.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/SimpleSaxHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/io/UnsupportedArchiveException.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/record/CleanUtils.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/record/DarwinCoreRecord.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/record/DarwinCoreTaxon.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/record/Record.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/record/RecordImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/record/RecordIterator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/record/StarRecord.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/record/StarRecordImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/tools/ArchiveScanner.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/tools/IdGenerator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/tools/IntSequenceGenerator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/dwca/tools/MetaValidator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/io/TabWriter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/tabular/DwcTabularDataFileReader.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/tabular/TermTabularDataFileReader.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/tabular/TermTabularDataLine.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/tabular/TermTabularFiles.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/util/CSVReaderHelper.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/util/DownloadUtil.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/classes/org/gbif/xml/SAXUtils.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/digester/CallParamNoNSRule.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/digester/ThesaurusHandlingRule.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/DwcFiles.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/DwcLayout.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/DwcRecordIterator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/InternalDwcFileFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/NormalizedDwcArchive.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/StarRecordIterator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/SupplierWithIO.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/extensions/Extension.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/extensions/ExtensionFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/extensions/ExtensionProperty.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/extensions/VocabulariesManager.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/extensions/Vocabulary.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/extensions/VocabularyConcept.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/extensions/VocabularyFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/extensions/VocabularyTerm.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/meta/DwcMetaFiles.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwc/meta/MetaXMLSaxHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/Archive$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/Archive$ArchiveDwcIterator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/Archive$ArchiveIterator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/Archive.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/ArchiveFactory.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/ArchiveField$DataType.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/ArchiveField.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/ArchiveFile.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/DwcaStreamWriter$RowWriteHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/DwcaStreamWriter$RowWriteHandlerImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/DwcaStreamWriter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/DwcaWriter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/MetaDescriptorWriter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/MetadataException.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/SimpleSaxHandler.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/io/UnsupportedArchiveException.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/record/CleanUtils.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/record/DarwinCoreRecord.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/record/DarwinCoreTaxon.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/record/Record.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/record/RecordImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/record/RecordIterator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/record/StarRecord.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/record/StarRecordImpl.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/tools/ArchiveScanner.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/tools/IdGenerator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/tools/IntSequenceGenerator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/dwca/tools/MetaValidator.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/io/TabWriter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/tabular/DwcTabularDataFileReader.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/tabular/TermTabularDataFileReader.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/tabular/TermTabularDataLine.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/tabular/TermTabularFiles.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/util/CSVReaderHelper.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/util/DownloadUtil.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/gbif/xml/SAXUtils.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/harvester/Harvester.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/harvester/Harvester.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/harvester/HarvesterController.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/harvester/HarvesterController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/harvester/StorageLayerClient.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/harvester/StorageLayerClient.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/DwcaParser.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/DwcaParser.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/utils/Constants.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/utils/Constants.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT.war" afterPath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT.war" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT.war.original" afterPath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT.war.original" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/bibalex/eol/harvester/Harvester.class" afterPath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/bibalex/eol/harvester/Harvester.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/bibalex/eol/harvester/HarvesterController.class" afterPath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/bibalex/eol/harvester/HarvesterController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/bibalex/eol/harvester/StorageLayerClient.class" afterPath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/bibalex/eol/harvester/StorageLayerClient.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/bibalex/eol/parser/DwcaParser.class" afterPath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/bibalex/eol/parser/DwcaParser.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/bibalex/eol/utils/Constants.class" afterPath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/org/bibalex/eol/utils/Constants.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/harvester.iml" afterPath="$PROJECT_DIR$/harvester.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/Harvester.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/Harvester.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterController.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/configs.properties" afterPath="$PROJECT_DIR$/src/main/resources/configs.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/configs.properties" afterPath="$PROJECT_DIR$/target/classes/configs.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/configs.properties" afterPath="$PROJECT_DIR$/target/harvester-1.0-SNAPSHOT/WEB-INF/classes/configs.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -33,71 +199,63 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DwcaParser.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3790">
-              <caret line="486" column="0" lean-forward="false" selection-start-line="486" selection-start-column="0" selection-end-line="486" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Harvester.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/Harvester.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="30" column="71" lean-forward="false" selection-start-line="30" selection-start-column="71" selection-end-line="30" selection-end-column="71" />
+            <state relative-caret-position="360">
+              <caret line="28" column="62" lean-forward="false" selection-start-line="28" selection-start-column="62" selection-end-line="28" selection-end-column="62" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ParentFormat.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java">
+      <file leaf-file-name="HarvesterController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="72" column="17" lean-forward="false" selection-start-line="72" selection-start-column="17" selection-end-line="72" selection-end-column="17" />
+            <state relative-caret-position="197">
+              <caret line="33" column="36" lean-forward="false" selection-start-line="33" selection-start-column="36" selection-end-line="33" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SynonymNodeHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java">
+      <file leaf-file-name="StorageLayerClient.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="45" column="51" lean-forward="false" selection-start-line="45" selection-start-column="51" selection-end-line="45" selection-end-column="51" />
+            <state relative-caret-position="1386">
+              <caret line="101" column="0" lean-forward="false" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Neo4jHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/Neo4jHandler.java">
+      <file leaf-file-name="ArchiveFileHandler.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/deltacalculator/ArchiveFileHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="80" column="32" lean-forward="false" selection-start-line="80" selection-start-column="15" selection-end-line="80" selection-end-column="32" />
+            <state relative-caret-position="288">
+              <caret line="232" column="71" lean-forward="false" selection-start-line="232" selection-start-column="71" selection-end-line="232" selection-end-column="71" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommonTerms.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/CommonTerms.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="468">
+              <caret line="27" column="41" lean-forward="false" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="41" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Format.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java">
+      <file leaf-file-name="TermURIs.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/TermURIs.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="30" column="21" lean-forward="false" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Node.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Node.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+            <state relative-caret-position="174">
+              <caret line="41" column="31" lean-forward="false" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -106,18 +264,38 @@
       <file leaf-file-name="configs.properties" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/configs.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+            <state relative-caret-position="180">
+              <caret line="16" column="29" lean-forward="false" selection-start-line="16" selection-start-column="29" selection-end-line="16" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Taxon.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Taxon.java">
+      <file leaf-file-name="ActionFiles.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="379">
-              <caret line="23" column="15" lean-forward="false" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="15" />
+            <state relative-caret-position="198">
+              <caret line="16" column="48" lean-forward="false" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Constants.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ActionFile.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/deltacalculator/ActionFile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="864">
+              <caret line="56" column="20" lean-forward="false" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -134,8 +312,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>checkIfReferencesChanged</find>
-      <find>checkIfAgentsChanged</find>
       <find>adjusr</find>
       <find>&quot;_action&quot;</find>
       <find>agent</find>
@@ -163,7 +339,9 @@
       <find>start applying</find>
       <find>RunTime Error sorting core file</find>
       <find>downloadRe</find>
+      <find>placeholde</find>
       <find>media</find>
+      <find>14</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -177,7 +355,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/functions/ReferenceValidationFunctions.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/functions/TaxonValidationFunctions.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/handlers/DwcaHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/rules/FieldValidationRule.java" />
@@ -204,12 +381,10 @@
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/VernacularName.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Occurrence.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Media.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/AncestryFormat.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/functions/ValidationFunctions.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/rules/ValidationRulesLoader.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/handlers/XMLHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/OwnDwcaWriter.java" />
@@ -218,15 +393,18 @@
         <option value="$PROJECT_DIR$/src/main/java/org/gbif/xml/SAXUtils.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/gbif/dwc/InternalDwcFileFactory.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterController.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/MainHarvester.java" />
         <option value="$PROJECT_DIR$/src/main/resources/application.properties" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/DwcaValidator.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/Archive.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" />
         <option value="$PROJECT_DIR$/src/main/resources/ValidationRules.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/Harvester.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/Harvester.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/deltacalculator/ArchiveFileHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java" />
         <option value="$PROJECT_DIR$/src/main/resources/configs.properties" />
       </list>
     </option>
@@ -265,10 +443,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="Scratches" />
-      <pane id="AndroidView" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -300,6 +477,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="deltacalculator" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="harvester" type="b2602c69:ProjectViewProjectNode" />
+              <item name="harvester" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="org" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -330,39 +515,6 @@
               <item name="org" type="462c0819:PsiDirectoryNode" />
               <item name="eol" type="462c0819:PsiDirectoryNode" />
               <item name="parser" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="harvester" type="b2602c69:ProjectViewProjectNode" />
-              <item name="harvester" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="org" type="462c0819:PsiDirectoryNode" />
-              <item name="eol" type="462c0819:PsiDirectoryNode" />
-              <item name="parser" type="462c0819:PsiDirectoryNode" />
-              <item name="formats" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="harvester" type="b2602c69:ProjectViewProjectNode" />
-              <item name="harvester" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="org" type="462c0819:PsiDirectoryNode" />
-              <item name="eol" type="462c0819:PsiDirectoryNode" />
-              <item name="parser" type="462c0819:PsiDirectoryNode" />
-              <item name="handlers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="harvester" type="b2602c69:ProjectViewProjectNode" />
-              <item name="harvester" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="org" type="462c0819:PsiDirectoryNode" />
-              <item name="eol" type="462c0819:PsiDirectoryNode" />
-              <item name="parser" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="harvester" type="b2602c69:ProjectViewProjectNode" />
@@ -373,16 +525,6 @@
               <item name="org" type="462c0819:PsiDirectoryNode" />
               <item name="eol" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="harvester" type="b2602c69:ProjectViewProjectNode" />
-              <item name="harvester" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="org" type="462c0819:PsiDirectoryNode" />
-              <item name="eol" type="462c0819:PsiDirectoryNode" />
-              <item name="validator" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="harvester" type="b2602c69:ProjectViewProjectNode" />
@@ -418,22 +560,13 @@
               <item name="harvester" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="org" type="462c0819:PsiDirectoryNode" />
-              <item name="gbif" type="462c0819:PsiDirectoryNode" />
-              <item name="xml" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="harvester" type="b2602c69:ProjectViewProjectNode" />
-              <item name="harvester" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -461,13 +594,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Application.Harvester">
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <module />
-    </configuration>
     <configuration name="ActionFiles" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -563,6 +689,13 @@
       <module name="harvester" />
       <envs />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" />
@@ -596,6 +729,12 @@
       </option>
       <envs />
       <patterns />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
     </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
@@ -631,12 +770,6 @@
       <properties />
       <listeners />
     </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" />
-      <predefined_log_file id="idea.log" enabled="true" />
-    </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Application.MainHarvester" />
       <item index="1" class="java.lang.String" itemvalue="Application.StorageLayerClient" />
@@ -671,12 +804,11 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="27" width="1922" height="1054" extended-state="6" />
+    <frame x="0" y="27" width="1922" height="1054" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32781458" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -684,23 +816,52 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32994652" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33774835" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289183" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3598234" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36092716" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31176472" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19946525" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33995584" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45695364" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32781458" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32994652" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45695364" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32781458" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33774835" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289183" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3598234" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1973262" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -708,24 +869,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java</url>
-          <line>486</line>
-          <properties />
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java</url>
-          <line>41</line>
-          <properties />
-          <option name="timeStamp" value="23" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java</url>
-          <line>70</line>
-          <properties />
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java</url>
           <line>35</line>
@@ -750,27 +893,24 @@
           <properties />
           <option name="timeStamp" value="28" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/Neo4jHandler.java</url>
+          <line>32</line>
+          <properties />
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/RestClientHandler.java</url>
+          <line>73</line>
+          <properties />
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="29" />
+      <option name="time" value="33" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/handlers/DwcaHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1026">
-          <caret line="24" column="13" lean-forward="false" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterTest.java" />
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/4.3.8.RELEASE/spring-web-4.3.8.RELEASE.jar!/org/springframework/web/client/RestTemplate.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="300" column="33" lean-forward="false" selection-start-line="300" selection-start-column="33" selection-end-line="300" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/4.3.8.RELEASE/spring-web-4.3.8.RELEASE.jar!/org/springframework/http/MediaType.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="249">
@@ -782,14 +922,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="215">
           <caret line="21" column="58" lean-forward="false" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-455">
-          <caret line="16" column="48" lean-forward="false" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
         </state>
       </provider>
     </entry>
@@ -825,12 +957,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1368">
           <caret line="76" column="29" lean-forward="false" selection-start-line="76" selection-start-column="29" selection-end-line="76" selection-end-column="29" />
-          <folding>
-            <element signature="e#8338#8339#0" expanded="false" />
-            <element signature="e#8367#8368#0" expanded="false" />
-            <element signature="e#8411#8412#0" expanded="false" />
-            <element signature="e#8447#8448#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -838,12 +964,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1188">
           <caret line="66" column="29" lean-forward="false" selection-start-line="66" selection-start-column="29" selection-end-line="66" selection-end-column="29" />
-          <folding>
-            <element signature="e#7850#7851#0" expanded="false" />
-            <element signature="e#7879#7880#0" expanded="false" />
-            <element signature="e#7923#7924#0" expanded="false" />
-            <element signature="e#7959#7960#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -851,12 +971,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2394">
           <caret line="209" column="5" lean-forward="false" selection-start-line="209" selection-start-column="5" selection-end-line="209" selection-end-column="5" />
-          <folding>
-            <element signature="e#4916#4917#0" expanded="false" />
-            <element signature="e#4945#4946#0" expanded="false" />
-            <element signature="e#4989#4990#0" expanded="false" />
-            <element signature="e#5025#5026#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -864,20 +978,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
           <caret line="22" column="29" lean-forward="false" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
-          <folding>
-            <element signature="e#2138#2139#0" expanded="false" />
-            <element signature="e#2167#2168#0" expanded="false" />
-            <element signature="e#2211#2212#0" expanded="false" />
-            <element signature="e#2247#2248#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="47" column="45" lean-forward="false" selection-start-line="44" selection-start-column="16" selection-end-line="47" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -895,47 +995,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/ArchiveFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="25" column="31" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="25" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/ExtensionFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="14" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/gbif/xml/SAXUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/gbif/dwc/InternalDwcFileFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="61" column="5" lean-forward="true" selection-start-line="61" selection-start-column="5" selection-end-line="61" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/ArchiveFactory.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/gbif/dwc/extensions/ExtensionFactory.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/gbif/xml/SAXUtils.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/gbif/dwc/InternalDwcFileFactory.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/OwnDwcaWriter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3510">
           <caret line="212" column="96" lean-forward="false" selection-start-line="212" selection-start-column="96" selection-end-line="212" selection-end-column="96" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -943,7 +1010,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="233">
           <caret line="91" column="39" lean-forward="false" selection-start-line="91" selection-start-column="39" selection-end-line="91" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -951,7 +1017,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="4" column="23" lean-forward="false" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -959,7 +1024,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
           <caret line="56" column="34" lean-forward="false" selection-start-line="56" selection-start-column="18" selection-end-line="56" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -967,7 +1031,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="630">
           <caret line="44" column="31" lean-forward="false" selection-start-line="44" selection-start-column="31" selection-end-line="44" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -991,55 +1054,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
           <caret line="1" column="27" lean-forward="false" selection-start-line="1" selection-start-column="20" selection-end-line="1" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/Archive.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-139">
-          <caret line="430" column="0" lean-forward="false" selection-start-line="430" selection-start-column="0" selection-end-line="430" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-360">
-          <caret line="63" column="19" lean-forward="false" selection-start-line="63" selection-start-column="12" selection-end-line="63" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/Archive.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/NodeRecord.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
           <caret line="20" column="11" lean-forward="false" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/RestClientHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-72">
-          <caret line="57" column="43" lean-forward="false" selection-start-line="57" selection-start-column="33" selection-end-line="57" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/MainHarvester.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="16" column="5" lean-forward="false" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="24" column="47" lean-forward="false" selection-start-line="24" selection-start-column="31" selection-end-line="24" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1047,7 +1069,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="261">
           <caret line="118" column="0" lean-forward="false" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1055,7 +1076,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1031">
           <caret line="93" column="0" lean-forward="false" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1063,17 +1083,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="181">
           <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/CommonTerms.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="9" column="88" lean-forward="false" selection-start-line="9" selection-start-column="88" selection-end-line="9" selection-end-column="88" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1089,29 +1098,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="313" column="0" lean-forward="false" selection-start-line="313" selection-start-column="0" selection-end-line="313" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/TermURIs.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="87" column="31" lean-forward="false" selection-start-line="87" selection-start-column="31" selection-end-line="87" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Node.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Taxon.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379">
+        <state relative-caret-position="414">
           <caret line="23" column="15" lean-forward="false" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="15" />
           <folding />
         </state>
@@ -1119,56 +1111,158 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
+        <state relative-caret-position="738">
           <caret line="45" column="51" lean-forward="false" selection-start-line="45" selection-start-column="51" selection-end-line="45" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/Neo4jHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="80" column="32" lean-forward="false" selection-start-line="80" selection-start-column="15" selection-end-line="80" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="72" column="17" lean-forward="false" selection-start-line="72" selection-start-column="17" selection-end-line="72" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/configs.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
+        <state relative-caret-position="432">
           <caret line="30" column="21" lean-forward="false" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/Harvester.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Node.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="30" column="71" lean-forward="false" selection-start-line="30" selection-start-column="71" selection-end-line="30" selection-end-column="71" />
+        <state relative-caret-position="882">
+          <caret line="49" column="11" lean-forward="false" selection-start-line="49" selection-start-column="11" selection-end-line="49" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/Neo4jHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="29" column="15" lean-forward="false" selection-start-line="29" selection-start-column="15" selection-end-line="29" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/RestClientHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="73" column="0" lean-forward="false" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+          <folding>
+            <element signature="e#2168#2193#0" expanded="true" />
+            <element signature="e#2766#2778#0" expanded="true" />
+            <element signature="e#3454#3460#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="812">
+          <caret line="63" column="63" lean-forward="false" selection-start-line="63" selection-start-column="63" selection-end-line="63" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/MainHarvester.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="16" column="5" lean-forward="false" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3790">
+        <state relative-caret-position="18">
           <caret line="486" column="0" lean-forward="false" selection-start-line="486" selection-start-column="0" selection-end-line="486" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/deltacalculator/DeltaCalculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="40" column="75" lean-forward="false" selection-start-line="40" selection-start-column="75" selection-end-line="40" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/CommonTerms.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="27" column="41" lean-forward="false" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="16" column="48" lean-forward="false" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/deltacalculator/ActionFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="864">
+          <caret line="56" column="20" lean-forward="false" selection-start-line="56" selection-start-column="20" selection-end-line="56" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/deltacalculator/ArchiveFileHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="232" column="71" lean-forward="false" selection-start-line="232" selection-start-column="71" selection-end-line="232" selection-end-column="71" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/Harvester.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="28" column="62" lean-forward="false" selection-start-line="28" selection-start-column="62" selection-end-line="28" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/TermURIs.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="41" column="31" lean-forward="false" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/HarvesterController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="33" column="36" lean-forward="false" selection-start-line="33" selection-start-column="36" selection-end-line="33" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/configs.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="16" column="29" lean-forward="false" selection-start-line="16" selection-start-column="29" selection-end-line="16" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1386">
+          <caret line="101" column="0" lean-forward="false" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
           <folding />
         </state>
       </provider>

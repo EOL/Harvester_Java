@@ -1,5 +1,6 @@
 package org.bibalex.eol.harvester;
 
+import com.deltacalculator.DeltaCalculator;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -16,9 +17,12 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import org.json.*;
 
@@ -33,13 +37,14 @@ public class StorageLayerClient {
         return PropertiesHandler.getProperty("storage.output.directory") + File.separator + resourceId + "_org";
     }
 
-    public static void downloadResource(String resId, String isOrg) throws IOException {
+
+    public static void downloadResource(String resId, String isOrg, String isNew) {
         logger.debug("Downloading resource into harvester: " + resId);
         final String uri = PropertiesHandler.getProperty("storage.layer.api.url") +
                 PropertiesHandler.getProperty("download.resource.url");
 
         RestTemplate restTemplate;
-        if(PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
+        if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
             CredentialsProvider credsProvider = new BasicCredentialsProvider();
 
             String proxyUrl = PropertiesHandler.getProperty("proxy");
@@ -73,6 +78,7 @@ public class StorageLayerClient {
         Map<String, String> params = new HashMap<String, String>();
         params.put(PropertiesHandler.getProperty("download.var1"), resId);
         params.put(PropertiesHandler.getProperty("download.var2"), isOrg);
+        params.put(PropertiesHandler.getProperty("download.var3"), isNew);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
@@ -81,29 +87,45 @@ public class StorageLayerClient {
         System.out.println("before send request");
         System.out.println(uri);
         System.out.println(params);
-        ResponseEntity<byte[]> response = restTemplate.exchange(
-                uri,
-                HttpMethod.GET, entity, byte[].class, params);
-        System.out.println("after request");
-        HttpHeaders outHeaders = response.getHeaders();
-        System.out.println(outHeaders.get("Content-disposition").size() + "_----------------------");
-        String fileName = "";
-        if(outHeaders.get("Content-disposition").size() > 0) {
-            fileName = outHeaders.get("Content-disposition").get(0);
-            fileName = fileName.substring(fileName.indexOf("=") + 1);
-        }
-        if (response.getStatusCode() == HttpStatus.OK) {
-            System.out.println("creating file");
-            FileOutputStream fos = new FileOutputStream(PropertiesHandler.getProperty
-                    ("storage.output.directory") + File.separator + resId + "_" +
-                    (isOrg.equalsIgnoreCase("1")? "org" : "core"));
-            fos.write(response.getBody());
-            fos.close();
-        } else {
-            logger.error("org.bibalex.eol.harvester.client.StorageLayerClient.downloadResource: returned code(" + response.getStatusCode() + ")");
-        }
+        try {
+            ResponseEntity<byte[]> response = restTemplate.exchange(
+                    uri,
+                    HttpMethod.GET, entity, byte[].class, params);
+            System.out.println("after request");
+            HttpHeaders outHeaders = response.getHeaders();
+            System.out.println(outHeaders.get("Content-disposition").size() + "_----------------------");
+            String fileName = "";
+            if (outHeaders.get("Content-disposition").size() > 0) {
+                fileName = outHeaders.get("Content-disposition").get(0);
+                fileName = fileName.substring(fileName.indexOf("=") + 1);
+            }
 
+            if (response.getStatusCode() == HttpStatus.OK) {
+                System.out.println("creating file");
+                File directory = new File(PropertiesHandler.getProperty
+                        ("storage.output.directory") + File.separator + resId + (isNew.equalsIgnoreCase("1") ? "" : "_old") + "_" +
+                        (isOrg.equalsIgnoreCase("1") ? "org" : "core"));
+
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(directory);
+                    fos.write(response.getBody());
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+            else return;
+        } catch (HttpClientErrorException ex) {
+            logger.error(ex + ": Resource Version not found");
+            return;
+        }
     }
+
 
     public static void uploadDWCAResource(String resId, String fileName) throws IOException {
         logger.debug("Uploading DWCA resource (" + resId + ") into SL.");
@@ -272,6 +294,20 @@ public class StorageLayerClient {
         urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/2018012915070314586_eternity.jpg");
         urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
         client.downloadMedia("105", urls);
+    }
+    public static void getArchiveToValidate(String oldPath, String updatedPath) throws IOException {
+        DeltaCalculator deltaCalculator = new DeltaCalculator();
+
+
+        File oldVersion = new File(oldPath);
+        File updatedVersion = new File(updatedPath),
+                oldVersionArchive = new File(oldVersion.getName() + ".tar.gz"),
+                updatedVersionArchive = new File(updatedVersion.getName() + ".tar.gz");
+        Files.copy(oldVersion.toPath(), oldVersionArchive.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(updatedVersion.toPath(), updatedVersionArchive.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        logger.info("Updated Version of the existing resource found - calling Delta Calculator");
+        deltaCalculator.deltaCalculatorMain(oldVersionArchive, updatedVersionArchive);
     }
 
 }

@@ -26,13 +26,13 @@ public class Harvester {
         HarvesterAPI harvesterAPI= new HarvesterAPI();
         try {
             PropertiesHandler.initializeProperties();
-            StorageLayerClient.downloadResource(176+"", "1");
+            StorageLayerClient.downloadResource(179+"", "1","1");
             String path = PropertiesHandler.getProperty
-                    ("storage.output.directory") + File.separator + 176 + "_org";
+                    ("storage.output.directory") + File.separator + 179 + "_org";
             System.out.println("henaaaaaaaaaaaaaa "+ path);
 
 //            return true;
-            harvesterAPI.callValidation(path, 176);
+            harvesterAPI.callValidation(path, 179);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,7 +47,7 @@ public class Harvester {
         logger.debug("Create storage layer client: ");
         StorageLayerClient storageLayerClient = new StorageLayerClient();
         logger.debug("Call download: ");
-        storageLayerClient.downloadResource(resourceId+"", "1");
+        storageLayerClient.downloadResource(resourceId+"", "1","1");
         logger.debug("Get the property: ");
         String path = PropertiesHandler.getProperty("storage.output.directory") + File.separator + resourceId + "_org";
         System.out.println(path);

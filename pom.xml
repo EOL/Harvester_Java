@@ -186,6 +186,11 @@
             <artifactId>json</artifactId>
             <version>20171018</version>
         </dependency>
+        <dependency>
+            <groupId>org.gbif</groupId>
+            <artifactId>dwca-io</artifactId>
+            <version>1.23</version>
+        </dependency>
     </dependencies>
 
 
