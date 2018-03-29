@@ -14,16 +14,17 @@ import java.io.IOException;
 @Service
 public class HarvesterAPI {
 
-    public boolean callValidation(String path, int resourceID){
+    public boolean callValidation(String path, int resourceID, boolean newResource){
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
             Archive dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
 //            Archive dwcArchive = ArchiveFactory.openArchive(new File(path));
+            System.out.println("call validationnnnnnnnnnnnnn");
             validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
 //            return true;
-            return callParser(path+".out_valid", resourceID);
+            return callParser(path+".out_valid", resourceID, newResource);
         } catch (IOException e) {
 //            e.printStackTrace();
 //            System.out.println("exceptionnnnnnnnnnnnnnnnnnnnn");
@@ -36,12 +37,12 @@ public class HarvesterAPI {
 
     }
 
-    private boolean callParser(String path, int resourceID){
+    private boolean callParser(String path, int resourceID, boolean newResource){
         Archive dwcArchive = null;
         try {
             PropertiesHandler.initializeProperties();
             dwcArchive = ArchiveFactory.openArchive(new File(path));
-            DwcaParser dwcaP = new DwcaParser(dwcArchive);
+            DwcaParser dwcaP = new DwcaParser(dwcArchive, newResource);
             dwcaP.prepareNodesRecord(resourceID);
             return true;
         } catch (IOException e) {

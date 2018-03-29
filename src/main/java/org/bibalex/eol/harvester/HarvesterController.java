@@ -25,6 +25,7 @@ public class HarvesterController {
     @RequestMapping(method = RequestMethod.POST)
     public boolean harvest(@RequestParam(value = "resourceID") String resourceID){
         try {
+            boolean newResource = false;
             PropertiesHandler.initializeProperties();
             StorageLayerClient.downloadResource(resourceID + "", "1", "1");
             String updatedPath = PropertiesHandler.getProperty
@@ -36,13 +37,15 @@ public class HarvesterController {
                 File checkOldVersion = new File(oldPath);
                 String checkFilePath = checkOldVersion.getPath();
                 System.out.println(checkFilePath);
-                if(!checkFilePath.equals(null))
-                    StorageLayerClient.getArchiveToValidate(oldPath, updatedPath);
+                if(!checkFilePath.equals(null)) {
+                    String deltaPath = StorageLayerClient.getArchiveToValidate(oldPath, updatedPath);
+                    return harvesterAPI.callValidation(deltaPath, Integer.parseInt(resourceID), newResource);
+                }
             } catch (NoSuchFileException exception) {
+                newResource = true;
                 logger.info(exception+": No Older Versions of the resource found, calling Validator");
             }
-//            return harvesterAPI.callValidation(updatedPath, Integer.parseInt(resourceID));
-            return true;
+            return harvesterAPI.callValidation(updatedPath, Integer.parseInt(resourceID), newResource);
         } catch (IOException e) {
             e.printStackTrace();
             return false;

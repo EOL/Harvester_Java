@@ -13,6 +13,7 @@ import org.gbif.dwca.record.Record;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
 
@@ -31,6 +32,7 @@ public class DwcaValidator {
     public DwcaValidator(String propertiesFile) throws Exception {
 //        LogHandler.initializeHandler(propertiesFile);
 //        logger = LogHandler.getLogger(DwcaValidator.class.getName());
+        System.out.println("load rulessssssssssssssssssssssssssssssssssssssssssssssssssssss");
         rulesLoader = new ValidationRulesLoader(propertiesFile);
         if (!rulesLoader.loadValidationRules()) {
             throw new Exception("Failed to load the validation rules while creating new dwca " +
@@ -39,12 +41,24 @@ public class DwcaValidator {
     }
 
     public ValidationResult validateArchive(String path, Archive dwcArchive) throws Exception {
+        checkIfValidArchiveIsExists(path);
         ValidationResult validationResult = new ValidationResult(path);
         if (!validateArchive(dwcArchive, validationResult)) {
             throw new Exception("Problem happened while trying to apply the validation rules on " +
                     "the archive : " + path);
         }
         return validationResult;
+    }
+
+    private void checkIfValidArchiveIsExists(String path) {
+        File f = new File(path+"_valid");
+        if (f.exists() && f.isDirectory()) {
+            try {
+                FileUtils.deleteDirectory(f);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

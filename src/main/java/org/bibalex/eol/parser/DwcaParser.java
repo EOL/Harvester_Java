@@ -13,6 +13,7 @@ import org.bibalex.eol.parser.models.*;
 import org.bibalex.eol.utils.CommonTerms;
 import org.bibalex.eol.utils.Constants;
 import org.bibalex.eol.utils.TermURIs;
+import org.bibalex.eol.validator.DwcaValidator;
 import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwc.terms.GbifTerm;
 import org.gbif.dwc.terms.TermFactory;
@@ -46,8 +47,9 @@ public class DwcaParser {
     private int resourceID;
     private Map<String, Map<String, String>> actionFiles;
     int batchSize = 1000;
+    private boolean newResource;
 
-    public DwcaParser(Archive dwca) {
+    public DwcaParser(Archive dwca, boolean newResource) {
         this.dwca = dwca;
         referencesMap = new HashMap<>();
         agentsMap = new HashMap<>();
@@ -61,6 +63,7 @@ public class DwcaParser {
         loadAllAssociations();
         loadAllAssociationsINOneMap();
         actionFiles = ActionFiles.loadActionFiles(dwca);
+        this.newResource = newResource;
     }
 
     private void loadAllReferences() {
@@ -222,8 +225,13 @@ public class DwcaParser {
                         i++;
                         taxaList.add(parseTaxon(rec));
                     }
-                } else {
+                } /*else {
                     System.out.println("insert from else of actions is null");
+                    i++;
+                    taxaList.add(parseTaxon(rec));
+                }*/
+                if(newResource){
+                    System.out.println("insert new resource");
                     i++;
                     taxaList.add(parseTaxon(rec));
                 }
@@ -254,8 +262,12 @@ public class DwcaParser {
                 System.out.println("insert from else of action is null");
                 insertTaxon(tableRecord);
             }
-        } else {
+        } /*else {
             System.out.println("insert from else of actions is null");
+            insertTaxon(tableRecord);
+        }*/
+        if(newResource){
+            System.out.println("new resource");
             insertTaxon(tableRecord);
         }
     }
@@ -305,15 +317,17 @@ public class DwcaParser {
     private String checkIfAgentsChanged(String agentId) {
         ArchiveFile agentFile = dwca.getExtension(CommonTerms.agentTerm);
         String action = "";
-        Map<String, String> actions = actionFiles.get(agentFile.getLocation() + "_action");
-        System.out.println(actions);
-        if (actions != null && actions.get(agentId) != null) {
-            action = actions.get(agentId);
-            System.out.println("agent action found");
-        } else {
-            action = "insert";
+        if(agentFile != null) {
+            Map<String, String> actions = actionFiles.get(agentFile.getLocation() + "_action");
+            System.out.println(actions);
+            if (actions != null && actions.get(agentId) != null) {
+                action = actions.get(agentId);
+                System.out.println("agent action found");
+            } else {
+                action = "insert";
+            }
+            System.out.println("agent " + action);
         }
-        System.out.println("agent "+action);
         return action;
     }
 
@@ -321,41 +335,45 @@ public class DwcaParser {
     private String checkIfReferencesChanged(String referenceId) {
         ArchiveFile referenceFile = dwca.getExtension(CommonTerms.referenceTerm);
         String action = "";
-        Map<String, String> actions = actionFiles.get(referenceFile.getLocation() + "_action");
-        System.out.println(actions);
-        if (actions != null && actions.get(referenceId) != null) {
-            action = actions.get(referenceId);
-            System.out.println("reference action found");
-        } else {
-            action = "insert";
+        if(referenceFile != null) {
+            Map<String, String> actions = actionFiles.get(referenceFile.getLocation() + "_action");
+            System.out.println(actions);
+            if (actions != null && actions.get(referenceId) != null) {
+                action = actions.get(referenceId);
+                System.out.println("reference action found");
+            } else {
+                action = "insert";
+            }
+            System.out.println("refe " + action);
         }
-        System.out.println("refe "+action);
         return action;
     }
 
     private String checkIfVernacularChanged(Record extensionRecord) {
         ArchiveFile vernacularFile = dwca.getExtension(GbifTerm.VernacularName);
-        Map<String, String> actions = actionFiles.get(vernacularFile.getLocation() + "_action");
         String action = "";
-        if (actions != null) {
-            System.out.println(actions);
+        if(vernacularFile != null) {
+            Map<String, String> actions = actionFiles.get(vernacularFile.getLocation() + "_action");
+            if (actions != null) {
+                System.out.println(actions);
 
-            String name = extensionRecord.value(DwcTerm.vernacularName);
-            String language = extensionRecord.value(CommonTerms.languageTerm);
-            String key = name + Constants.SEPARATOR + language;
+                String name = extensionRecord.value(DwcTerm.vernacularName);
+                String language = extensionRecord.value(CommonTerms.languageTerm);
+                String key = name + Constants.SEPARATOR + language;
 
-            System.out.println(key);
-            if (actions.get(key) != null) {
-                System.out.println("vernacular action found");
-                action = actions.get(key);
+                System.out.println(key);
+                if (actions.get(key) != null) {
+                    System.out.println("vernacular action found");
+                    action = actions.get(key);
+                } else {
+                    System.out.println("vernacular action not found");
+                    action = "insert";
+                }
             } else {
-                System.out.println("vernacular action not found");
                 action = "insert";
             }
-        } else {
-            action = "insert";
+            System.out.println("vernacular " + action);
         }
-        System.out.println("vernacular "+action);
         return action;
     }
 
@@ -368,27 +386,29 @@ public class DwcaParser {
                 refIds.add(ref.getReferenceId());
         }
 
-        if (nodeRecord.getTaxon().getReferenceId() != null &&
-                !refIds.contains(nodeRecord.getTaxon().getReferenceId())) {
+        if (nodeRecord.getTaxon().getReferenceId() != null) {
             String[] references = nodeRecord.getTaxon().getReferenceId().split(";");
             for (String referenceId : references) {
                 Reference reference = referencesMap.get(referenceId);
-                String action = checkIfReferencesChanged(referenceId);
-                reference.setAction(action);
-                addReference(nodeRecord, reference);
+                if(reference != null && !refIds.contains(referenceId) ) {
+                    String action = checkIfReferencesChanged(referenceId);
+                    reference.setAction(action);
+                    addReference(nodeRecord, reference);
+                }
             }
         }
 
         if (nodeRecord.getMedia() != null) {
             for (Media media : nodeRecord.getMedia()) {
-                if (media.getReferenceId() != null && !refIds.contains(media.getReferenceId()) &&
-                        referencesMap.get(media.getReferenceId()) != null) {
+                if (media.getReferenceId() != null){
                     String[] references = media.getReferenceId().split(";");
                     for (String referenceId : references) {
                         Reference reference = referencesMap.get(referenceId);
-                        String action = checkIfReferencesChanged(referenceId);
-                        reference.setAction(action);
-                        addReference(nodeRecord, reference);
+                        if(reference != null&& !refIds.contains(referenceId)) {
+                            String action = checkIfReferencesChanged(referenceId);
+                            reference.setAction(action);
+                            addReference(nodeRecord, reference);
+                        }
                     }
                 }
             }
@@ -396,22 +416,24 @@ public class DwcaParser {
 
         if (nodeRecord.getAssociations() != null) {
             for (Association association : nodeRecord.getAssociations()) {
-                if (association.getReferenceId() != null && !refIds.contains(association.getReferenceId()) &&
-                        referencesMap.get(association.getReferenceId()) != null) {
+                if (association.getReferenceId() != null) {
                     String[] references = association.getReferenceId().split(";");
-                    for (String reference : references)
-                        addReference(nodeRecord, referencesMap.get(reference));
+                    for (String reference : references) {
+                        if(referencesMap.get(reference) != null && !refIds.contains(reference) )
+                            addReference(nodeRecord, referencesMap.get(reference));
+                    }
                 }
             }
         }
 
         if (nodeRecord.getMeasurementOrFacts() != null) {
             for (MeasurementOrFact measurementOrFact : nodeRecord.getMeasurementOrFacts()) {
-                if (measurementOrFact.getReferenceId() != null && !refIds.contains(measurementOrFact.getReferenceId())
-                        && referencesMap.get(measurementOrFact.getReferenceId()) != null) {
+                if (measurementOrFact.getReferenceId() != null && !refIds.contains(measurementOrFact.getReferenceId())) {
                     String[] references = measurementOrFact.getReferenceId().split(";");
-                    for (String reference : references)
-                        addReference(nodeRecord, referencesMap.get(reference));
+                    for (String reference : references) {
+                        if(referencesMap.get(reference) != null&& !refIds.contains(reference))
+                            addReference(nodeRecord, referencesMap.get(reference));
+                    }
                 }
             }
         }
@@ -434,9 +456,11 @@ public class DwcaParser {
             String[] agentIds = agents.split(";");
             for (String agentId : agentIds) {
                 Agent agent = agentsMap.get(agentId);
-                String action = checkIfAgentsChanged(agentId);
-                agent.setAction(action);
-                tempAgents.add(agent);
+                if(agent != null) {
+                    String action = checkIfAgentsChanged(agentId);
+                    agent.setAction(action);
+                    tempAgents.add(agent);
+                }
             }
         }
         return tempAgents;
@@ -717,16 +741,18 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/eol_resources/dwca12858.tar.gz";
+        String path = "/home/ba/EOL_dynamic_hierarchyV1Revised_9.zip";
         try {
+            DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
             dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
+            validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
         } catch (Exception e) {
-            System.out.println("Failure");
+            System.out.println(e);
         }
-        DwcaParser dwcaP = new DwcaParser(dwcArchive);
-        dwcaP.prepareNodesRecord(5000);
+//        DwcaParser dwcaP = new DwcaParser(dwcArchive);
+//        dwcaP.prepareNodesRecord(5000);
 
 //        ArrayList<String> urls = new ArrayList<String>();
 ////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");

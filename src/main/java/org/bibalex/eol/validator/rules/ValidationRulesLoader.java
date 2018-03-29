@@ -218,6 +218,7 @@ private static final Logger logger = Logger.getLogger(ValidationRulesLoader.clas
      * @return false in case in failing to load the validation rules, true in case of succes.Fs
      */
     public boolean loadValidationRules() {
+        rowTypeList.clear();
         XMLHandler xmlHandler = new XMLHandler();
         logger.info("============ STARTING GETTING VALIDATION RULES ==============");
         NodeList nList = xmlHandler.document.getElementsByTagName("RulesList");

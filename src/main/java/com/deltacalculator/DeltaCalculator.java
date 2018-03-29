@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.Date;
 
 public class DeltaCalculator {
-    static File DWCADiff = new File("target/DifferenceArchive_" + new Date().getTime());
+    static File DWCADiff = new File("/home/a-amorad/eol_workspace/originals/DifferenceArchive_" + new Date().getTime());
 
     public DeltaCalculator() {
     }
@@ -16,7 +16,7 @@ public class DeltaCalculator {
     private static final Logger logger = Logger.getLogger(DeltaCalculator.class);
 
     public static void main(String[] args) {}
-    public void deltaCalculatorMain (File oldVersionFile, File updatedVersionFile){
+    public String deltaCalculatorMain (File oldVersionFile, File updatedVersionFile){
         DeltaCalculator deltaCalculator = new DeltaCalculator();
         ArchiveHandler archiveHandler = new ArchiveHandler();
         ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();
@@ -45,10 +45,13 @@ public class DeltaCalculator {
             commandExecutor.removeDirectory(dwca2.getLocation().getPath());
             commandExecutor.compress(DWCADiff);
             commandExecutor.removeDirectory(DWCADiff.getPath());
+            return DWCADiff.getPath()+".tar.gz";
         } catch (NullPointerException e) {
             logger.info(e);
             System.out.println(e);
+            return "";
         }
+
     }
 
     private void adjustUnchangedRecords(Archive updatedArchive) {

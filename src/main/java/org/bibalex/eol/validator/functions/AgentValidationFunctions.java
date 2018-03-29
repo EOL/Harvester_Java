@@ -43,7 +43,7 @@ public class AgentValidationFunctions {
         while (i.hasNext()) {
             Record record = i.next();
             if (record.value(urlTerm) == null || record.value(urlTerm).length() <= 0 ||
-                    record.value(urlTerm).matches("/^(https?|ftp)://.*\\./i")) {
+                    !record.value(urlTerm).matches("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]")) {
                 //TODO DEFRAWY regex format is weak according to sources online
 //                logger.debug(
 //                        "line : " + record.toString() + " is violating a rule \"" +

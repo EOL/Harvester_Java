@@ -295,19 +295,20 @@ public class StorageLayerClient {
         urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
         client.downloadMedia("105", urls);
     }
-    public static void getArchiveToValidate(String oldPath, String updatedPath) throws IOException {
+    public static String getArchiveToValidate(String oldPath, String updatedPath) throws IOException {
         DeltaCalculator deltaCalculator = new DeltaCalculator();
 
 
         File oldVersion = new File(oldPath);
         File updatedVersion = new File(updatedPath),
-                oldVersionArchive = new File(oldVersion.getName() + ".tar.gz"),
-                updatedVersionArchive = new File(updatedVersion.getName() + ".tar.gz");
+                oldVersionArchive = new File(oldVersion.getPath() + ".tar.gz"),
+                updatedVersionArchive = new File(updatedVersion.getPath() + ".tar.gz");
         Files.copy(oldVersion.toPath(), oldVersionArchive.toPath(), StandardCopyOption.REPLACE_EXISTING);
         Files.copy(updatedVersion.toPath(), updatedVersionArchive.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
         logger.info("Updated Version of the existing resource found - calling Delta Calculator");
-        deltaCalculator.deltaCalculatorMain(oldVersionArchive, updatedVersionArchive);
+        String deltaPath = deltaCalculator.deltaCalculatorMain(oldVersionArchive, updatedVersionArchive);
+        return deltaPath;
     }
 
 }
