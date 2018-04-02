@@ -8,15 +8,21 @@ import java.io.*;
 import java.util.Date;
 
 public class DeltaCalculator {
-    static File DWCADiff = new File("/home/a-amorad/eol_workspace/originals/DifferenceArchive_" + new Date().getTime());
+    static File DWCADiff = new File("/home/ba/eol_workspace/originals/DifferenceArchive_" + new Date().getTime());
 
     public DeltaCalculator() {
     }
 
     private static final Logger logger = Logger.getLogger(DeltaCalculator.class);
 
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+      File file1 = new File ("/home/ba/EOL_dynamic_hierarchyV1Revised_19.zip");
+      File file2 = new File ("/home/ba/EOL_dynamic_hierarchyV1Revised_21.zip");
+      DeltaCalculator deltaCalculator = new DeltaCalculator();
+      deltaCalculator.deltaCalculatorMain(file1, file2);
+    }
     public String deltaCalculatorMain (File oldVersionFile, File updatedVersionFile){
+        ModelsIds.setModelsIds(null);
         DeltaCalculator deltaCalculator = new DeltaCalculator();
         ArchiveHandler archiveHandler = new ArchiveHandler();
         ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();

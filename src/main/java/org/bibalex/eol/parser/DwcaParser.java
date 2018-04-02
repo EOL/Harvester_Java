@@ -250,13 +250,10 @@ public class DwcaParser {
                 if (action.equalsIgnoreCase(Constants.INSERT)) {
                     System.out.println("insert that action is insert");
                     insertTaxon(tableRecord);
-                } else if (action.equalsIgnoreCase(Constants.UPDATE)) {
+                } else if (action.equalsIgnoreCase(Constants.UPDATE)|| action.equalsIgnoreCase(Constants.UNCHANGED)) {
                     //TODO call update
                 } else if (action.equalsIgnoreCase(Constants.DELETE)) {
                     //TODO call delete
-                } else if (action.equalsIgnoreCase(Constants.UNCHANGED)) {
-                    //TODO call unchanged
-                    System.out.println("unchanged");
                 }
             } else {
                 System.out.println("insert from else of action is null");
@@ -741,7 +738,7 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/EOL_dynamic_hierarchyV1Revised_9.zip";
+        String path = "/home/ba/DifferenceArchive_1522670384787.tar.gz";
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);

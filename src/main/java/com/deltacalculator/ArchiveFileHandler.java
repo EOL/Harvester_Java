@@ -191,6 +191,7 @@ public class ArchiveFileHandler {
                             archiveFileHandler.addHeader(differenceFile, fileHeader);
                     } catch (Exception e) {
                         logger.error(e);
+                        e.printStackTrace();
                     }
 
                 } else {
@@ -211,6 +212,7 @@ public class ArchiveFileHandler {
                             archiveFileHandler.addHeader(differenceFile, fileHeader);
                     } catch (Exception e) {
                         logger.error(e);
+                        e.printStackTrace();
                     }
                 }
 

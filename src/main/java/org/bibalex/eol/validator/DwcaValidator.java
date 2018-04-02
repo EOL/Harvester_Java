@@ -47,7 +47,36 @@ public class DwcaValidator {
             throw new Exception("Problem happened while trying to apply the validation rules on " +
                     "the archive : " + path);
         }
+        copyActionFiles(path, dwcArchive);
         return validationResult;
+    }
+
+    private void copyActionFiles(String path, Archive dwcArchive) {
+        for(ArchiveFile archiveFile : dwcArchive.getExtensions()){
+            String actionFilePath = archiveFile.getLocationFile().getPath()+"_action";
+            File actionFile = new File(actionFilePath);
+            if( actionFile.exists()){
+                File actionFileCopy = new File(path+"_valid/"+archiveFile.getTitle()+"_action");
+                try {
+                    actionFileCopy.createNewFile();
+                    FileUtils.copyFile(actionFile, actionFileCopy);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        String actionFilePath = dwcArchive.getCore().getLocationFile().getPath()+"_action";
+        File actionFile = new File(actionFilePath);
+        if( actionFile.exists()){
+            File actionFileCopy = new File(path+"_valid/"+dwcArchive.getCore().getTitle()+"_action");
+            try {
+                actionFileCopy.createNewFile();
+                FileUtils.copyFile(actionFile, actionFileCopy);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void checkIfValidArchiveIsExists(String path) {

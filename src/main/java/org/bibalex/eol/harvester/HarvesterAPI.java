@@ -24,7 +24,7 @@ public class HarvesterAPI {
             System.out.println("call validationnnnnnnnnnnnnn");
             validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
 //            return true;
-            return callParser(path+".out_valid", resourceID, newResource);
+            return callParser(FilenameUtils.removeExtension(path)+".out_valid", resourceID, newResource);
         } catch (IOException e) {
 //            e.printStackTrace();
 //            System.out.println("exceptionnnnnnnnnnnnnnnnnnnnn");

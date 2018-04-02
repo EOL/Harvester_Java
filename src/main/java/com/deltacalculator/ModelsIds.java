@@ -30,6 +30,10 @@ public class ModelsIds {
         return modelsIds;
     }
 
+    public static void setModelsIds(ModelsIds modelsIds) {
+        ModelsIds.modelsIds = modelsIds;
+    }
+
     public HashSet<String> getReferenceIds() {
         return referenceIds;
     }
