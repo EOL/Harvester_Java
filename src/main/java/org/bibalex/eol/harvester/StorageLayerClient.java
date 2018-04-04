@@ -193,7 +193,7 @@ public class StorageLayerClient {
 
     }
 
-    public ArrayList<String> downloadMedia(String resId, ArrayList<String> mediaFiles) throws IOException {
+    public ArrayList<String> downloadMedia(String resId, ArrayList<ArrayList<String>> mediaFiles) throws IOException {
         logger.debug("Request to storage layer to download media of resource (" + resId + ").");
         final String uri = PropertiesHandler.getProperty("storage.layer.api.url") + PropertiesHandler.getProperty("media.resource.url");
 
@@ -238,6 +238,7 @@ public class StorageLayerClient {
         headers.set("Accept", "application/json"); // looks like you want a string back
 
         String mediaJson = getJson(mediaFiles);
+        System.out.println("--------------------" + mediaJson);
         HttpEntity<String> entity = new HttpEntity<String>(mediaJson, headers);
 
 
@@ -256,22 +257,23 @@ public class StorageLayerClient {
         return parseJson(response.getBody(), mediaFiles);
     }
 
-    private String getJson(ArrayList<String> mediaFiles) {
+
+    private String getJson(ArrayList<ArrayList<String>> mediaFiles) {
         String out = "[";
         for (int i = 0; i < mediaFiles.size(); i++) {
-            out += "\"" + mediaFiles.get(i) + "\"";
-            if ((i + 1) != mediaFiles.size()) {
+            List<String> list = mediaFiles.get(i);
+            out += "[\"" + list.get(0) + "\",\""+list.get(1)+"\"]";
+            if ((i + 1) != mediaFiles.size())
                 out += ",";
-            }
         }
         return out + "]";
     }
 
-    private ArrayList<String> parseJson(String json, ArrayList<String> urls) {
+    private ArrayList<String> parseJson(String json, ArrayList<ArrayList<String>> urls) {
         ArrayList<String> paths = new ArrayList<String>();
         JSONObject obj = new JSONObject(json);
-        for (String url : urls) {
-            String path = obj.getString(url);
+        for (List<String> url : urls) {
+            String path = obj.getString(url.get(0));
             System.out.println(path);
 
             String[] parts = path.split(",");
@@ -284,23 +286,12 @@ public class StorageLayerClient {
 
     public static void main(String[] args) throws IOException {
         PropertiesHandler.initializeProperties();
-        StorageLayerClient client = new StorageLayerClient();
-//        client.downloadResource("100", "1");
-//        client.uploadDWCAResource("107", "3.tar.gz");
-        ArrayList<String> urls = new ArrayList<String>();
-//        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");
-//        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/031.mp3");
-        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/2018012915070314586_eternity.jpg");
-        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
-        client.downloadMedia("105", urls);
     }
 
-    public static void getArchiveToValidate(String oldPath, String updatedPath) throws IOException {
+    public static void callDeltaCalculator(String oldPath, String updatedPath) throws IOException {
         DeltaCalculator deltaCalculator = new DeltaCalculator();
-
-
-        File oldVersion = new File(oldPath);
-        File updatedVersion = new File(updatedPath),
+        File oldVersion = new File(oldPath),
+                updatedVersion = new File(updatedPath),
                 oldVersionArchive = new File(oldVersion.getName() + ".tar.gz"),
                 updatedVersionArchive = new File(updatedVersion.getName() + ".tar.gz");
         Files.copy(oldVersion.toPath(), oldVersionArchive.toPath(), StandardCopyOption.REPLACE_EXISTING);

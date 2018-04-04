@@ -1,6 +1,5 @@
 package org.bibalex.eol.parser;
 
-import com.sun.javafx.collections.MappingChange;
 import org.apache.commons.io.FilenameUtils;
 import org.bibalex.eol.harvester.StorageLayerClient;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.locks.Condition;
 
 public class DwcaParser {
 
@@ -46,6 +44,7 @@ public class DwcaParser {
     private int resourceID;
     private Map<String, Map<String, String>> actionFiles;
     int batchSize = 1000;
+    public static final ArrayList<String> expectedMediaFormat = new ArrayList<>();
 
     public DwcaParser(Archive dwca) {
         this.dwca = dwca;
@@ -152,7 +151,7 @@ public class DwcaParser {
             if (rec.hasExtension(CommonTerms.mediaTerm)) {
                 tableRecord.setMedia(parseMedia(rec, tableRecord));
             }
-            System.out.println("before adjust refe");
+            System.out.println("before adjust ref.");
             adjustReferences(tableRecord);
             checkActionFiles(rec, actions, tableRecord);
 
@@ -558,6 +557,7 @@ public class DwcaParser {
     private ArrayList<Media> parseMedia(StarRecord record, NodeRecord rec) {
         ArrayList<Media> media = new ArrayList<Media>();
         for (Record extensionRecord : record.extension(CommonTerms.mediaTerm)) {
+            expectedMediaFormat.add(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaFormatURI)));
             String storageLayerPath = "", storageLayerThumbnailPath = "";
             ArrayList<String> paths = new ArrayList<String>();
 
@@ -613,7 +613,16 @@ public class DwcaParser {
     public String getMediaPath(int resourceID, ArrayList<String> mediaFiles) {
         try {
             StorageLayerClient client = new StorageLayerClient();
-            ArrayList<String> SLPaths = client.downloadMedia(String.valueOf(resourceID), mediaFiles);
+            ArrayList<ArrayList<String>> mediaFileType = new ArrayList<ArrayList<String>>();
+            ArrayList<String> mediaTypeArray = new ArrayList<>();
+            for(int i=0;i<mediaFiles.size();i++)
+            {
+                mediaTypeArray.add(mediaFiles.get(i));
+                mediaTypeArray.add(expectedMediaFormat.get(i));
+                mediaFileType.add(mediaTypeArray);
+            }
+
+            ArrayList<String> SLPaths = client.downloadMedia(String.valueOf(resourceID), mediaFileType);
             return convertArrayListToString(SLPaths);
         } catch (IOException e) {
             e.printStackTrace();
@@ -703,16 +712,5 @@ public class DwcaParser {
         }
         DwcaParser dwcaP = new DwcaParser(dwcArchive);
         dwcaP.prepareNodesRecord(5000);
-
-//        ArrayList<String> urls = new ArrayList<String>();
-////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");
-////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/031.mp3");
-//        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/2018012915070314586_eternity.jpg");
-//        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
-//        String paths = dwcaP.getMediaPath(5, urls );
-//        System.out.println(paths);
-//        dwcaP.callHBase(new NodeRecord("name", "1", 1));
-
-
     }
 }

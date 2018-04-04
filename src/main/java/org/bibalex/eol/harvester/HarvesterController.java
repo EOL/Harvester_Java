@@ -1,16 +1,11 @@
 package org.bibalex.eol.harvester;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
-import org.gbif.dwca.io.Archive;
-import org.gbif.dwca.io.ArchiveFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 
@@ -38,12 +33,11 @@ public class HarvesterController {
                 String checkFilePath = checkOldVersion.getPath();
                 System.out.println(checkFilePath);
                 if(!checkFilePath.equals(null))
-                StorageLayerClient.getArchiveToValidate(oldPath, updatedPath);
+                StorageLayerClient.callDeltaCalculator(oldPath, updatedPath);
             } catch (NoSuchFileException exception) {
                 logger.info(exception+": No Older Versions of the resource found, calling Validator");
             }
             return harvesterAPI.callValidation(updatedPath, Integer.parseInt(resourceID));
-//            return true;
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;

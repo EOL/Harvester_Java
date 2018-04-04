@@ -22,8 +22,8 @@ public class HarvesterAPI {
             Archive dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
 //            Archive dwcArchive = ArchiveFactory.openArchive(new File(path));
             validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
-            return true;
-//            return callParser(path+".out_valid", resourceID);
+//            return true;
+            return callParser(path+".out_valid", resourceID);
         } catch (IOException e) {
 //            e.printStackTrace();
 //            System.out.println("exceptionnnnnnnnnnnnnnnnnnnnn");
