@@ -97,7 +97,7 @@ public class ParentFormat extends Format {
     }
 
     public void updateScientificName(String newScientificName, String oldScientificName, String ancestry){
-        String taxonID = neo4jHandler.getNodeByAncestry(oldScientificName, ancestry, resourceId);
+        String taxonID = neo4jHandler.getNodeByAncestry(newScientificName, ancestry, resourceId);
 
         if(!(taxonID != null)){
             String nodeID = neo4jHandler.getNodebyTaxonID(taxonID, resourceId);
