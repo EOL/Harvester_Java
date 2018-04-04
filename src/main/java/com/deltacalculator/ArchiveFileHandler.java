@@ -450,13 +450,15 @@ public class ArchiveFileHandler {
         }
     }
 
-    public void setTaxaOfChangedMedia(Archive updatedArchive) {
+    public void setTaxaOfChangedMedia(Archive updatedArchive, Archive oldArchive) {
         HashSet<String> mediaIds = ModelsIds.getModelsIds().getMediaIds();
+        HashSet<String> occurrenceIds = ModelsIds.getModelsIds().getOccurrenceIds();
+        HashSet<String> vernacularIds = ModelsIds.getModelsIds().getVernacularIds();
         HashSet<String> taxaIds = ModelsIds.getModelsIds().getTaxaIds();
         ArchiveFile taxaFile = updatedArchive.getCore();
         ActionFile actionFile = new ActionFile();
 
-        try {
+//        try {
             for (StarRecord starRecord : updatedArchive) {
                 if (starRecord.extension(CommonTerms.mediaTerm) != null) {
                     for (Record record : starRecord.extension(CommonTerms.mediaTerm)) {
@@ -467,19 +469,6 @@ public class ArchiveFileHandler {
                         }
                     }
                 }
-            }
-        } catch (NullPointerException e) {
-            logger.info(e + ": No media file found");
-        }
-    }
-
-    public void setTaxaOfChangedOccurrences(Archive updatedArchive) {
-        HashSet<String> occurrenceIds = ModelsIds.getModelsIds().getOccurrenceIds();
-        HashSet<String> taxaIds = ModelsIds.getModelsIds().getTaxaIds();
-        ArchiveFile taxaFile = updatedArchive.getCore();
-        ActionFile actionFile = new ActionFile();
-        try {
-            for (StarRecord starRecord : updatedArchive) {
                 if (starRecord.extension(CommonTerms.occurrenceTerm) != null) {
                     for (Record record : starRecord.extension(CommonTerms.occurrenceTerm)) {
                         if (occurrenceIds.contains(record.value(CommonTerms.occurrenceID)) && !taxaIds.contains(starRecord.core().id())) {
@@ -489,11 +478,79 @@ public class ArchiveFileHandler {
                         }
                     }
                 }
+                if (starRecord.extension(GbifTerm.VernacularName) != null) {
+                    for (Record record : starRecord.extension(GbifTerm.VernacularName)) {
+//                    System.out.println(record.toString());
+                        String id = record.value(DwcTerm.vernacularName) + "+" + record.value(CommonTerms.languageTerm);
+                        if (vernacularIds.contains(id) && !taxaIds.contains(starRecord.core().id())) {
+                            ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
+                            actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
+                            writeRecordToArchiveFile(starRecord.core(), taxaFile);
+                        }
+                    }
+                }
+
             }
-        } catch (NullPointerException e) {
-            logger.info(e + ": No Occurrence File Found");
+
+
+        for (StarRecord starRecord : oldArchive) {
+            if (starRecord.extension(CommonTerms.mediaTerm) != null) {
+                for (Record record : starRecord.extension(CommonTerms.mediaTerm)) {
+                    if (mediaIds.contains(record.value(CommonTerms.identifierTerm)) && !taxaIds.contains(starRecord.core().id())) {
+                        ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
+                        actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
+                        writeRecordToArchiveFile(starRecord.core(), taxaFile);
+                    }
+                }
+            }
+            if (starRecord.extension(CommonTerms.occurrenceTerm) != null) {
+                for (Record record : starRecord.extension(CommonTerms.occurrenceTerm)) {
+                    if (occurrenceIds.contains(record.value(CommonTerms.occurrenceID)) && !taxaIds.contains(starRecord.core().id())) {
+                        ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
+                        actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
+                        writeRecordToArchiveFile(starRecord.core(), taxaFile);
+                    }
+                }
+            }
+            if (starRecord.extension(GbifTerm.VernacularName) != null) {
+                for (Record record : starRecord.extension(GbifTerm.VernacularName)) {
+//                    System.out.println(record.toString());
+                    String id = record.value(DwcTerm.vernacularName) + "+" + record.value(CommonTerms.languageTerm);
+                    if (vernacularIds.contains(id) && !taxaIds.contains(starRecord.core().id())) {
+                        ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
+                        actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
+                        writeRecordToArchiveFile(starRecord.core(), taxaFile);
+                    }
+                }
+            }
+
         }
+//        } catch (NullPointerException e) {
+//            logger.info(e + ": No media file found");
+//        }
     }
+
+//    public void setTaxaOfChangedOccurrences(Archive updatedArchive) {
+//        HashSet<String> occurrenceIds = ModelsIds.getModelsIds().getOccurrenceIds();
+//        HashSet<String> taxaIds = ModelsIds.getModelsIds().getTaxaIds();
+//        ArchiveFile taxaFile = updatedArchive.getCore();
+//        ActionFile actionFile = new ActionFile();
+//        try {
+//            for (StarRecord starRecord : updatedArchive) {
+//                if (starRecord.extension(CommonTerms.occurrenceTerm) != null) {
+//                    for (Record record : starRecord.extension(CommonTerms.occurrenceTerm)) {
+//                        if (occurrenceIds.contains(record.value(CommonTerms.occurrenceID)) && !taxaIds.contains(starRecord.core().id())) {
+//                            ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
+//                            actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
+//                            writeRecordToArchiveFile(starRecord.core(), taxaFile);
+//                        }
+//                    }
+//                }
+//            }
+//        } catch (NullPointerException e) {
+//            logger.info(e + ": No Occurrence File Found");
+//        }
+//    }
 
     public void setTaxaOfChangedReference(Archive updatedArchive) {
         HashSet<String> referenceIds = ModelsIds.getModelsIds().getReferenceIds();
@@ -521,30 +578,30 @@ public class ArchiveFileHandler {
         }
     }
 
-    public void setTaxaOfChangedVernacular(Archive updatedArchive) {
-        HashSet<String> vernacularIds = ModelsIds.getModelsIds().getVernacularIds();
-        HashSet<String> taxaIds = ModelsIds.getModelsIds().getTaxaIds();
-        ArchiveFile taxaFile = updatedArchive.getCore();
-        ActionFile actionFile = new ActionFile();
-
-        try {
-            for (StarRecord starRecord : updatedArchive) {
-                if (starRecord.extension(GbifTerm.VernacularName) != null) {
-                    for (Record record : starRecord.extension(GbifTerm.VernacularName)) {
-//                    System.out.println(record.toString());
-                        String id = record.value(DwcTerm.vernacularName) + "+" + record.value(CommonTerms.languageTerm);
-                        if (vernacularIds.contains(id) && !taxaIds.contains(starRecord.core().id())) {
-                            ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
-                            actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                            writeRecordToArchiveFile(starRecord.core(), taxaFile);
-                        }
-                    }
-                }
-            }
-        } catch (NullPointerException e) {
-            logger.info(e + ": No Vernacular File Found");
-        }
-    }
+//    public void setTaxaOfChangedVernacular(Archive updatedArchive) {
+//        HashSet<String> vernacularIds = ModelsIds.getModelsIds().getVernacularIds();
+//        HashSet<String> taxaIds = ModelsIds.getModelsIds().getTaxaIds();
+//        ArchiveFile taxaFile = updatedArchive.getCore();
+//        ActionFile actionFile = new ActionFile();
+//
+//        try {
+//            for (StarRecord starRecord : updatedArchive) {
+//                if (starRecord.extension(GbifTerm.VernacularName) != null) {
+//                    for (Record record : starRecord.extension(GbifTerm.VernacularName)) {
+////                    System.out.println(record.toString());
+//                        String id = record.value(DwcTerm.vernacularName) + "+" + record.value(CommonTerms.languageTerm);
+//                        if (vernacularIds.contains(id) && !taxaIds.contains(starRecord.core().id())) {
+//                            ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
+//                            actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
+//                            writeRecordToArchiveFile(starRecord.core(), taxaFile);
+//                        }
+//                    }
+//                }
+//            }
+//        } catch (NullPointerException e) {
+//            logger.info(e + ": No Vernacular File Found");
+//        }
+//    }
 
     private void writeRecordToArchiveFile(Record record, ArchiveFile archiveFile) {
         try {

@@ -60,7 +60,7 @@ public class CommandExecutor {
                 file1SDIFF = removeSpaceFromFileName(file1);
             if (file2.contains(" "))
                 file2SDIFF = removeSpaceFromFileName(file2);
-            String command = "sdiff " + file1SDIFF + " " + file2SDIFF + " -s" + " -H" + " -w" + " 2048";
+            String command = "sdiff " + file1SDIFF + " " + file2SDIFF + " -s" + " -H" + " -w" + "6144";
             System.out.println("Executing Command: " + command);
             logger.info("Executing Command: " + command);
             Process sDiff = Runtime.getRuntime().exec(command);

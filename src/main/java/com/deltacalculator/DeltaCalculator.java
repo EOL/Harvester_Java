@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.Date;
 
 public class DeltaCalculator {
-    static File DWCADiff = new File("/home/ba/eol_workspace/originals/DifferenceArchive_" + new Date().getTime());
+    static File DWCADiff = new File("/home/a-amorad/eol_workspace/originals/DifferenceArchive_" + new Date().getTime());
 
     public DeltaCalculator() {
     }
@@ -16,8 +16,8 @@ public class DeltaCalculator {
     private static final Logger logger = Logger.getLogger(DeltaCalculator.class);
 
     public static void main(String[] args) {
-      File file1 = new File ("/home/ba/EOL_dynamic_hierarchyV1Revised_19.zip");
-      File file2 = new File ("/home/ba/EOL_dynamic_hierarchyV1Revised_21.zip");
+      File file1 = new File ("/home/ba/EOL_dynamic_hierarchyV1Revised_23.zip");
+      File file2 = new File ("/home/ba/EOL_dynamic_hierarchyV1Revised_24.zip");
       DeltaCalculator deltaCalculator = new DeltaCalculator();
       deltaCalculator.deltaCalculatorMain(file1, file2);
     }
@@ -47,7 +47,9 @@ public class DeltaCalculator {
             commandExecutor.removeDirectory(dwca1.getLocation().getPath());
             commandExecutor.removeDirectory(dwca2.getLocation().getPath());
             Archive updatedArchive = archiveHandler.openDwcAFolder(archive2Path);
-            deltaCalculator.adjustUnchangedRecords(updatedArchive);
+            Archive oldArchive = archiveHandler.openDwcAFolder(archive1Path);
+            deltaCalculator.adjustUnchangedRecords(updatedArchive, oldArchive);
+            commandExecutor.removeDirectory(dwca1.getLocation().getPath());
             commandExecutor.removeDirectory(dwca2.getLocation().getPath());
             commandExecutor.compress(DWCADiff);
             commandExecutor.removeDirectory(DWCADiff.getPath());
@@ -60,7 +62,7 @@ public class DeltaCalculator {
 
     }
 
-    private void adjustUnchangedRecords(Archive updatedArchive) {
+    private void adjustUnchangedRecords(Archive updatedArchive, Archive oldArchive) {
         ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();
         archiveFileHandler.setMediaOfChangedAgents(updatedArchive);
         archiveFileHandler.setMediaOfChangedReference(updatedArchive);
@@ -71,9 +73,9 @@ public class DeltaCalculator {
         archiveFileHandler.setOccurrenceOfChangedMeasurements(updatedArchive);
         archiveFileHandler.setOccurrenceOfChangedAssociations(updatedArchive);
 
-        archiveFileHandler.setTaxaOfChangedMedia(updatedArchive);
-        archiveFileHandler.setTaxaOfChangedOccurrences(updatedArchive);
+        archiveFileHandler.setTaxaOfChangedMedia(updatedArchive, oldArchive);
+//        archiveFileHandler.setTaxaOfChangedOccurrences(updatedArchive);
         archiveFileHandler.setTaxaOfChangedReference(updatedArchive);
-        archiveFileHandler.setTaxaOfChangedVernacular(updatedArchive);
+//        archiveFileHandler.setTaxaOfChangedVernacular(updatedArchive);
     }
 }
