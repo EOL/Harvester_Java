@@ -54,14 +54,13 @@ public class ParentFormat extends Format {
     }
 
     private int createParentIfNotExist(String parentUsageId){
-        int parentGeneratedNodeId = neo4jHandler.getNodeIfExist(parentUsageId, resourceId);
+        int parentGeneratedNodeId = neo4jHandler.createParentWithPlaceholder(resourceId, parentUsageId);
         System.out.println("In create parent: " + parentGeneratedNodeId);
         if(parentGeneratedNodeId > 0){
-            logger.debug("parent exists");
+            logger.debug("successfully create parent");
         }else{
-            logger.debug("parent does not exist");
+            logger.debug("failed to create parent");
             missingParents.add(parentUsageId);
-            parentGeneratedNodeId = neo4jHandler.createParentWithPlaceholder(resourceId, parentUsageId);
         }
         return parentGeneratedNodeId;
     }
