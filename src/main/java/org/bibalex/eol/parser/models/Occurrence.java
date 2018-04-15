@@ -29,13 +29,12 @@ public class Occurrence {
     String verbatimLongitude;
     String verbatimElevation;
     String deltaStatus;
-    String action;
 
     public Occurrence(String occurrenceId, String eventId, String institutionCode, String collectionCode, String catalogNumber, String sex, String lifeStage,
                       String reproductiveCondition, String behavior, String establishmentMeans, String remarks, String countOfIndividuals,
                       String preparations, String fieldNotes, String samplingProtocol, String samplingEffort, String recordedBy, String identifiedBy,
                       String dateIdentified, String eventDate, String modifiedDate, String locality, String decimalLatitude, String decimalLongitude,
-                      String verbatimLatitude, String verbatimLongitude, String verbatimElevation, String action) {
+                      String verbatimLatitude, String verbatimLongitude, String verbatimElevation, String deltaStatus) {
         this.occurrenceId = occurrenceId;
         this.eventId = eventId;
         this.institutionCode = institutionCode;
@@ -64,7 +63,7 @@ public class Occurrence {
         this.verbatimLatitude = verbatimLatitude;
         this.verbatimLongitude = verbatimLongitude;
         this.verbatimElevation = verbatimElevation;
-        this.action = action;
+        this.deltaStatus = deltaStatus;
     }
 
     public String getOccurrenceId() {
@@ -290,13 +289,5 @@ public class Occurrence {
 
     public void setVerbatimElevation(String verbatimElevation) {
         this.verbatimElevation = verbatimElevation;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
     }
 }

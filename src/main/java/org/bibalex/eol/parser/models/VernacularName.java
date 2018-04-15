@@ -10,9 +10,8 @@ public class VernacularName {
     String isPreferred;
     String taxonRemarks;
     String deltaStatus;
-    String action;
 
-    public VernacularName(String name, String source, String language, String locality, String countryCode, String isPreferred, String taxonRemarks, String action) {
+    public VernacularName(String name, String source, String language, String locality, String countryCode, String isPreferred, String taxonRemarks, String deltaStatus) {
         this.name = name;
         this.source = source;
         this.language = language;
@@ -20,7 +19,7 @@ public class VernacularName {
         this.countryCode = countryCode;
         this.isPreferred = isPreferred;
         this.taxonRemarks = taxonRemarks;
-        this.action = action;
+        this.deltaStatus = deltaStatus;
     }
 
     public void setName(String name) {
@@ -87,13 +86,5 @@ public class VernacularName {
 
     public String getTaxonRemarks() {
         return taxonRemarks;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
     }
 }

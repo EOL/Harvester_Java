@@ -20,7 +20,6 @@ public class MeasurementOrFact {
     String contributor;
     String referenceId;
     String deltaStatus;
-    String action;
 
     public String getDeltaStatus() {
         return deltaStatus;
@@ -172,14 +171,6 @@ public class MeasurementOrFact {
 
     public void setReferenceId(String referenceId) {
         this.referenceId = referenceId;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
     }
 
     public MeasurementOrFact(String measurementId, String occurrenceId, String measurementOfTaxon, String associationId,

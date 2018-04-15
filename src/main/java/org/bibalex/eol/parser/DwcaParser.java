@@ -389,7 +389,7 @@ public class DwcaParser {
                 Reference reference = referencesMap.get(referenceId);
                 if(reference != null && !refIds.contains(referenceId) ) {
                     String action = checkIfReferencesChanged(referenceId);
-                    reference.setAction(action);
+                    reference.setDeltaStatus(action);
                     addReference(nodeRecord, reference);
                 }
             }
@@ -403,7 +403,7 @@ public class DwcaParser {
                         Reference reference = referencesMap.get(referenceId);
                         if(reference != null&& !refIds.contains(referenceId)) {
                             String action = checkIfReferencesChanged(referenceId);
-                            reference.setAction(action);
+                            reference.setDeltaStatus(action);
                             addReference(nodeRecord, reference);
                         }
                     }
@@ -455,7 +455,7 @@ public class DwcaParser {
                 Agent agent = agentsMap.get(agentId);
                 if(agent != null) {
                     String action = checkIfAgentsChanged(agentId);
-                    agent.setAction(action);
+                    agent.setDeltaStatus(action);
                     tempAgents.add(agent);
                 }
             }

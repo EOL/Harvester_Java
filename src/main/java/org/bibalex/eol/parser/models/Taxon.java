@@ -28,12 +28,11 @@ public class Taxon {
     String eolIdAnnotations;
     String deltaStatus;
     ArrayList<String> guids;
-    String action;
 
     public Taxon(String identifier, String scientificName, String parentTaxonId, String kingdom, String phylum, String taxonClass, String order,
                  String family, String genus, String taxonRank, String furtherInformationURI, String taxonomicStatus, String taxonRemarks,
                  String namePublishedIn, String referenceId, String pageEolId, String acceptedNodeId, String source, String canonicalName,
-                 String scientificNameAuthorship, String scientificNameID, String datasetId, String eolIdAnnotations, String action) {
+                 String scientificNameAuthorship, String scientificNameID, String datasetId, String eolIdAnnotations, String deltaStatus) {
         this.identifier = identifier;
         this.scientificName = scientificName;
         this.parentTaxonId = parentTaxonId;
@@ -57,7 +56,7 @@ public class Taxon {
         this.scientificNameID = scientificNameID;
         this.datasetId = datasetId;
         this.eolIdAnnotations = eolIdAnnotations;
-        this.action = action;
+        this.deltaStatus = deltaStatus;
     }
 
     public ArrayList<String> getGuids() {
@@ -259,13 +258,5 @@ public class Taxon {
 
     public void setPageEolId(String pageEolId) {
         this.pageEolId = pageEolId;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
     }
 }
