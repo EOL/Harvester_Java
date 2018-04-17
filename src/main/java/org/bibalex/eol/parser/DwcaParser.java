@@ -139,7 +139,7 @@ public class DwcaParser {
             int generatedNodeId = neo4jHandler.getNodeIfExist
                     (rec.core().value(DwcTerm.taxonID), resourceId);
             System.out.println(rec.core().value(DwcTerm.taxonID));
-            NodeRecord tableRecord = new NodeRecord(rec.core().value(DwcTerm.taxonID),
+            NodeRecord tableRecord = new NodeRecord(
                     generatedNodeId + "", resourceId);
 
             Taxon taxon = parseTaxon(rec);
@@ -291,7 +291,7 @@ public class DwcaParser {
         if (actions != null && actions.get(extensionRecord.value(CommonTerms.occurrenceID)) != null)
             action = actions.get(extensionRecord.value(CommonTerms.occurrenceID));
         else
-            action = "insert";
+            action = "I";
         System.out.println("occ "+action);
         return action;
 
@@ -304,7 +304,7 @@ public class DwcaParser {
         if (actions != null && actions.get(extensionRecord.value(CommonTerms.identifierTerm)) != null) {
             action = actions.get(extensionRecord.value(CommonTerms.identifierTerm));
         } else {
-            action = "insert";
+            action = "I";
         }
         System.out.println("media "+action);
         return action;
@@ -321,7 +321,7 @@ public class DwcaParser {
                 action = actions.get(agentId);
                 System.out.println("agent action found");
             } else {
-                action = "insert";
+                action = "I";
             }
             System.out.println("agent " + action);
         }
@@ -339,7 +339,7 @@ public class DwcaParser {
                 action = actions.get(referenceId);
                 System.out.println("reference action found");
             } else {
-                action = "insert";
+                action = "I";
             }
             System.out.println("refe " + action);
         }
@@ -364,10 +364,10 @@ public class DwcaParser {
                     action = actions.get(key);
                 } else {
                     System.out.println("vernacular action not found");
-                    action = "insert";
+                    action = "I";
                 }
             } else {
-                action = "insert";
+                action = "I";
             }
             System.out.println("vernacular " + action);
         }
@@ -487,7 +487,7 @@ public class DwcaParser {
         if (actions != null && actions.get(taxonID) != null)
             action = actions.get(taxonID);
         else
-            action = "insert";
+            action = "I";
         System.out.println("taxon "+action);
         Taxon taxonData = new Taxon(record.core().value(DwcTerm.taxonID), record.core().value(DwcTerm.scientificName),
                 record.core().value(DwcTerm.parentNameUsageID), record.core().value(DwcTerm.kingdom),
@@ -682,7 +682,7 @@ public class DwcaParser {
         System.out.print("===================================================");
         System.out.println("-------------scientific name---------------");
         System.out.println(nodeRecord.getTaxon().getScientificName());
-        System.out.println(" " + nodeRecord.getTaxonId());
+//        System.out.println(" " + nodeRecord.getTaxonId());
         System.out.println("-------------Media---------------");
         if (nodeRecord.getMedia() != null && nodeRecord.getMedia().size() > 0)
             System.out.println(nodeRecord.getMedia().size() + "\n" + nodeRecord.getMedia().get(0).

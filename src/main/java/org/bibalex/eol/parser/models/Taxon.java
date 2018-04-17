@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Taxon {
     String identifier;
+    String taxonId;
     String scientificName;
     String parentTaxonId;
     String kingdom;
@@ -34,6 +35,7 @@ public class Taxon {
                  String namePublishedIn, String referenceId, String pageEolId, String acceptedNodeId, String source, String canonicalName,
                  String scientificNameAuthorship, String scientificNameID, String datasetId, String eolIdAnnotations, String deltaStatus) {
         this.identifier = identifier;
+        this.taxonId = identifier;
         this.scientificName = scientificName;
         this.parentTaxonId = parentTaxonId;
         this.kingdom = kingdom;

@@ -7,7 +7,6 @@ This class will include the needed objects and attributes
  */
 public class NodeRecord {
     int resourceId;
-    String taxonId;
     ArrayList<VernacularName> vernaculars;
     ArrayList<Reference> references;
     ArrayList<Occurrence> occurrences;
@@ -18,8 +17,7 @@ public class NodeRecord {
     Taxon taxon;
     String deltaStatus;
 
-    public NodeRecord(String taxonId, String generatedNodeId, int resourceId) {
-        this.taxonId = taxonId;
+    public NodeRecord(String generatedNodeId, int resourceId) {
         this.generatedNodeId = generatedNodeId;
         this.resourceId = resourceId;
     }
@@ -72,13 +70,13 @@ public class NodeRecord {
         this.generatedNodeId = generatedNodeId;
     }
 
-    public String getTaxonId() {
-        return taxonId;
-    }
-
-    public void setTaxonId(String taxonId) {
-        this.taxonId = taxonId;
-    }
+//    public String getTaxonId() {
+//        return taxonId;
+//    }
+//
+//    public void setTaxonId(String taxonId) {
+//        this.taxonId = taxonId;
+//    }
 
     public ArrayList<Media> getMedia() {
         return media;
