@@ -16,6 +16,7 @@ import org.bibalex.eol.utils.TermURIs;
 import org.bibalex.eol.validator.DwcaValidator;
 import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwc.terms.GbifTerm;
+import org.gbif.dwc.terms.Term;
 import org.gbif.dwc.terms.TermFactory;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFactory;
@@ -136,11 +137,11 @@ public class DwcaParser {
         buildGraph(resourceId);
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
         for (StarRecord rec : dwca) {
-            int generatedNodeId = neo4jHandler.getNodeIfExist
-                    (rec.core().value(DwcTerm.taxonID), resourceId);
+//            int generatedNodeId = neo4jHandler.getNodeIfExist
+//                    (rec.core().value(DwcTerm.taxonID), resourceId);
             System.out.println(rec.core().value(DwcTerm.taxonID));
             NodeRecord tableRecord = new NodeRecord(
-                    generatedNodeId + "", resourceId);
+                    0 + "", resourceId);
 
             Taxon taxon = parseTaxon(rec);
             if (taxon != null)
@@ -191,18 +192,18 @@ public class DwcaParser {
         System.out.println("BUILD");
         ArrayList<Taxon> taxaList = new ArrayList<>();
         int i = 0;
-        boolean parentFormat = dwca.getCore().hasTerm(DwcTerm.parentNameUsageID);
+        boolean parentFormat = checkParentFormat();
         logger.debug("parent format: " + parentFormat);
         System.out.println("parent format: " + parentFormat);
         Format format = parentFormat ? new ParentFormat(resourceId) : new AncestryFormat(resourceId);
-
+        boolean normalResource = dwca.getCore().hasTerm(DwcTerm.acceptedNameUsageID);
         for (StarRecord rec : dwca) {
             logger.debug("for loop i is: " + i);
             System.out.println("for loop i is: " + i);
             if (i >= batchSize) {
                 logger.debug("create batch: " + parentFormat);
                 System.out.println("create batch: " + parentFormat);
-                format.handleLines(taxaList);
+                format.handleLines(taxaList, normalResource);
                 i = 0;
                 taxaList = new ArrayList<>();
             } else {
@@ -238,7 +239,7 @@ public class DwcaParser {
 
             }
         }
-        format.handleLines(taxaList);
+        format.handleLines(taxaList, normalResource);
     }
 
     private void checkActionFiles(StarRecord rec, Map<String, String> actions, NodeRecord tableRecord) {
@@ -676,6 +677,23 @@ public class DwcaParser {
         return path;
     }
 
+    private boolean checkParentFormat(){
+        ArrayList<Term> ancestryTerms = new ArrayList<>();
+        ancestryTerms.add(CommonTerms.kingdomTerm);
+        ancestryTerms.add(CommonTerms.phylumTerm);
+        ancestryTerms.add(CommonTerms.classTerm);
+        ancestryTerms.add(CommonTerms.orderTerm);
+        ancestryTerms.add(CommonTerms.familyTerm);
+        ancestryTerms.add(CommonTerms.genusTerm);
+
+        for(Term term : ancestryTerms){
+            if(dwca.getCore().hasTerm(term)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void printRecord(NodeRecord nodeRecord) {
 
         System.out.print("===================================================");
@@ -738,18 +756,18 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/EOL_dynamic_hierarchyV1Revised_29.zip";
+        String path = "/home/ba/eol_resources/arnoldarboretum (copy).zip";
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
             dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
-            validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
+//            validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
         } catch (Exception e) {
             System.out.println(e);
         }
-//        DwcaParser dwcaP = new DwcaParser(dwcArchive);
-//        dwcaP.prepareNodesRecord(5000);
+        DwcaParser dwcaP = new DwcaParser(dwcArchive, true);
+        dwcaP.prepareNodesRecord(444444444);
 
 //        ArrayList<String> urls = new ArrayList<String>();
 ////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");

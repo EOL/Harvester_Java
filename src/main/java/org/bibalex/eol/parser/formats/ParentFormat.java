@@ -25,10 +25,10 @@ public class ParentFormat extends Format {
         this.missingParents = new HashSet<>();
     }
 
-    public void handleLines(ArrayList<Taxon> nodes) {
+    public void handleLines(ArrayList<Taxon> nodes, boolean normalResource) {
         System.out.println("start handling");
         for(Taxon node : nodes) {
-            if(handleLine(node)){
+            if(handleLine(node, normalResource)){
                 logger.debug("Handling line with taxon id: " + node.getIdentifier() + " is successful");
                 System.out.println("Handling line with taxon id: " + node.getIdentifier() + " is successful");
             }else {
@@ -38,10 +38,10 @@ public class ParentFormat extends Format {
         }
     }
 
-    private boolean handleLine(Taxon node){
-        int parentGeneratedNodeId = createParentIfNotExist(node.getParentTaxonId());
+    private boolean handleLine(Taxon node, boolean normalResource){
+//        int parentGeneratedNodeId = createParentIfNotExist(node.getParentTaxonId());
         int originalGeneratedNodeId = createOriginalNode(node.getIdentifier(), node.getScientificName(),
-                node.getTaxonRank(), node.getTaxonomicStatus(), node.getAcceptedNodeId(), parentGeneratedNodeId);
+                node.getTaxonRank(), node.getTaxonomicStatus(), node.getAcceptedNodeId(), normalResource, node.getParentTaxonId());
         if(originalGeneratedNodeId > 0){
             logger.debug("Successfully created the original node");
             System.out.println("Successfully created the original node");
@@ -67,18 +67,36 @@ public class ParentFormat extends Format {
     }
 
     private int createOriginalNode(String nodeId, String scientificName, String rank, String taxonomicStatus,
-                                       String acceptedNodeId, int parentGeneratedNodeId){
+                                       String acceptedNodeId, boolean normalResource, String parentUsageId){
         deleteFromMissingParentsIfExist(nodeId);
         int generatedNodeId;
-        if(isSynonym(taxonomicStatus)){
-            logger.debug("The node is synonym");
-            SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
-            generatedNodeId = synonymNodeHandler.handleSynonymNode(nodeId, scientificName, rank, acceptedNodeId);
+        if(normalResource){
+            int parentGeneratedNodeId = createParentIfNotExist(parentUsageId);
+            if(acceptedNodeId != null && !acceptedNodeId.equalsIgnoreCase(nodeId)){
+                //synonym node
+                logger.debug("The node is synonym");
+                SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
+                generatedNodeId = synonymNodeHandler.handleSynonymNode(nodeId, scientificName, rank, acceptedNodeId);
+            }else{
+                //accepted node
+                logger.debug("The node is not synonym");
+                generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
+                        neo4jHandler);
+            }
         }else{
-            logger.debug("The node is not synonym");
-            generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
-                    neo4jHandler);
+            if(isSynonym(taxonomicStatus)){
+                // as it synonym and we don't have acceptedNameUsageID so we send parentUsageId instead of acceptedNameUsageId
+                logger.debug("The node is synonym");
+                SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
+                generatedNodeId = synonymNodeHandler.handleSynonymNode(nodeId, scientificName, rank, parentUsageId);
+            }else{
+                int parentGeneratedNodeId = createParentIfNotExist(parentUsageId);
+                logger.debug("The node is not synonym");
+                generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
+                        neo4jHandler);
+            }
         }
+
         return generatedNodeId;
     }
 

@@ -24,9 +24,9 @@ public class AncestryFormat extends Format{
     }
 
 
-    public void handleLines(ArrayList<Taxon> nodes) {
+    public void handleLines(ArrayList<Taxon> nodes, boolean normalResource) {
         for(Taxon node : nodes) {
-            if(handleLine(node)){
+            if(handleLine(node, normalResource)){
                 logger.debug("Handling line with taxon id: " + node.getIdentifier() + " is successful");
             }else {
                 logger.debug("Error in handling line with taxon id: " + node.getIdentifier());
@@ -34,11 +34,11 @@ public class AncestryFormat extends Format{
         }
     }
 
-    private boolean handleLine(Taxon node){
+    private boolean handleLine(Taxon node, boolean normalResource){
         ArrayList<AncestorNode> currentAncestry = adjustNodeAncestry(node);
         int lastNodeGeneratedId = createAncestors(currentAncestry);
         int originalGeneratedNodeId = createOriginalNode(node.getScientificName(), node.getTaxonomicStatus(), node.getAcceptedNodeId(),
-                node.getTaxonRank(), lastNodeGeneratedId, node.getIdentifier());
+                node.getTaxonRank(), lastNodeGeneratedId, node.getIdentifier(), normalResource, node.getParentTaxonId());
         if(originalGeneratedNodeId > 0){
             logger.debug("Successfully created the original node");
             return true;
@@ -81,16 +81,31 @@ public class AncestryFormat extends Format{
     }
 
     private int createOriginalNode(String scientificName, String taxonomicStatus, String acceptedNodeId, String rank,
-                                    int parentGeneratedNodeId, String nodeId){
+                                    int parentGeneratedNodeId, String nodeId, boolean normalResource, String parentUsageId){
         int generatedNodeId;
-        if(isSynonym(taxonomicStatus)){
-            logger.debug("The node is synonym");
-            SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
-            generatedNodeId = synonymNodeHandler.handleSynonymNode(nodeId, scientificName, rank, acceptedNodeId);
-        }else{
-            logger.debug("The node is not synonym");
-            generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
-                    neo4jHandler);
+        if(normalResource) {
+            if (acceptedNodeId != null && !acceptedNodeId.equalsIgnoreCase(nodeId)) {
+                logger.debug("The node is synonym");
+                SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
+                generatedNodeId = synonymNodeHandler.handleSynonymNode(nodeId, scientificName, rank, acceptedNodeId);
+            }
+            else {
+                logger.debug("The node is not synonym");
+                generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
+                        neo4jHandler);
+            }
+        }
+        else {
+            if (isSynonym(taxonomicStatus)) {
+                // as it synonym and we don't have acceptedNameUsageID so we send parentUsageId instead of acceptedNameUsageId
+                logger.debug("The node is synonym");
+                SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
+                generatedNodeId = synonymNodeHandler.handleSynonymNode(nodeId, scientificName, rank, parentUsageId);
+            } else {
+                logger.debug("The node is not synonym");
+                generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
+                        neo4jHandler);
+            }
         }
         return generatedNodeId;
     }

@@ -4,8 +4,13 @@
     <list default="true" id="eed71ae0-16b5-45c1-b66f-1279bc55d5dd" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/NodeRecord.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/NodeRecord.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Taxon.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Taxon.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/AncestryFormat.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/AncestryFormat.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/CommonTerms.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/CommonTerms.java" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/DwcaParser.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/parser/DwcaParser.class" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/bibalex/eol/utils/CommonTerms.class" afterPath="$PROJECT_DIR$/target/classes/org/bibalex/eol/utils/CommonTerms.class" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -18,103 +23,77 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DwcaParser.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DwcaParser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="386" column="78" lean-forward="false" selection-start-line="386" selection-start-column="73" selection-end-line="386" selection-end-column="78" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ActionFiles.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="14" column="32" lean-forward="false" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="32" />
+            <state relative-caret-position="130">
+              <caret line="758" column="72" lean-forward="false" selection-start-line="758" selection-start-column="72" selection-end-line="758" selection-end-column="72" />
               <folding>
-                <element signature="e#376#405#0" expanded="true" />
+                <element signature="e#39040#39041#0" expanded="true" />
+                <element signature="e#39078#39079#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Constants.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java">
+      <file leaf-file-name="CommonTerms.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/CommonTerms.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="20" column="47" lean-forward="true" selection-start-line="17" selection-start-column="3" selection-end-line="20" selection-end-column="47" />
+            <state relative-caret-position="441">
+              <caret line="32" column="34" lean-forward="false" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="34" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="configs.properties" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/configs.properties">
+      <file leaf-file-name="TermURIs.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/TermURIs.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="94">
-              <caret line="10" column="23" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="23" />
+            <state relative-caret-position="139">
+              <caret line="11" column="35" lean-forward="false" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Association.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Association.java">
+      <file leaf-file-name="AncestryFormat.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/AncestryFormat.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="136" column="5" lean-forward="false" selection-start-line="136" selection-start-column="5" selection-end-line="136" selection-end-column="5" />
+            <state relative-caret-position="-391">
+              <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NodeRecord.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/NodeRecord.java">
+      <file leaf-file-name="ParentFormat.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="738">
-              <caret line="78" column="7" lean-forward="false" selection-start-line="72" selection-start-column="6" selection-end-line="78" selection-end-column="7" />
+            <state relative-caret-position="167">
+              <caret line="93" column="0" lean-forward="false" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
+              <folding>
+                <element signature="e#5624#5625#0" expanded="true" />
+                <element signature="e#5692#5693#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SynonymNodeHandler.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="311">
+              <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DeltaCalculator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/deltacalculator/DeltaCalculator.java">
+      <file leaf-file-name="Format.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="10" column="51" lean-forward="false" selection-start-line="10" selection-start-column="51" selection-end-line="10" selection-end-column="51" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Reference.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Reference.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
-              <caret line="200" column="5" lean-forward="false" selection-start-line="200" selection-start-column="5" selection-end-line="200" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Taxon.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Taxon.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="37" column="34" lean-forward="false" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="VernacularName.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/VernacularName.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="88" column="5" lean-forward="false" selection-start-line="88" selection-start-column="5" selection-end-line="88" selection-end-column="5" />
+            <state relative-caret-position="149">
+              <caret line="46" column="16" lean-forward="false" selection-start-line="46" selection-start-column="16" selection-end-line="46" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -131,14 +110,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>checkMediaHasValidURL_FieldValidator</find>
-      <find>checkAgen</find>
-      <find>(https?|ftp):</find>
-      <find>buildGraph</find>
-      <find>debug</find>
-      <find>bui</find>
-      <find>buildg</find>
-      <find>RulesList</find>
       <find>associationHashMap</find>
       <find>rowTypeList</find>
       <find>_valid</find>
@@ -155,12 +126,20 @@
       <find>getAcceptedNode</find>
       <find>location</find>
       <find>parseMed</find>
-      <find>build</find>
       <find>setActi</find>
       <find>insert</find>
       <find>&quot;insert&quot;</find>
       <find>&quot;update&quot;</find>
+      <find>agen</find>
       <find>split</find>
+      <find>URI</find>
+      <find>kingdomTerm</find>
+      <find>ass</find>
+      <find>handleLi</find>
+      <find>kingdom</find>
+      <find>accep</find>
+      <find>parseTax</find>
+      <find>build</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -183,10 +162,7 @@
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/RestClientHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/Neo4jHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/CommonTerms.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/TermURIs.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/AncestryFormat.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/functions/ValidationFunctions.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/handlers/XMLHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/OwnDwcaWriter.java" />
@@ -197,9 +173,6 @@
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/MainHarvester.java" />
         <option value="$PROJECT_DIR$/src/main/resources/application.properties" />
         <option value="$PROJECT_DIR$/src/main/java/org/gbif/dwca/io/Archive.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/functions/MediaValidationFunctions.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/functions/AgentValidationFunctions.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/validator/rules/ValidationRulesLoader.java" />
@@ -214,7 +187,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/deltacalculator/ArchiveFileHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/deltacalculator/DeltaCalculator.java" />
         <option value="$PROJECT_DIR$/src/main/resources/configs.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Agent.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/MeasurementOrFact.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Media.java" />
@@ -224,6 +196,13 @@
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Association.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Taxon.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/NodeRecord.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/CommonTerms.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/AncestryFormat.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" />
       </list>
     </option>
@@ -242,10 +221,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="64" />
+    <option name="x" value="16" />
     <option name="y" value="181" />
-    <option name="width" value="1912" />
-    <option name="height" value="789" />
+    <option name="width" value="1904" />
+    <option name="height" value="799" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -406,7 +385,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.DeltaCalculator">
+  <component name="RunManager" selected="Application.DwcaParser">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -592,8 +571,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.DeltaCalculator" />
-        <item index="1" class="java.lang.String" itemvalue="Application.DwcaParser" />
+        <item index="0" class="java.lang.String" itemvalue="Application.DwcaParser" />
+        <item index="1" class="java.lang.String" itemvalue="Application.DeltaCalculator" />
         <item index="2" class="java.lang.String" itemvalue="Application.MainHarvester" />
         <item index="3" class="java.lang.String" itemvalue="Application.Harvester" />
         <item index="4" class="java.lang.String" itemvalue="Application.ActionFiles" />
@@ -630,7 +609,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32994652" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32119206" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289183" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3432671" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18763797" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20427808" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -639,7 +618,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4370861" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4370861" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -705,13 +684,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java</url>
-          <line>26</line>
+          <line>27</line>
           <properties />
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java</url>
-          <line>55</line>
+          <line>61</line>
           <properties />
           <option name="timeStamp" value="28" />
         </line-breakpoint>
@@ -723,13 +702,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java</url>
-          <line>275</line>
+          <line>276</line>
           <properties />
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java</url>
-          <line>397</line>
+          <line>398</line>
           <properties />
           <option name="timeStamp" value="47" />
         </line-breakpoint>
@@ -763,8 +742,46 @@
           <properties />
           <option name="timeStamp" value="59" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java</url>
+          <line>42</line>
+          <properties />
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java</url>
+          <line>29</line>
+          <properties />
+          <option name="timeStamp" value="69" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java</url>
+          <line>70</line>
+          <properties />
+          <option name="timeStamp" value="70" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java</url>
+          <line>56</line>
+          <properties />
+          <option name="timeStamp" value="71" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/AncestryFormat.java</url>
+          <line>85</line>
+          <properties />
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/NodeRecord.java</url>
+          <line>52</line>
+          <properties class="org.bibalex.eol.parser.models.NodeRecord" method="setAssociations">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="62" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="62" />
+      <option name="time" value="73" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -813,14 +830,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/CommonTerms.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="27" column="41" lean-forward="false" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/deltacalculator/ActionFile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="864">
@@ -847,6 +856,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
           <caret line="101" column="35" lean-forward="false" selection-start-line="101" selection-start-column="35" selection-end-line="101" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -854,13 +864,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="652">
           <caret line="110" column="70" lean-forward="false" selection-start-line="110" selection-start-column="70" selection-end-line="110" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3024">
-          <caret line="192" column="25" lean-forward="false" selection-start-line="188" selection-start-column="12" selection-end-line="192" selection-end-column="25" />
           <folding />
         </state>
       </provider>
@@ -869,6 +872,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="319">
           <caret line="28" column="46" lean-forward="false" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -876,6 +880,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="297">
           <caret line="45" column="125" lean-forward="false" selection-start-line="45" selection-start-column="125" selection-end-line="45" selection-end-column="125" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -944,14 +949,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/ValidationRules.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="147" column="32" lean-forward="true" selection-start-line="147" selection-start-column="32" selection-end-line="147" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/harvester/StorageLayerClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="230">
@@ -984,50 +981,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="55" column="36" lean-forward="false" selection-start-line="55" selection-start-column="14" selection-end-line="55" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/Neo4jHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="232">
           <caret line="72" column="94" lean-forward="false" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="94" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="93" column="5" lean-forward="true" selection-start-line="91" selection-start-column="4" selection-end-line="93" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/TermURIs.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="101" column="31" lean-forward="false" selection-start-line="101" selection-start-column="31" selection-end-line="101" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/AncestryFormat.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1321">
-          <caret line="123" column="27" lean-forward="false" selection-start-line="123" selection-start-column="8" selection-end-line="123" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="63" column="104" lean-forward="true" selection-start-line="63" selection-start-column="12" selection-end-line="63" selection-end-column="104" />
           <folding />
         </state>
       </provider>
@@ -1112,26 +1069,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/NodeRecord.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="738">
-          <caret line="78" column="7" lean-forward="false" selection-start-line="72" selection-start-column="6" selection-end-line="78" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Association.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
           <caret line="136" column="5" lean-forward="false" selection-start-line="136" selection-start-column="5" selection-end-line="136" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Taxon.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="37" column="34" lean-forward="false" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
           <folding />
         </state>
       </provider>
@@ -1144,28 +1085,117 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="20" column="47" lean-forward="true" selection-start-line="17" selection-start-column="3" selection-end-line="20" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/ActionFiles.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="14" column="32" lean-forward="false" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="32" />
           <folding>
-            <element signature="e#376#405#0" expanded="true" />
+            <element signature="e#376#405#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="192" column="28" lean-forward="true" selection-start-line="192" selection-start-column="28" selection-end-line="192" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/ValidationRules.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="339" column="47" lean-forward="false" selection-start-line="339" selection-start-column="44" selection-end-line="339" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/NodeRecord.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="52" column="21" lean-forward="false" selection-start-line="52" selection-start-column="21" selection-end-line="52" selection-end-column="21" />
+          <folding>
+            <element signature="e#1273#1274#0" expanded="true" />
+            <element signature="e#1321#1322#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Taxon.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="448">
+          <caret line="53" column="27" lean-forward="false" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/Constants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="83" column="0" lean-forward="true" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/TermURIs.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="11" column="35" lean-forward="false" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/utils/CommonTerms.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="32" column="34" lean-forward="false" selection-start-line="32" selection-start-column="34" selection-end-line="32" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/ParentFormat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="93" column="0" lean-forward="false" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
+          <folding>
+            <element signature="e#5624#5625#0" expanded="true" />
+            <element signature="e#5692#5693#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="386" column="78" lean-forward="false" selection-start-line="386" selection-start-column="73" selection-end-line="386" selection-end-column="78" />
+        <state relative-caret-position="130">
+          <caret line="758" column="72" lean-forward="false" selection-start-line="758" selection-start-column="72" selection-end-line="758" selection-end-column="72" />
+          <folding>
+            <element signature="e#39040#39041#0" expanded="true" />
+            <element signature="e#39078#39079#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/handlers/SynonymNodeHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/Format.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="46" column="16" lean-forward="false" selection-start-line="46" selection-start-column="16" selection-end-line="46" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/formats/AncestryFormat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-391">
+          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
           <folding />
         </state>
       </provider>

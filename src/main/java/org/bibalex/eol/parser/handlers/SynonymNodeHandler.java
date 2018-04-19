@@ -24,21 +24,27 @@ public class SynonymNodeHandler {
     }
 
     public int handleSynonymNode(String nodeId, String scientificName, String rank, String acceptedNodeId){
-        int acceptedNodeGeneratedId = neo4jHandler.getNodeIfExist(acceptedNodeId, resourceId);
-        int synonymNodeGeneratedId;
-        boolean acceptedNotExist = false;
-        if(acceptedNodeGeneratedId <= 0) {
-            acceptedNotExist = true;
-            acceptedNodeGeneratedId = handleSynonym_acceptedNodeNotExist(acceptedNodeId);
+        if(acceptedNodeId != null) {
+            int acceptedNodeGeneratedId = neo4jHandler.getNodeIfExist(acceptedNodeId, resourceId);
+            int synonymNodeGeneratedId;
+            boolean acceptedNotExist = false;
+            if (acceptedNodeGeneratedId <= 0) {
+                acceptedNotExist = true;
+                acceptedNodeGeneratedId = handleSynonym_acceptedNodeNotExist(acceptedNodeId);
+            }
+            synonymNodeGeneratedId = createSynonymIfNotExist(nodeId, scientificName, rank, acceptedNodeId,
+                    acceptedNodeGeneratedId);
+            if (acceptedNotExist) {
+                ArrayList<Integer> synonyms = orphanSynonyms.get(acceptedNodeId);
+                synonyms.add(synonymNodeGeneratedId);
+                orphanSynonyms.put(acceptedNodeId, synonyms);
+            }
+            return synonymNodeGeneratedId;
         }
-        synonymNodeGeneratedId = createSynonymIfNotExist(nodeId, scientificName, rank, acceptedNodeId,
-                acceptedNodeGeneratedId);
-        if(acceptedNotExist) {
-            ArrayList<Integer> synonyms = orphanSynonyms.get(acceptedNodeId);
-            synonyms.add(synonymNodeGeneratedId);
-            orphanSynonyms.put(acceptedNodeId, synonyms);
+        else{
+            logger.error("there isn't accepted node id");
+            return -1;
         }
-        return synonymNodeGeneratedId;
     }
 
     private int createSynonymIfNotExist(String nodeId, String scientificName, String rank, String acceptedNodeId,

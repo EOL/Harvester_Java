@@ -14,12 +14,13 @@ import java.util.ArrayList;
 public abstract class Format {
 
 //    protected static final String ancestorTaxonId = "placeholder";
-    private final static String acceptedNodesStatuses[] = {"accepted", "accepted name", "valid", "valid name",
+    private final static String acceptedNodesStatuses[] = {"accepted", "accepted name", "preferred", "preferred name", "valid", "valid name", "provisionally accepted",
         "provisionally accepted name"};
+
     private static final Logger logger = Logger.getLogger(Format.class);
 //    private static ArrayList<String> acceptedNodesStatuses = Arrays.asList(accepted);
 
-    public abstract void handleLines(ArrayList<Taxon> nodes);
+    public abstract void handleLines(ArrayList<Taxon> nodes, boolean normalResource);
 
     public static boolean isSynonym(String taxonomicStatus){
         for(String acceptedNodeStatus : acceptedNodesStatuses){

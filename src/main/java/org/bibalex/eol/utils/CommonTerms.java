@@ -26,4 +26,12 @@ public class CommonTerms {
     public static final Term furtherInformationURL = TermFactory.instance().findTerm(TermURIs.furtherInformationURL);
     public static final Term parentId = TermFactory.instance().findTerm(TermURIs.furtherInformationURL);
     public static final Term occurrenceID = TermFactory.instance().findTerm(TermURIs.occurrenceID);
+
+    public static final Term kingdomTerm = TermFactory.instance().findTerm(TermURIs.kingdomURI);
+    public static final Term phylumTerm = TermFactory.instance().findTerm(TermURIs.phylumURI);
+    public static final Term classTerm = TermFactory.instance().findTerm(TermURIs.classURI);
+    public static final Term orderTerm = TermFactory.instance().findTerm(TermURIs.orderURI);
+    public static final Term familyTerm = TermFactory.instance().findTerm(TermURIs.familyURI);
+    public static final Term genusTerm  = TermFactory.instance().findTerm(TermURIs.genusURI);
+
 }
