@@ -21,7 +21,12 @@ public class Neo4jHandler {
     public int createAncestorIfNotExist(int resourceId, String scientificName, String rank, String taxonId,
                                 int parentGeneratedId){
         //TODO call the neo4j and return the id
-        return 1;
+        Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createAncestor"), node);
+        System.out.println("===============================");
+        System.out.println("The node is " + response);
+        System.out.println("===============================");
+        return Integer.parseInt(response);
     }
 
     /**
@@ -42,7 +47,12 @@ public class Neo4jHandler {
      */
     public boolean createRelationBetweenNodeAndSynonyms(int acceptedNodeGeneratedId, int synonymNodeId){
         //TODO call neo4j to adjust the relations between the accepted node and its synonyms
-        return true;
+        Node node = new Node(synonymNodeId, acceptedNodeGeneratedId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createRelationBetweenNodeAndSynonym"), node);
+        System.out.println("===============================");
+        System.out.println("The node is " + response);
+        System.out.println("===============================");
+        return Boolean.valueOf(response);
     }
 
     public int getNodeIfExist(String nodeId, int resourceId){
@@ -81,13 +91,23 @@ public class Neo4jHandler {
     public int createSynonymNode(int resourceId, String nodeId, String scientificName, String rank,
                                   String acceptedNodeId, int acceptedNodeGeneratedId){
         //TODO call neo4j and return the id of the generated node
-        return 1;
+        Node node = new Node(resourceId, nodeId, scientificName, rank, acceptedNodeId, acceptedNodeGeneratedId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNeo4jNode"), node);
+        System.out.println("===============================");
+        System.out.println("A node is created with id " + response);
+        System.out.println("===============================");
+        return Integer.parseInt(response);
     }
 
     public int getSynonymNodeIfExist(String nodeId, String scientificName, int resourceId, String acceptedNodeId, int
                                      acceptedGeneratedId){
         //TODO call neo4j and return the id of the generated node
-        return 1;
+        Node node = new Node(resourceId, nodeId, scientificName, acceptedGeneratedId, acceptedNodeId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("getSynonymNode"), node);
+        System.out.println("===============================");
+        System.out.println("A node is created with id " + response);
+        System.out.println("===============================");
+        return Integer.parseInt(response);
     }
 
     public boolean hasChildren (String nodeId, int resourceId){

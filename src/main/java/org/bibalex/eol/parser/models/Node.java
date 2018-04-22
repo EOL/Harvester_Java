@@ -52,7 +52,26 @@ public class Node {
         this.parentNodeId = parentNodeId;
     }
 
+    public Node(int generatedNodeId, int  acceptedNodeGeneratedId){
+        this.generatedNodeId = generatedNodeId;
+        this.acceptedNodeGeneratedId = acceptedNodeGeneratedId;
+    }
+    public Node(int resourceId, String nodeId, String scientificName, String rank, String acceptedNodeId, int acceptedNodeGeneratedId){
+        this.resourceId = resourceId;
+        this.nodeId = nodeId;
+        this.scientificName = scientificName;
+        this.rank = rank;
+        this.acceptedNodeId = acceptedNodeId;
+        this.acceptedNodeGeneratedId = acceptedNodeGeneratedId;
+    }
 
+    public Node(int resourceId, String nodeId, String scientificName, int acceptedNodeGeneratedId, String acceptedNodeId){
+        this.resourceId = resourceId;
+        this.nodeId = nodeId;
+        this.scientificName = scientificName;
+        this.acceptedNodeGeneratedId = acceptedNodeGeneratedId;
+        this.acceptedNodeId = acceptedNodeId;
+    }
     public String getNodeId() {
         return nodeId;
     }

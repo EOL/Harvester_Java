@@ -137,11 +137,11 @@ public class DwcaParser {
         buildGraph(resourceId);
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
         for (StarRecord rec : dwca) {
-//            int generatedNodeId = neo4jHandler.getNodeIfExist
-//                    (rec.core().value(DwcTerm.taxonID), resourceId);
+            int generatedNodeId = neo4jHandler.getNodeIfExist
+                    (rec.core().value(DwcTerm.taxonID), resourceId);
             System.out.println(rec.core().value(DwcTerm.taxonID));
             NodeRecord tableRecord = new NodeRecord(
-                    0 + "", resourceId);
+                    generatedNodeId + "", resourceId);
 
             Taxon taxon = parseTaxon(rec);
             if (taxon != null)
@@ -756,7 +756,7 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/eol_resources/arnoldarboretum (copy).zip";
+        String path = "/home/ba/eol_resources/arnoldarboretum (copy).tar.gz";
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
