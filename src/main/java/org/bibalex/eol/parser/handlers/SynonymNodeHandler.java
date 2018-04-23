@@ -49,12 +49,12 @@ public class SynonymNodeHandler {
 
     private int createSynonymIfNotExist(String nodeId, String scientificName, String rank, String acceptedNodeId,
                                         int acceptedNodeGeneratedId){
-        int generatedNodeId = neo4jHandler.getSynonymNodeIfExist(nodeId, scientificName, resourceId, acceptedNodeId,
-                acceptedNodeGeneratedId);
-        if(generatedNodeId <= 0){
-            generatedNodeId = neo4jHandler.createSynonymNode(resourceId, nodeId, scientificName, rank, acceptedNodeId,
+//        int generatedNodeId = neo4jHandler.getSynonymNodeIfExist(nodeId, scientificName, resourceId, acceptedNodeId,
+//                acceptedNodeGeneratedId);
+//        if(generatedNodeId <= 0){
+            int generatedNodeId = neo4jHandler.createSynonymNode(resourceId, nodeId, scientificName, rank, acceptedNodeId,
                     acceptedNodeGeneratedId);
-        }
+//        }
         return generatedNodeId;
     }
 

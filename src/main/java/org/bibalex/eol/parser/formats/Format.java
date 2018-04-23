@@ -46,11 +46,11 @@ public abstract class Format {
 
     private int createAcceptedNodeIfNotExist(String nodeId, String scientificName, String rank, int parentGeneratedNodeId,
                                                int resourceId, Neo4jHandler neo4jHandler){
-        int generatedNodeId = neo4jHandler.getAcceptedNodeIfExist(nodeId, scientificName, resourceId);
-        if(generatedNodeId <= 0){
-            generatedNodeId = neo4jHandler.createAcceptedNode(resourceId, nodeId, scientificName,
+//        int generatedNodeId = neo4jHandler.getAcceptedNodeIfExist(nodeId, scientificName, resourceId);
+//        if(generatedNodeId <= 0){
+        int generatedNodeId = neo4jHandler.createAcceptedNode(resourceId, nodeId, scientificName,
                     rank, parentGeneratedNodeId);
-        }
+//        }
         return generatedNodeId;
     }
 

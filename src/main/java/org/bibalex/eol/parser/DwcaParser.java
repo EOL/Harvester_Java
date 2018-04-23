@@ -250,39 +250,46 @@ public class DwcaParser {
             if (action != null) {
                 if (action.equalsIgnoreCase(Constants.INSERT)) {
                     System.out.println("insert that action is insert");
-                    insertTaxon(tableRecord);
+                    insertTaxonToHBase(tableRecord);
                 } else if (action.equalsIgnoreCase(Constants.UPDATE)|| action.equalsIgnoreCase(Constants.UNCHANGED)) {
-                    //TODO call update
+                    updateTaxonInHBase(tableRecord);
                 } else if (action.equalsIgnoreCase(Constants.DELETE)) {
-                    //TODO call delete
+                    deleteTaxonInHBase(tableRecord);
                 }
             } else {
                 System.out.println("insert from else of action is null");
-                insertTaxon(tableRecord);
+                insertTaxonToHBase(tableRecord);
             }
         } /*else {
             System.out.println("insert from else of actions is null");
-            insertTaxon(tableRecord);
+            insertTaxonToHBase(tableRecord);
         }*/
         if(newResource){
             System.out.println("new resource");
-            insertTaxon(tableRecord);
+            insertTaxonToHBase(tableRecord);
         }
     }
 
 
-    private void insertTaxon(NodeRecord tableRecord) {
-
-        //Send to HBASE
-        callHBaseToCreate(tableRecord);
-        ////////
+    private void insertTaxonToHBase(NodeRecord tableRecord) {
+        RestClientHandler restClientHandler = new RestClientHandler();
+        restClientHandler.doConnection(PropertiesHandler.getProperty("addEntryHBase"), tableRecord);
         printRecord(tableRecord);
         System.out.println();
     }
 
-    private void callHBaseToCreate(NodeRecord nodeRecord) {
+    private void updateTaxonInHBase(NodeRecord tableRecord){
         RestClientHandler restClientHandler = new RestClientHandler();
-        restClientHandler.doConnection(PropertiesHandler.getProperty("addEntryHBase"), nodeRecord);
+        restClientHandler.doConnection(PropertiesHandler.getProperty("updateEntryHBase"), tableRecord);
+        printRecord(tableRecord);
+        System.out.println();
+    }
+
+    private void deleteTaxonInHBase(NodeRecord tableRecord){
+        RestClientHandler restClientHandler = new RestClientHandler();
+        restClientHandler.deleteTaxon(PropertiesHandler.getProperty("deleteEntryHBase"), tableRecord);
+        printRecord(tableRecord);
+        System.out.println();
     }
 
     private String checkIfOccurrencesChanged(Record extensionRecord) {
@@ -756,7 +763,7 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/eol_resources/arnoldarboretum (copy).tar.gz";
+        String path = "/home/ba/eol_resources/dynamic/EOL_dynamic_hierarchyV1Revised (2).tar.gz";
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
@@ -766,8 +773,8 @@ public class DwcaParser {
         } catch (Exception e) {
             System.out.println(e);
         }
-        DwcaParser dwcaP = new DwcaParser(dwcArchive, true);
-        dwcaP.prepareNodesRecord(444444444);
+        DwcaParser dwcaP = new DwcaParser(dwcArchive, false);
+        dwcaP.prepareNodesRecord(1111);
 
 //        ArrayList<String> urls = new ArrayList<String>();
 ////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");
