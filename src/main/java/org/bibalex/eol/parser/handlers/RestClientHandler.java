@@ -77,7 +77,10 @@ public class RestClientHandler {
                 // Send the request as POST
                 try {
                     System.out.println(uri);
-                    response = restTemplate.exchange(uri, HttpMethod.POST, entity, Integer.class);
+//                    if (uri.equalsIgnoreCase(PropertiesHandler.getProperty("deleteNodeParentFormat")) || uri.equalsIgnoreCase(PropertiesHandler.getProperty("deleteNodeAncestryFormat")))
+//                        response = restTemplate.exchange(uri, HttpMethod.POST, entity, Boolean.class);
+//                    else
+                        response = restTemplate.exchange(uri, HttpMethod.POST, entity, Integer.class);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("can't connect");
@@ -87,6 +90,8 @@ public class RestClientHandler {
 
                 if (response.getStatusCode() == HttpStatus.OK) {
                     System.out.println(response.getBody());
+//                    if (uri.equalsIgnoreCase(PropertiesHandler.getProperty("deleteNodeParentFormat")) || uri.equalsIgnoreCase(PropertiesHandler.getProperty("deleteNodeAncestryFormat")))
+//                        return Boolean.toString((Boolean) response.getBody());
                     return Integer.toString((Integer) response.getBody());
                 } else {
                     System.out.println("returned code(" + response.getStatusCode() + ")");
@@ -152,5 +157,56 @@ public class RestClientHandler {
             }
         }
         return "";
+    }
+
+    public boolean updateTaxonNeo4j(String uri, Node node){
+        System.out.println("do connection");
+        RestTemplate restTemplate;
+        System.out.println("after restTemplate, uri: " + uri);
+        if (!uri.equalsIgnoreCase("")) {
+            System.out.println("gowa el if");
+            if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
+                System.out.println("gowa el proper");
+                restTemplate = handleProxy(PropertiesHandler.getProperty("proxy"),
+                        Integer.parseInt(PropertiesHandler.getProperty("port")),
+                        PropertiesHandler.getProperty("proxyUserName"),
+                        PropertiesHandler.getProperty("password"));
+            } else {
+                System.out.println("else of proper");
+                restTemplate = new RestTemplate();
+            }
+
+            //create the json converter
+            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+            List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
+            list.add(converter);
+            restTemplate.setMessageConverters(list);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Accept", "application/json");
+            System.out.println("after header");
+            // Pass the object and the needed headers
+            ResponseEntity response = null;
+            HttpEntity<Node> entity = new HttpEntity<Node>(node, headers);
+            System.out.println("before send post request");
+            // Send the request as POST
+            try {
+                System.out.println(uri);
+                response = restTemplate.exchange(uri, HttpMethod.POST, entity, Boolean.class);
+                if (response.getStatusCode() == HttpStatus.OK) {
+                    System.out.println(response.getBody());
+                    return Boolean.valueOf((Boolean) response.getBody());
+                } else {
+                    System.out.println("returned code(" + response.getStatusCode() + ")");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("can't connect");
+            }
+
+
+        }
+        return false;
     }
 }

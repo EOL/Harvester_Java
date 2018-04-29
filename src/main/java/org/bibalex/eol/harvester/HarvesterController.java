@@ -1,12 +1,8 @@
 package org.bibalex.eol.harvester;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
-import org.gbif.dwca.io.Archive;
-import org.gbif.dwca.io.ArchiveFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -38,7 +34,7 @@ public class HarvesterController {
                 String checkFilePath = checkOldVersion.getPath();
                 System.out.println(checkFilePath);
                 if(!checkFilePath.equals(null)) {
-                    String deltaPath = StorageLayerClient.getArchiveToValidate(oldPath, updatedPath);
+                    String deltaPath = StorageLayerClient.callDeltaCalculator(oldPath, updatedPath);
                     return harvesterAPI.callValidation(deltaPath, Integer.parseInt(resourceID), newResource);
                 }
             } catch (NoSuchFileException exception) {

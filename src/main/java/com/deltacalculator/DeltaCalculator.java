@@ -16,8 +16,8 @@ public class DeltaCalculator {
     private static final Logger logger = Logger.getLogger(DeltaCalculator.class);
 
     public static void main(String[] args) {
-      File file1 = new File ("/home/ba/EOL_dynamic_hierarchyV1Revised_23.zip");
-      File file2 = new File ("/home/ba/EOL_dynamic_hierarchyV1Revised_24.zip");
+      File file1 = new File ("/home/ba/329_old_org.tar.gz");
+      File file2 = new File ("/home/ba/329_org.tar.gz");
       DeltaCalculator deltaCalculator = new DeltaCalculator();
       deltaCalculator.deltaCalculatorMain(file1, file2);
     }

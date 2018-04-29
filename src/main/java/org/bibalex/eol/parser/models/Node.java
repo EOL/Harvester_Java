@@ -72,6 +72,13 @@ public class Node {
         this.acceptedNodeGeneratedId = acceptedNodeGeneratedId;
         this.acceptedNodeId = acceptedNodeId;
     }
+
+    public Node (int resourceId, String nodeId, String scientificName, String rank){
+        this.resourceId = resourceId;
+        this.nodeId = nodeId;
+        this.scientificName = scientificName;
+        this.rank = rank;
+    }
     public String getNodeId() {
         return nodeId;
     }

@@ -49,6 +49,8 @@ public class DwcaParser {
     private Map<String, Map<String, String>> actionFiles;
     int batchSize = 1000;
     private boolean newResource;
+    public static final ArrayList<String> expectedMediaFormat = new ArrayList<>();
+    private HashMap<String, Integer> deletedTaxons = new HashMap<>();
 
     public DwcaParser(Archive dwca, boolean newResource) {
         this.dwca = dwca;
@@ -188,6 +190,7 @@ public class DwcaParser {
     }
 
     private void buildGraph(int resourceId) {
+        deletedTaxons.clear();
         Map<String, String> actions = actionFiles.get(dwca.getCore().getLocation() + "_action");
         System.out.println("BUILD");
         ArrayList<Taxon> taxaList = new ArrayList<>();
@@ -217,9 +220,10 @@ public class DwcaParser {
                             i++;
                             taxaList.add(parseTaxon(rec));
                         } else if (action.equalsIgnoreCase(Constants.UPDATE)) {
-                            format.updateTaxon(taxonID, resourceId, new Neo4jHandler());
+                            format.updateTaxon(taxonID, resourceId, rec.core().value(DwcTerm.scientificName), rec.core().value(DwcTerm.taxonRank), rec.core().value(DwcTerm.parentNameUsageID));
                         } else if (action.equalsIgnoreCase(Constants.DELETE)) {
-                            format.deleteFromTaxonFile(taxonID);
+                            int generatedNodeId = format.deleteTaxon(taxonID, resourceId, rec.core().value(DwcTerm.scientificName));
+                            deletedTaxons.put(taxonID, generatedNodeId);
                         }
                     } else {
                         System.out.println("insert from else of action is null");
@@ -286,6 +290,7 @@ public class DwcaParser {
     }
 
     private void deleteTaxonInHBase(NodeRecord tableRecord){
+        tableRecord.setGeneratedNodeId(deletedTaxons.get(tableRecord.getTaxon().getIdentifier())+"");
         RestClientHandler restClientHandler = new RestClientHandler();
         restClientHandler.deleteTaxon(PropertiesHandler.getProperty("deleteEntryHBase"), tableRecord);
         printRecord(tableRecord);
@@ -609,8 +614,9 @@ public class DwcaParser {
 
     private ArrayList<Media> parseMedia(StarRecord record, NodeRecord rec) {
         ArrayList<Media> media = new ArrayList<Media>();
+        expectedMediaFormat.clear();
         for (Record extensionRecord : record.extension(CommonTerms.mediaTerm)) {
-            System.out.println("===> has mediaaaaaaaaaaa");
+            expectedMediaFormat.add(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaFormatURI)));
             String storageLayerPath = "", storageLayerThumbnailPath = "";
             ArrayList<String> paths = new ArrayList<String>();
 
@@ -666,7 +672,16 @@ public class DwcaParser {
     public String getMediaPath(int resourceID, ArrayList<String> mediaFiles) {
         try {
             StorageLayerClient client = new StorageLayerClient();
-            ArrayList<String> SLPaths = client.downloadMedia(String.valueOf(resourceID), mediaFiles);
+            ArrayList<ArrayList<String>> mediaFileType = new ArrayList<ArrayList<String>>();
+            ArrayList<String> mediaTypeArray = new ArrayList<>();
+            for(int i=0;i<mediaFiles.size();i++)
+            {
+                mediaTypeArray.add(mediaFiles.get(i));
+                mediaTypeArray.add(expectedMediaFormat.get(i));
+                mediaFileType.add(mediaTypeArray);
+            }
+
+            ArrayList<String> SLPaths = client.downloadMedia(String.valueOf(resourceID), mediaFileType);
             return convertArrayListToString(SLPaths);
         } catch (IOException e) {
             e.printStackTrace();
@@ -763,7 +778,7 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/eol_resources/dynamic/EOL_dynamic_hierarchyV1Revised (2).tar.gz";
+        String path = "/home/ba/test/DifferenceArchive_1524729687324.tar.out_valid.tar.gz";
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
@@ -774,7 +789,7 @@ public class DwcaParser {
             System.out.println(e);
         }
         DwcaParser dwcaP = new DwcaParser(dwcArchive, false);
-        dwcaP.prepareNodesRecord(1111);
+        dwcaP.prepareNodesRecord(346);
 
 //        ArrayList<String> urls = new ArrayList<String>();
 ////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");

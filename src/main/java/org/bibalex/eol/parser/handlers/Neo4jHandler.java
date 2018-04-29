@@ -125,9 +125,24 @@ public class Neo4jHandler {
         return true;
     }
 
-    public String deleteNode (String nodeID, int resourceId){
+    public int deleteNodeParentFormat (String nodeID, String scientificName, int resourceId){
         //TODO delete node and return its parent id not generated parent id
-        return "1";
+        Node node = new Node(nodeID, scientificName, resourceId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("deleteNodeParentFormat"), node);
+        System.out.println("===============================");
+        System.out.println("A node is deleted that has id " + response);
+        System.out.println("===============================");
+        return Integer.valueOf(response);
+    }
+
+    public int deleteNodeAncestryFormat (String nodeID, String scientificName, int resourceId){
+        //TODO delete node and return its parent id not generated parent id
+        Node node = new Node(nodeID, scientificName, resourceId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("deleteNodeAncestryFormat"), node);
+        System.out.println("===============================");
+        System.out.println("A node is deleted that has id " + response);
+        System.out.println("===============================");
+        return Integer.valueOf(response);
     }
 
     public void deleteNodeWithGeneratedID (String generatedNodeID){
@@ -173,4 +188,21 @@ public class Neo4jHandler {
         //TODO link between parent and node
     }
 
+    public int updateParent(int resourceId, String nodeId, String scientificName, String rank, int parentGeneratedNodeId) {
+        Node node = new Node(resourceId, nodeId, scientificName, rank, parentGeneratedNodeId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNodeWithFulldata"), node);
+        System.out.println("===============================");
+        System.out.println("A node is created with id " + response);
+        System.out.println("===============================");
+        return Integer.valueOf(response);
+    }
+
+    public boolean updateTaxonParent(String nodeId, int resourceId, String scientificName, String rank, String parentUsageId) {
+        Node node = new Node(resourceId, nodeId, scientificName, rank);
+        Boolean response = restClientHandler.updateTaxonNeo4j(PropertiesHandler.getProperty("updateParentFormat")+"/"+parentUsageId, node);
+        System.out.println("===============================");
+        System.out.println("A node is updated with id " + response);
+        System.out.println("===============================");
+        return response;
+    }
 }

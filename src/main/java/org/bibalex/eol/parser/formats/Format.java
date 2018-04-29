@@ -66,20 +66,20 @@ public abstract class Format {
         return true;
     }
 
-    protected boolean deleteTaxon(String nodeId, Neo4jHandler neo4jHandler, int resourceId){
-        System.out.println("deleteTaxon");
-        if (neo4jHandler.hasChildren(nodeId, resourceId)){
-            return true;
-        }
-        else{
-            deleteNodeHasNoChildren(nodeId, neo4jHandler, resourceId);
-        }
-        return false;
-    }
+//    protected boolean deleteTaxon(String nodeId, Neo4jHandler neo4jHandler, int resourceId){
+//        System.out.println("deleteTaxon");
+//        if (neo4jHandler.hasChildren(nodeId, resourceId)){
+//            return true;
+//        }
+//        else{
+//            deleteNodeHasNoChildren(nodeId, neo4jHandler, resourceId);
+//        }
+//        return false;
+//    }
 
     private void deleteNodeHasNoChildren(String nodeId, Neo4jHandler neo4jHandler, int resourceId){
         System.out.println("delete taxon has no children");
-        String parentID = neo4jHandler.deleteNode(nodeId, resourceId);
+        String parentID = "";
         //then delete from H-base
         if(!neo4jHandler.hasSibling(nodeId, resourceId) &&
                 !neo4jHandler.nodeHasTaxonID(parentID, resourceId)){
@@ -88,11 +88,13 @@ public abstract class Format {
         }
     }
 
-    public abstract void deleteFromTaxonFile(String nodeID);
+    public abstract int deleteTaxon(String nodeID, int resourceId, String scientificName);
 
-    public void updateTaxon(String nodeID, int resourceId, Neo4jHandler neo4jHandler){
-        neo4jHandler.updateTaxon(nodeID, resourceId);
-    }
+    public abstract boolean updateTaxon (String nodeId, int resourceId, String scientificName, String rank, String parentUsageId);
+
+//    public void updateTaxon(String nodeID, int resourceId, Neo4jHandler neo4jHandler){
+//        neo4jHandler.updateTaxon(nodeID, resourceId);
+//    }
 
 
 }
