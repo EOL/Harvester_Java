@@ -1,7 +1,8 @@
 package org.bibalex.eol.parser.handlers;
 
-import org.bibalex.eol.parser.handlers.PropertiesHandler;
 import org.bibalex.eol.parser.models.Node;
+
+import java.util.ArrayList;
 
 /**
  * Created by AmrMorad
@@ -197,11 +198,25 @@ public class Neo4jHandler {
         return Integer.valueOf(response);
     }
 
-    public boolean updateTaxonParent(String nodeId, int resourceId, String scientificName, String rank, String parentUsageId) {
+    public int updateTaxonParentFormat(String nodeId, int resourceId, String scientificName, String rank, String parentUsageId) {
         Node node = new Node(resourceId, nodeId, scientificName, rank);
-        Boolean response = restClientHandler.updateTaxonNeo4j(PropertiesHandler.getProperty("updateParentFormat")+"/"+parentUsageId, node);
+        if(rank == null)
+            node.setRank("null");
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("updateParentFormat")+"/"+parentUsageId, node);
         System.out.println("===============================");
-        System.out.println("A node is updated with id " + response);
+        System.out.println("A node is updated with response " + response);
+        System.out.println("===============================");
+        return Integer.valueOf(response);
+    }
+
+    public boolean updateTaxonAncestoryFormat(String nodeId, int resourceId, String scientificName, String rank, String parentUsageId, ArrayList<Node> nodes) {
+        Node node = new Node(resourceId, nodeId, scientificName, rank);
+        if(rank == null)
+            node.setRank("null");
+        nodes.add(node);
+        Boolean response = restClientHandler.updateTaxonInNeo4jAncestoryFormat(PropertiesHandler.getProperty("updateAncestoryFormat"), nodes);
+        System.out.println("===============================");
+        System.out.println("A node is updated " + response);
         System.out.println("===============================");
         return response;
     }

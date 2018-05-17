@@ -183,9 +183,10 @@ public class ArchiveFileHandler {
                     fileHeader = archiveFileHandler.getHeader(file2);
 
                     try {
+                        boolean isVernacular = archiveFile1.getRowType().equals(GbifTerm.VernacularName);
                         File sortedFile1 = commandExecutor.executeSort(file1, (archiveFile1.getFieldsTerminatedBy()), getSortingColumnIndex(archiveFile1)),
                                 sortedFile2 = commandExecutor.executeSort(file2, (archiveFile2.getFieldsTerminatedBy()), getSortingColumnIndex(archiveFile2)),
-                                differenceFile = commandExecutor.executeDiff(sortedFile1.getPath(), sortedFile2.getPath(), sortedFile2.getName(), archiveFile2);
+                                differenceFile = commandExecutor.executeDiff(sortedFile1.getPath(), sortedFile2.getPath(), sortedFile2.getName(), archiveFile2, isVernacular);
 
                         if ((version2.getExtension(archiveRowTypesArrayList.get(i)).getIgnoreHeaderLines()) == 1)
                             archiveFileHandler.addHeader(differenceFile, fileHeader);
@@ -207,7 +208,7 @@ public class ArchiveFileHandler {
                     try {
                         File sortedFile1 = commandExecutor.executeSort(coreFile1, (archiveCoreFile1.getFieldsTerminatedBy()), getSortingColumnIndex(archiveCoreFile1)),
                                 sortedFile2 = commandExecutor.executeSort(coreFile2, (archiveCoreFile2.getFieldsTerminatedBy()), getSortingColumnIndex(archiveCoreFile2)),
-                                differenceFile = commandExecutor.executeDiff(sortedFile1.getPath(), sortedFile2.getPath(), sortedFile2.getName(), (version2.getCore()));
+                                differenceFile = commandExecutor.executeDiff(sortedFile1.getPath(), sortedFile2.getPath(), sortedFile2.getName(), (version2.getCore()), false);
                         if ((archiveCoreFile2.getIgnoreHeaderLines()) == 1)
                             archiveFileHandler.addHeader(differenceFile, fileHeader);
                     } catch (Exception e) {

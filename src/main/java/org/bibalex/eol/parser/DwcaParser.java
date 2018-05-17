@@ -220,7 +220,7 @@ public class DwcaParser {
                             i++;
                             taxaList.add(parseTaxon(rec));
                         } else if (action.equalsIgnoreCase(Constants.UPDATE)) {
-                            format.updateTaxon(taxonID, resourceId, rec.core().value(DwcTerm.scientificName), rec.core().value(DwcTerm.taxonRank), rec.core().value(DwcTerm.parentNameUsageID));
+                            format.updateTaxon(parseTaxon(rec));
                         } else if (action.equalsIgnoreCase(Constants.DELETE)) {
                             int generatedNodeId = format.deleteTaxon(taxonID, resourceId, rec.core().value(DwcTerm.scientificName));
                             deletedTaxons.put(taxonID, generatedNodeId);

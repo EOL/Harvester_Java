@@ -90,7 +90,8 @@ public abstract class Format {
 
     public abstract int deleteTaxon(String nodeID, int resourceId, String scientificName);
 
-    public abstract boolean updateTaxon (String nodeId, int resourceId, String scientificName, String rank, String parentUsageId);
+//    public abstract boolean updateTaxon (String nodeId, int resourceId, String scientificName, String rank, String parentUsageId);
+    public abstract void updateTaxon (Taxon taxon);
 
 //    public void updateTaxon(String nodeID, int resourceId, Neo4jHandler neo4jHandler){
 //        neo4jHandler.updateTaxon(nodeID, resourceId);

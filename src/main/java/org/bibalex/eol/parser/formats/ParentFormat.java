@@ -127,37 +127,10 @@ public class ParentFormat extends Format {
     }
 
     @Override
-    public boolean updateTaxon(String nodeId, int resourceId, String scientificName, String rank, String parentUsageId) {
-        return neo4jHandler.updateTaxonParent(nodeId, resourceId, scientificName, rank, parentUsageId);
+    public void updateTaxon(Taxon taxon) {
+        int response =  neo4jHandler.updateTaxonParentFormat(taxon.getIdentifier(), resourceId, taxon.getScientificName(), taxon.getTaxonRank(), taxon.getParentTaxonId());
+        if(response == 400)
+            missingParents.add(taxon.getIdentifier());
     }
 
-    public void updateScientificName(String newScientificName, String oldScientificName, String ancestry) {
-        String taxonID = neo4jHandler.getNodeByAncestry(newScientificName, ancestry, resourceId);
-
-        if (!(taxonID != null)) {
-            String nodeID = neo4jHandler.getNodebyTaxonID(taxonID, resourceId);
-            neo4jHandler.updateScientificName(nodeID, newScientificName, resourceId);
-            //update in h-base
-        }
-    }
-
-    public void updateRank(String nodeID, String newRank) {
-        neo4jHandler.updateRank(nodeID, newRank, resourceId);
-    }
-
-    public void updateAncestry(String scientificName, String rank, String newParentGeneratedNodeId, String taxonID) {
-        int generatedNodeID = neo4jHandler.createAcceptedNode(resourceId, taxonID, scientificName, rank, -1);
-
-        int parentGeneratedNodeId = neo4jHandler.getNodeIfExist(newParentGeneratedNodeId, resourceId);
-        if (parentGeneratedNodeId > 0) {
-            neo4jHandler.addLinkBetweenParentAndNode(parentGeneratedNodeId, Integer.toString(generatedNodeID), resourceId);
-        } else {
-            missingParents.add(newParentGeneratedNodeId);
-        }
-
-        if (!neo4jHandler.nodeHasTaxonID(newParentGeneratedNodeId, resourceId)) {
-            neo4jHandler.deleteNodeWithGeneratedID(newParentGeneratedNodeId);
-        }
-
-    }
 }

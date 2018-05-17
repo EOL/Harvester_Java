@@ -3,6 +3,7 @@ package org.bibalex.eol.parser.formats;
 import org.bibalex.eol.parser.handlers.Neo4jHandler;
 import org.bibalex.eol.parser.handlers.SynonymNodeHandler;
 import org.bibalex.eol.parser.models.AncestorNode;
+import org.bibalex.eol.parser.models.Node;
 import org.bibalex.eol.parser.models.Taxon;
 import org.apache.log4j.Logger;
 
@@ -117,8 +118,14 @@ public class AncestryFormat extends Format{
     }
 
     @Override
-    public boolean updateTaxon(String nodeId, int resourceId, String scientificName, String rank, String parentUsageId) {
-        return false;
+    public void updateTaxon(Taxon taxon) {
+        ArrayList<Node> nodes = new ArrayList<>();
+        ArrayList<AncestorNode> ancestorNodes = adjustNodeAncestry(taxon);
+        for(AncestorNode ancestorNode : ancestorNodes){
+            nodes.add(new Node(resourceId, ancestorTaxonId,
+                    ancestorNode.getScientificName(), ancestorNode.getRank(), 0));
+        }
+        neo4jHandler.updateTaxonAncestoryFormat(taxon.getIdentifier(), resourceId, taxon.getScientificName(), taxon.getTaxonRank(), taxon.getParentTaxonId(), nodes);
     }
 
     public void updateScientificName(String newScientificName, String oldScientificName, String rank, String ancestry){
