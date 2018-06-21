@@ -21,8 +21,10 @@ public class HarvesterController {
     @RequestMapping(method = RequestMethod.POST)
     public boolean harvest(@RequestParam(value = "resourceID") String resourceID){
         try {
+            System.out.println("maped true");
             boolean newResource = false;
             PropertiesHandler.initializeProperties();
+            System.out.println("before download");
             StorageLayerClient.downloadResource(resourceID + "", "1", "1");
             String updatedPath = PropertiesHandler.getProperty
                     ("storage.output.directory") + File.separator + resourceID + "_org";

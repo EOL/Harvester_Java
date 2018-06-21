@@ -93,7 +93,7 @@ public class Neo4jHandler {
                                   String acceptedNodeId, int acceptedNodeGeneratedId){
         //TODO call neo4j and return the id of the generated node
         Node node = new Node(resourceId, nodeId, scientificName, rank, acceptedNodeId, acceptedNodeGeneratedId);
-        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNeo4jNode"), node);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createSynonymNode"), node);
         System.out.println("===============================");
         System.out.println("A node is created with id " + response);
         System.out.println("===============================");
