@@ -1,6 +1,8 @@
 package com.bibalex.taxonmatcher.handlers;
 
 import com.bibalex.taxonmatcher.models.Node;
+import org.json.simple.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -92,5 +94,11 @@ public class Neo4jHandler {
         ArrayList<Node>synonyms = (ArrayList<Node>) response;
         return synonyms;
     }
+
+    public static ArrayList<JSONObject> getJSonObject(int[] generatedNodeIds)  {
+        ArrayList<JSONObject> returnedJSon = RestClientHandler.httpConnect(ResourceHandler.getPropertyValue("getNodesjson"),generatedNodeIds);
+        return returnedJSon;
+    }
+
 
 }

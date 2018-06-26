@@ -9,6 +9,8 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.ProxyAuthenticationStrategy;
+import org.json.simple.JSONObject;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -96,6 +98,23 @@ public class RestClientHandler {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Accept", "application/json");
         return headers ;
+    }
+
+    public static ArrayList<JSONObject> httpConnect(String uri, int[] generatedNodeIds)  {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Accept", "application/json");
+
+
+        org.springframework.http.HttpEntity<Object> requestEntity = new org.springframework.http.HttpEntity<Object>(generatedNodeIds,headers);
+        ResponseEntity<ArrayList<JSONObject>> rateResponse = restTemplate.exchange(uri, HttpMethod.POST, requestEntity,new ParameterizedTypeReference<ArrayList<JSONObject>>() {});
+
+        System.out.println(rateResponse.getBody());
+        return rateResponse.getBody();
+
     }
 
 }

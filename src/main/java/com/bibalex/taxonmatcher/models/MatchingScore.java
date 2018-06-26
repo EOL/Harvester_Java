@@ -8,12 +8,14 @@ public class MatchingScore {
     int numberOfMatchingAncestors;
     double score;
     int pageId;
+    int nodeId;
 
-    public MatchingScore(int numberOfMatchingChildren, int numberOfMatchingAncestors, double score, int pageId) {
+    public MatchingScore(int numberOfMatchingChildren, int numberOfMatchingAncestors, double score, int pageId, int nodeId) {
         this.numberOfMatchingChildren = numberOfMatchingChildren;
         this.numberOfMatchingAncestors = numberOfMatchingAncestors;
         this.score = score;
         this.pageId = pageId;
+        this.nodeId = nodeId;
     }
 
     public void setPageId(int pageId) {
@@ -23,6 +25,14 @@ public class MatchingScore {
     public int getPageId() {
 
         return pageId;
+    }
+
+    public void setNodeId(int nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    public int getNodeId() {
+        return nodeId;
     }
 
     public int getNumberOfMatchingChildren() {

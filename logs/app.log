@@ -1,0 +1,7 @@
+2018-06-25 13:26:50,535 INFO c.b.t.c.NodeMapper [main] Search query is: synonyms:"tiger"
+2018-06-26 10:39:57,323 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [id=485, page_id=5, is_hybrid=false, other_canonical_synonyms=[], other_synonyms=[]])
+2018-06-26 10:40:19,568 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [id=485, page_id=5, is_hybrid=false, other_canonical_synonyms=[], other_synonyms=[]])
+2018-06-26 10:41:40,262 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [id=485, page_id=5, is_hybrid=false, other_canonical_synonyms=[], other_synonyms=[]])
+2018-06-26 10:44:25,367 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [id=485, page_id=5, is_hybrid=false, other_canonical_synonyms=[], other_synonyms=[]])
+2018-06-26 10:46:17,496 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [other_canonical_synonyms=[Acer pseudosieboldianum takesimense], other_synonyms=[Acer pseudosieboldianum ssp. takesimense], id=485, page_id=5, is_hybrid=false])
+2018-06-26 10:48:09,915 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [other_canonical_synonyms=[Acer pseudosieboldianum takesimense], other_synonyms=[Acer pseudosieboldianum ssp. takesimense], id=485, page_id=5, is_hybrid=false])

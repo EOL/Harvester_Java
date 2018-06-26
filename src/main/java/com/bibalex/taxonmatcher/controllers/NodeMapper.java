@@ -4,6 +4,9 @@ import com.bibalex.taxonmatcher.handlers.*;
 import com.bibalex.taxonmatcher.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrServerException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,9 +26,11 @@ public class NodeMapper {
     private static Logger logger;
     private FileHandler fileHandler;
     private Neo4jHandler neo4jHandler;
+    private SolrHandler solrHandler;
+    int resourceId;
 
 
-    public NodeMapper(){
+    public NodeMapper(int resourceId){
         strategyHandler = new StrategyHandler();
         globalNameHandler = new GlobalNamesHandler();
         nodeHandler = new NodeHandler();
@@ -35,7 +40,7 @@ public class NodeMapper {
         logger = LogHandler.getLogger(NodeMapper.class.getName());
         fileHandler = new FileHandler();
         neo4jHandler = new Neo4jHandler();
-
+        this.resourceId = resourceId;
     }
 
     public void mapAllNodesToPages(ArrayList<Node> rootNodes){
@@ -111,17 +116,18 @@ public class NodeMapper {
             if (results.get(0).getPageId() == 0) {
                 unmappedNode(node);
             } else {
-                mapToPage(node, results.get(0).getPageId());
+                mapToPage(node, results.get(0).getPageId(), results.get(0).getNodeId());
             }
 
 
         }else if(results.size() > 1){
             System.out.println("results returned is greater than one");
             logger.info("results returned is greater than one");
-            int pageId = findBestMatch(node, results);
-            if ( pageId != 0) {
-                mapToPage(node, pageId);
-            } else {
+            MatchingScore matchingScore = findBestMatch(node, results);
+            if(matchingScore != null){
+                mapToPage(node, matchingScore.getPageId(), matchingScore.getNodeId());
+            }
+            else {
                 unmappedNode(node);
             }
         }else{
@@ -149,7 +155,7 @@ public class NodeMapper {
         }
     }
 
-    private int findBestMatch(Node node, ArrayList<SearchResult> results){
+    private MatchingScore findBestMatch(Node node, ArrayList<SearchResult> results){
         ArrayList<MatchingScore> scores = new ArrayList<MatchingScore>();
 
         for(SearchResult result : results){
@@ -163,7 +169,7 @@ public class NodeMapper {
             double overallScore = matchingScoreHandler.calculateScore(matchedChildrenCount, matchedAncestorsCount);
             logger.info("overall score: "+overallScore);
             MatchingScore score = new MatchingScore(matchedChildrenCount,
-                    matchedAncestorsCount, overallScore, result.getPageId());
+                    matchedAncestorsCount, overallScore, result.getPageId(), result.getNodeId());
             logger.info("score: "+score.getScore() + " of page: "+score.getPageId());
             System.out.println("**********************************************************************************");
             scores.add(score);
@@ -180,14 +186,21 @@ public class NodeMapper {
         for( int i=0 ; i<scores.size() ;i++)
         {
             if(scores.get(i).getPageId()!=0)
-                return scores.get(i).getPageId() ;
+                return scores.get(i) ;
         }
 
-        return 0;
+        return null;
 
     }
 
-    private Node mapToPage(Node node, int pageId){
+    private Node mapToPage(Node node, int pageId, int nodeId){
+        try {
+            solrHandler.updateRecord(nodeId, node);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        }
         boolean response =neo4jHandler.assignPageToNode(node.getGeneratedNodeId(), pageId);
         if (response ==true){node.setPageId(pageId);}
         System.out.println("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
@@ -201,7 +214,14 @@ public class NodeMapper {
         logger.info("New page is created for node named: "+node.getScientificName());
         fileHandler.writeToFile("New page is created for node named: "+node.getScientificName());
         int page_id = neo4jHandler.assignPageToNode(node.getGeneratedNodeId());
-      //  Page newPage = new Page();
+        try {
+            solrHandler.addDocument(node, page_id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SolrServerException e) {
+            e.printStackTrace();
+        }
+        //  Page newPage = new Page();
        // node.setPageId(newPage.getId());
     }
 

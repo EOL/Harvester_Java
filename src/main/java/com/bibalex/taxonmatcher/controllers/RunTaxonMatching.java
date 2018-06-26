@@ -11,7 +11,7 @@ public class RunTaxonMatching {
         ResourceHandler.initialize("config.properties");
         LogHandler.initializeHandler();
         Neo4jHandler neo4jHandler = new Neo4jHandler();
-        NodeMapper nodeMapper = new NodeMapper();
+        NodeMapper nodeMapper = new NodeMapper(resourceId);
         nodeMapper.mapAllNodesToPages(neo4jHandler.getRootNodes(resourceId));
     }
 }

@@ -38,53 +38,63 @@ public class SearchHandler {
             searchQuery += strategy.getIndex();
 //            searchQuery += strategy.getType().equalsIgnoreCase("in") ? " : " : " = ";
             searchQuery += ":";
+            searchQuery += '"';
 
-            if (strategy.getIndex().equalsIgnoreCase("synonyms")||strategy.getIndex().equalsIgnoreCase("other_synonyms")||
-                    strategy.getIndex().equalsIgnoreCase("canonical_synonyms")||strategy.getIndex().equalsIgnoreCase("other_canonical_synonyms")){
-                ArrayList<Node> synonyms = nodeHandler.nodeMapper(neo4jHandler.getsynonyms(node.getGeneratedNodeId()));
-                if(strategy.getIndex().equalsIgnoreCase("synonyms")||strategy.getIndex().equalsIgnoreCase("canonical_synonyms"))
-                {
-                    searchQuery +="(";
-                    for(Node n:synonyms)
-                    {
-                        if(n.getResourceId()==Integer.valueOf(ResourceHandler.getPropertyValue("DWHId")))
-                        {
-                            searchQuery += '"';
-                            searchQuery += strategy.getAttribute().equalsIgnoreCase(scientificNameAttr) ?
-                                    n.getScientificName() : globalNameHandler.getCanonicalForm(n.getScientificName());
-                            searchQuery += '"';
-
-                        }
-
-                    }
-                    searchQuery +=")";
-
-                }
-                else
-                {
-                    searchQuery +="(";
-                    for(Node n:synonyms)
-                    {
-
-                        if(n.getResourceId()!=Integer.valueOf(ResourceHandler.getPropertyValue("DWHId")))
-                        {
-                            searchQuery += '"';
-                            searchQuery += strategy.getAttribute().equalsIgnoreCase(scientificNameAttr) ?
-                                    n.getScientificName() : globalNameHandler.getCanonicalForm(n.getScientificName());
-                            searchQuery += '"';
-
-                        }
-
-                    }
-                    searchQuery +=")";
-                }
+            if(strategy.getIndex().equalsIgnoreCase("synonyms")||strategy.getIndex().equalsIgnoreCase("other_synonyms")){
+               searchQuery +=node.getScientificName();
             }
+            else if(strategy.getIndex().equalsIgnoreCase("canonical_synonyms")||strategy.getIndex().equalsIgnoreCase("other_canonical_synonyms")){
+                searchQuery += globalNameHandler.getCanonicalForm(node.getScientificName());
+            }
+
+
+
+//            if (strategy.getIndex().equalsIgnoreCase("synonyms")||strategy.getIndex().equalsIgnoreCase("other_synonyms")||
+//                    strategy.getIndex().equalsIgnoreCase("canonical_synonyms")||strategy.getIndex().equalsIgnoreCase("other_canonical_synonyms")){
+//                ArrayList<Node> synonyms = nodeHandler.nodeMapper(neo4jHandler.getsynonyms(node.getGeneratedNodeId()));
+//                if(strategy.getIndex().equalsIgnoreCase("synonyms")||strategy.getIndex().equalsIgnoreCase("canonical_synonyms"))
+//                {
+//                    searchQuery +="(";
+//                    for(Node n:synonyms)
+//                    {
+//                        if(n.getResourceId()==Integer.valueOf(ResourceHandler.getPropertyValue("DWHId")))
+//                        {
+//                            searchQuery += '"';
+//                            searchQuery += strategy.getAttribute().equalsIgnoreCase(scientificNameAttr) ?
+//                                    n.getScientificName() : globalNameHandler.getCanonicalForm(n.getScientificName());
+//                            searchQuery += '"';
+//
+//                        }
+//
+//                    }
+//                    searchQuery +=")";
+//
+//                }
+//                else
+//                {
+//                    searchQuery +="(";
+//                    for(Node n:synonyms)
+//                    {
+//
+//                        if(n.getResourceId()!=Integer.valueOf(ResourceHandler.getPropertyValue("DWHId")))
+//                        {
+//                            searchQuery += '"';
+//                            searchQuery += strategy.getAttribute().equalsIgnoreCase(scientificNameAttr) ?
+//                                    n.getScientificName() : globalNameHandler.getCanonicalForm(n.getScientificName());
+//                            searchQuery += '"';
+//
+//                        }
+//
+//                    }
+//                    searchQuery +=")";
+//                }
+//            }
             else{
-                searchQuery += '"';
                 searchQuery += strategy.getAttribute().equalsIgnoreCase(scientificNameAttr) ?
                         node.getScientificName() : globalNameHandler.getCanonicalForm(node.getScientificName());
-                searchQuery += '"';
             }
+            searchQuery += '"';
+
 
             //not finalized
             //case search by canonical name
@@ -147,4 +157,16 @@ public class SearchHandler {
 //        }
 //        return childrenNames;
 //    }
+
+    public static void main (String []args){
+        ResourceHandler.initialize("configs.properties");
+        LogHandler.initializeHandler();
+        SearchHandler searchHandler = new SearchHandler();
+        Node node = new Node( "2", 1,  "tiger",  2,  "family",5,
+         "5",  "6",  6,  -1, -1, -1);
+        Strategy strategy = new Strategy("scientific_name", "synonyms", "eq");
+        Node ancestor = new Node( "2", 1,  "tiger",  2,  "family",5,
+                "5",  "6",  6,  -1, -1, -1);
+        searchHandler.getResults(node, strategy,ancestor);
+    }
 }
