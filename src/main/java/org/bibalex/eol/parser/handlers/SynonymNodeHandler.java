@@ -60,7 +60,7 @@ public class SynonymNodeHandler {
 
     private int handleSynonym_acceptedNodeNotExist(String acceptedNodeId){
         int acceptedNodeGeneratedId = neo4jHandler.createAcceptedNode(resourceId, acceptedNodeId, placeholder, "",
-                0);
+                0, 0);
         orphanSynonyms.put(acceptedNodeId, new ArrayList<>());
         return acceptedNodeGeneratedId;
     }

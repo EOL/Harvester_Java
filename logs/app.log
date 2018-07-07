@@ -5,3 +5,449 @@
 2018-06-26 10:44:25,367 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [id=485, page_id=5, is_hybrid=false, other_canonical_synonyms=[], other_synonyms=[]])
 2018-06-26 10:46:17,496 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [other_canonical_synonyms=[Acer pseudosieboldianum takesimense], other_synonyms=[Acer pseudosieboldianum ssp. takesimense], id=485, page_id=5, is_hybrid=false])
 2018-06-26 10:48:09,915 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [other_canonical_synonyms=[Acer pseudosieboldianum takesimense], other_synonyms=[Acer pseudosieboldianum ssp. takesimense], id=485, page_id=5, is_hybrid=false])
+2018-07-05 14:59:09,293 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-07-05 14:59:09,303 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapNodes: mapping node: Plantae
+2018-07-05 14:59:09,304 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapIfNeeded: used strategy is: scientific_name
+2018-07-05 14:59:09,304 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapIfNeeded: needs to be mapped
+2018-07-05 14:59:10,126 INFO c.b.t.h.GlobalNamesHandler [http-nio-8090-exec-1] name: Plantae doesnot have authority
+2018-07-05 14:59:10,126 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapIfNeeded: node does not have authority
+2018-07-05 14:59:10,126 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapIfNeeded: before mapNode
+2018-07-05 14:59:10,131 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] map Node : not virus neither surrogate
+2018-07-05 14:59:10,163 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 14:59:10,467 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,467 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 14:59:10,467 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,468 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,485 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 14:59:10,506 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,506 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 14:59:10,506 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,506 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,510 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 14:59:10,532 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,532 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 14:59:10,532 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,566 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 1
+2018-07-05 14:59:10,566 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is less than max depth and will call recursion
+2018-07-05 14:59:10,566 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,583 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 14:59:10,603 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,603 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 14:59:10,603 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,603 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,609 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 14:59:10,627 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,627 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 14:59:10,627 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,627 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,629 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 14:59:10,646 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,646 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 14:59:10,646 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,669 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 2
+2018-07-05 14:59:10,669 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is less than max depth and will call recursion
+2018-07-05 14:59:10,669 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,679 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 14:59:10,700 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,700 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 14:59:10,700 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,700 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,702 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 14:59:10,717 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,717 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 14:59:10,717 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,717 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,720 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 14:59:10,736 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,737 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 14:59:10,737 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,767 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 3
+2018-07-05 14:59:10,767 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is less than max depth and will call recursion
+2018-07-05 14:59:10,769 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,771 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 14:59:10,786 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,786 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 14:59:10,786 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,786 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,790 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 14:59:10,807 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,807 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 14:59:10,807 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,807 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,809 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 14:59:10,836 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,836 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 14:59:10,836 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,866 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 4
+2018-07-05 14:59:10,866 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is less than max depth and will call recursion
+2018-07-05 14:59:10,868 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,875 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 14:59:10,911 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,911 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 14:59:10,911 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,911 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,913 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 14:59:10,933 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,933 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 14:59:10,933 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,933 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,936 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 14:59:10,952 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,952 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 14:59:10,952 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:10,990 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 5
+2018-07-05 14:59:10,990 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is less than max depth and will call recursion
+2018-07-05 14:59:10,990 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:10,996 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 14:59:11,016 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:11,016 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 14:59:11,016 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:11,016 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:11,019 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 14:59:11,042 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:11,042 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 14:59:11,042 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:11,042 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 14:59:11,048 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 14:59:11,061 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:11,062 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 14:59:11,062 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 14:59:11,088 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 6
+2018-07-05 14:59:11,088 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is greater than max depth
+2018-07-05 14:59:52,062 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] New page is created for node named: Plantae
+2018-07-05 14:59:59,784 ERROR c.b.t.c.NodeMapper [http-nio-8090-exec-1] output file exception java.io.FileNotFoundException: output/output.txt (No such file or directory)
+2018-07-05 15:10:54,396 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-07-05 15:10:54,398 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapNodes: mapping node: Plantae
+2018-07-05 15:10:54,398 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapIfNeeded: used strategy is: scientific_name
+2018-07-05 15:10:54,398 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapIfNeeded: needs to be mapped
+2018-07-05 15:10:55,135 INFO c.b.t.h.GlobalNamesHandler [http-nio-8090-exec-1] name: Plantae doesnot have authority
+2018-07-05 15:10:55,135 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapIfNeeded: node does not have authority
+2018-07-05 15:10:55,136 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapIfNeeded: before mapNode
+2018-07-05 15:10:55,140 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] map Node : not virus neither surrogate
+2018-07-05 15:10:55,172 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 15:10:55,399 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,399 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 15:10:55,399 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,399 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,403 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,429 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,429 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 15:10:55,429 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,429 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,439 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,472 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,472 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 15:10:55,472 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,497 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 1
+2018-07-05 15:10:55,498 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is less than max depth and will call recursion
+2018-07-05 15:10:55,498 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,516 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 15:10:55,531 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,531 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 15:10:55,531 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,531 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,534 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,544 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,544 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 15:10:55,544 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,545 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,550 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,563 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,563 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 15:10:55,563 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,586 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 2
+2018-07-05 15:10:55,586 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is less than max depth and will call recursion
+2018-07-05 15:10:55,586 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,588 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 15:10:55,601 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,601 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 15:10:55,601 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,602 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,618 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,632 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,632 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 15:10:55,632 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,632 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,643 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,656 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,656 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 15:10:55,656 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,689 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 3
+2018-07-05 15:10:55,689 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is less than max depth and will call recursion
+2018-07-05 15:10:55,691 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,693 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 15:10:55,710 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,711 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 15:10:55,711 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,711 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,713 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,726 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,726 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 15:10:55,726 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,726 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,729 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,745 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,745 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 15:10:55,745 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,768 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 4
+2018-07-05 15:10:55,769 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is less than max depth and will call recursion
+2018-07-05 15:10:55,769 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,774 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 15:10:55,785 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,785 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 15:10:55,785 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,785 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,788 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,800 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,800 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 15:10:55,800 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,800 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,805 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,820 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,820 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 15:10:55,820 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,853 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 5
+2018-07-05 15:10:55,853 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is less than max depth and will call recursion
+2018-07-05 15:10:55,853 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,873 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_name:"Plantae"
+2018-07-05 15:10:55,890 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,890 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 4
+2018-07-05 15:10:55,890 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,890 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,892 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,907 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,907 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 5
+2018-07-05 15:10:55,907 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,907 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Recursive call
+2018-07-05 15:10:55,909 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:10:55,921 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,921 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Index is: 6
+2018-07-05 15:10:55,921 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] ================================
+2018-07-05 15:10:55,946 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is: 6
+2018-07-05 15:10:55,946 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] depth is greater than max depth
+2018-07-05 15:11:03,051 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] New page is created for node named: Plantae
+2018-07-05 15:11:16,898 ERROR c.b.t.c.NodeMapper [http-nio-8090-exec-1] output file exception java.io.FileNotFoundException: output/output.txt (No such file or directory)
+2018-07-05 15:17:05,619 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Inside Map Node method
+2018-07-05 15:17:05,620 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] mapNodes: mapping node: Plantae
+2018-07-05 15:17:05,621 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] mapIfNeeded: used strategy is: scientific_name
+2018-07-05 15:17:05,621 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] mapIfNeeded: needs to be mapped
+2018-07-05 15:17:06,441 INFO c.b.t.h.GlobalNamesHandler [http-nio-8090-exec-2] name: Plantae doesnot have authority
+2018-07-05 15:17:06,441 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] mapIfNeeded: node does not have authority
+2018-07-05 15:17:06,441 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] mapIfNeeded: before mapNode
+2018-07-05 15:17:06,446 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] map Node : not virus neither surrogate
+2018-07-05 15:17:06,476 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Plantae"
+2018-07-05 15:17:06,725 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,725 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:17:06,725 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,725 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:06,729 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:17:06,756 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,757 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:17:06,757 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,757 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:06,768 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:17:06,780 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,780 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:17:06,780 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,804 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 1
+2018-07-05 15:17:06,804 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is less than max depth and will call recursion
+2018-07-05 15:17:06,804 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:06,810 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Plantae"
+2018-07-05 15:17:06,823 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,824 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:17:06,824 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,824 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:06,827 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:17:06,847 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,847 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:17:06,847 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,847 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:06,850 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:17:06,863 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,863 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:17:06,863 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,889 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 2
+2018-07-05 15:17:06,890 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is less than max depth and will call recursion
+2018-07-05 15:17:06,890 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:06,892 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Plantae"
+2018-07-05 15:17:06,902 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,902 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:17:06,902 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,902 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:06,905 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:17:06,933 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,933 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:17:06,933 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,933 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:06,936 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:17:06,951 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,951 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:17:06,951 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,973 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 3
+2018-07-05 15:17:06,973 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is less than max depth and will call recursion
+2018-07-05 15:17:06,974 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:06,976 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Plantae"
+2018-07-05 15:17:06,989 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,990 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:17:06,990 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:06,990 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:06,993 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:17:07,009 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,009 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:17:07,009 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,010 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:07,013 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:17:07,025 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,025 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:17:07,026 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,073 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 4
+2018-07-05 15:17:07,073 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is less than max depth and will call recursion
+2018-07-05 15:17:07,073 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:07,076 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Plantae"
+2018-07-05 15:17:07,090 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,091 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:17:07,091 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,091 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:07,094 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:17:07,109 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,109 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:17:07,109 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,109 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:07,112 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:17:07,131 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,132 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:17:07,132 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,161 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 5
+2018-07-05 15:17:07,161 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is less than max depth and will call recursion
+2018-07-05 15:17:07,161 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:07,164 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Plantae"
+2018-07-05 15:17:07,185 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,185 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:17:07,185 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,185 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:07,187 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Plantae"
+2018-07-05 15:17:07,208 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,208 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:17:07,208 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,208 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:17:07,211 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Plantae"
+2018-07-05 15:17:07,222 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,222 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:17:07,222 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:17:07,246 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 6
+2018-07-05 15:17:07,246 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is greater than max depth
+2018-07-05 15:17:25,598 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] New page is created for node named: Plantae
+2018-07-05 15:17:25,599 ERROR c.b.t.c.NodeMapper [http-nio-8090-exec-2] output file exception java.io.FileNotFoundException: output/output.txt (No such file or directory)
+2018-07-05 15:18:15,048 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] new added doc: SolrInputDocument(fields: [other_canonical_synonyms=[], other_synonyms=[], id=1962, page_id=174, rank=kingdom, is_hybrid=false])
+2018-07-05 15:19:11,083 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ====================children=================
+2018-07-05 15:19:13,341 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Inside Map Node method
+2018-07-05 15:19:13,342 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] mapNodes: mapping node: Tracheophyta
+2018-07-05 15:19:13,343 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] mapIfNeeded: used strategy is: scientific_name
+2018-07-05 15:19:13,343 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] mapIfNeeded: needs to be mapped
+2018-07-05 15:19:13,362 INFO c.b.t.h.GlobalNamesHandler [http-nio-8090-exec-2] name: Tracheophyta doesnot have authority
+2018-07-05 15:19:13,362 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] mapIfNeeded: node does not have authority
+2018-07-05 15:19:13,363 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] mapIfNeeded: before mapNode
+2018-07-05 15:19:13,394 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] map Node : not virus neither surrogate
+2018-07-05 15:19:13,590 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Tracheophyta" AND ancestors_ids : 1962
+2018-07-05 15:19:13,639 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:13,640 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:19:13,640 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:13,641 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:13,693 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Tracheophyta" AND ancestors_ids : 1962
+2018-07-05 15:19:13,716 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:13,717 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:19:13,717 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:13,718 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:13,751 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Tracheophyta" AND ancestors_ids : 1962
+2018-07-05 15:19:13,779 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:13,780 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:19:13,780 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:13,938 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 1
+2018-07-05 15:19:13,938 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is less than max depth and will call recursion
+2018-07-05 15:19:13,939 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:13,970 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Tracheophyta"
+2018-07-05 15:19:13,987 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:13,988 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:19:13,988 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:13,988 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:14,021 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Tracheophyta"
+2018-07-05 15:19:14,042 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,042 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:19:14,043 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,043 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:14,075 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Tracheophyta"
+2018-07-05 15:19:14,095 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,096 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:19:14,096 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,251 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 2
+2018-07-05 15:19:14,252 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is less than max depth and will call recursion
+2018-07-05 15:19:14,252 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:14,285 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Tracheophyta"
+2018-07-05 15:19:14,307 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,307 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:19:14,307 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,308 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:14,340 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Tracheophyta"
+2018-07-05 15:19:14,358 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,359 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:19:14,359 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,359 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:14,393 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Tracheophyta"
+2018-07-05 15:19:14,410 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,411 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:19:14,411 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,568 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 3
+2018-07-05 15:19:14,569 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is less than max depth and will call recursion
+2018-07-05 15:19:14,569 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:14,602 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Tracheophyta"
+2018-07-05 15:19:14,626 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,627 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:19:14,627 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,628 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:14,659 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Tracheophyta"
+2018-07-05 15:19:14,676 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,677 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:19:14,677 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,678 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:14,710 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Tracheophyta"
+2018-07-05 15:19:14,729 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,730 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:19:14,731 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,918 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 4
+2018-07-05 15:19:14,918 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is less than max depth and will call recursion
+2018-07-05 15:19:14,919 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:14,954 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Tracheophyta"
+2018-07-05 15:19:14,975 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,976 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:19:14,976 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:14,977 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:15,011 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Tracheophyta"
+2018-07-05 15:19:15,032 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:15,032 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:19:15,032 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:15,033 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:15,064 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Tracheophyta"
+2018-07-05 15:19:15,085 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:15,086 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:19:15,086 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:15,259 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 5
+2018-07-05 15:19:15,260 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is less than max depth and will call recursion
+2018-07-05 15:19:15,260 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:15,292 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_name:"Tracheophyta"
+2018-07-05 15:19:15,319 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:15,319 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 4
+2018-07-05 15:19:15,319 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:15,320 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:15,352 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: canonical_synonyms:"Tracheophyta"
+2018-07-05 15:19:15,370 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:15,370 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 5
+2018-07-05 15:19:15,371 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:15,371 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Recursive call
+2018-07-05 15:19:15,403 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Search query is: other_canonical_synonyms:"Tracheophyta"
+2018-07-05 15:19:15,421 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:15,421 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Index is: 6
+2018-07-05 15:19:15,422 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] ================================
+2018-07-05 15:19:15,586 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is: 6
+2018-07-05 15:19:15,587 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is greater than max depth
+2018-07-05 15:19:21,084 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] New page is created for node named: Tracheophyta
+2018-07-05 15:19:21,762 ERROR c.b.t.c.NodeMapper [http-nio-8090-exec-2] output file exception java.io.FileNotFoundException: output/output.txt (No such file or directory)

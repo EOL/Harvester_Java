@@ -17,6 +17,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import scala.Int;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -159,57 +160,6 @@ public class RestClientHandler {
         return "";
     }
 
-//    public int updateTaxonInNeo4jParentFormat(String uri, Node node){
-//        System.out.println("do connection");
-//        RestTemplate restTemplate;
-//        System.out.println("after restTemplate, uri: " + uri);
-//        if (!uri.equalsIgnoreCase("")) {
-//            System.out.println("gowa el if");
-//            if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
-//                System.out.println("gowa el proper");
-//                restTemplate = handleProxy(PropertiesHandler.getProperty("proxy"),
-//                        Integer.parseInt(PropertiesHandler.getProperty("port")),
-//                        PropertiesHandler.getProperty("proxyUserName"),
-//                        PropertiesHandler.getProperty("password"));
-//            } else {
-//                System.out.println("else of proper");
-//                restTemplate = new RestTemplate();
-//            }
-//
-//            //create the json converter
-//            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-//            List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
-//            list.add(converter);
-//            restTemplate.setMessageConverters(list);
-//
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.APPLICATION_JSON);
-//            headers.set("Accept", "application/json");
-//            System.out.println("after header");
-//            // Pass the object and the needed headers
-//            ResponseEntity response = null;
-//            HttpEntity<Node> entity = new HttpEntity<Node>(node, headers);
-//            System.out.println("before send post request");
-//            // Send the request as POST
-//            try {
-//                System.out.println(uri);
-//                response = restTemplate.exchange(uri, HttpMethod.POST, entity, Integer.class);
-//                if (response.getStatusCode() == HttpStatus.OK) {
-//                    System.out.println(response.getBody());
-//                    return Integer.valueOf((Integer) response.getBody());
-//                } else {
-//                    System.out.println("returned code(" + response.getStatusCode() + ")");
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                System.out.println("can't connect");
-//            }
-//
-//
-//        }
-//        return -1;
-//    }
-
     public Boolean updateTaxonInNeo4jAncestoryFormat(String uri, ArrayList<Node> nodes) {
         System.out.println("do connection");
         RestTemplate restTemplate;
@@ -259,5 +209,48 @@ public class RestClientHandler {
 
         }
         return false;
+    }
+
+    public int getPageId(String uri, int generatedNodeId) {
+        System.out.println("do connection");
+        RestTemplate restTemplate;
+        System.out.println("after restTemplate, uri: " + uri);
+        if (!uri.equalsIgnoreCase("")) {
+            System.out.println("gowa el if");
+            if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
+                System.out.println("gowa el proper");
+                restTemplate = handleProxy(PropertiesHandler.getProperty("proxy"),
+                        Integer.parseInt(PropertiesHandler.getProperty("port")),
+                        PropertiesHandler.getProperty("proxyUserName"),
+                        PropertiesHandler.getProperty("password"));
+            } else {
+                System.out.println("else of proper");
+                restTemplate = new RestTemplate();
+            }
+
+            //create the json converter
+            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+            List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
+            list.add(converter);
+            restTemplate.setMessageConverters(list);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Accept", "application/json");
+            // Pass the object and the needed headers
+            ResponseEntity response = null;
+            Map<String, Integer> params = new HashMap<String, Integer>();
+            params.put(PropertiesHandler.getProperty("generatedNodeId"), generatedNodeId);
+
+            response = restTemplate.exchange(uri, HttpMethod.GET, null, Integer.class, params);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                System.out.println(response.getBody());
+                return Integer.valueOf((Integer) response.getBody());
+            } else {
+                System.out.println("returned code(" + response.getStatusCode() + ")");
+            }
+
+        }
+        return 0;
     }
 }

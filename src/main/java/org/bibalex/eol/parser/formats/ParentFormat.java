@@ -40,8 +40,13 @@ public class ParentFormat extends Format {
 
     private boolean handleLine(Taxon node, boolean normalResource) {
 //        int parentGeneratedNodeId = createParentIfNotExist(node.getParentTaxonId());
-        int originalGeneratedNodeId = createOriginalNode(node.getIdentifier(), node.getScientificName(),
-                node.getTaxonRank(), node.getTaxonomicStatus(), node.getAcceptedNodeId(), normalResource, node.getParentTaxonId());
+        int originalGeneratedNodeId =0;
+        if(node.getPageEolId() != null)
+            originalGeneratedNodeId = createOriginalNode(node.getIdentifier(), node.getScientificName(),
+                node.getTaxonRank(), node.getTaxonomicStatus(), node.getAcceptedNodeId(), normalResource, node.getParentTaxonId(), Integer.valueOf(node.getPageEolId()));
+        else
+            originalGeneratedNodeId = createOriginalNode(node.getIdentifier(), node.getScientificName(),
+                    node.getTaxonRank(), node.getTaxonomicStatus(), node.getAcceptedNodeId(), normalResource, node.getParentTaxonId(), 0);
         if (originalGeneratedNodeId > 0) {
             logger.debug("Successfully created the original node");
             System.out.println("Successfully created the original node");
@@ -67,11 +72,11 @@ public class ParentFormat extends Format {
     }
 
     private int createOriginalNode(String nodeId, String scientificName, String rank, String taxonomicStatus,
-                                   String acceptedNodeId, boolean normalResource, String parentUsageId) {
+                                   String acceptedNodeId, boolean normalResource, String parentUsageId, int pageId) {
         int generatedNodeId;
         if (deleteFromMissingParentsIfExist(nodeId)) {
             int parentGeneratedNodeId = createParentIfNotExist(parentUsageId);
-            generatedNodeId = handleParentExists(nodeId, scientificName, rank, resourceId, parentGeneratedNodeId, neo4jHandler);
+            generatedNodeId = handleParentExists(nodeId, scientificName, rank, resourceId, parentGeneratedNodeId, neo4jHandler, pageId);
             return generatedNodeId;
         } else {
             if (normalResource) {
@@ -85,7 +90,7 @@ public class ParentFormat extends Format {
                     //accepted node
                     logger.debug("The node is not synonym");
                     generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
-                            neo4jHandler);
+                            neo4jHandler, pageId);
                 }
             } else {
                 if (isSynonym(taxonomicStatus)) {
@@ -97,7 +102,7 @@ public class ParentFormat extends Format {
                     int parentGeneratedNodeId = createParentIfNotExist(parentUsageId);
                     logger.debug("The node is not synonym");
                     generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
-                            neo4jHandler);
+                            neo4jHandler, pageId);
                 }
             }
 
@@ -105,9 +110,9 @@ public class ParentFormat extends Format {
         }
     }
 
-    private int handleParentExists(String nodeId, String scientificName, String rank, int resourceId, int parentGeneratedNodeId, Neo4jHandler neo4jHandler) {
+    private int handleParentExists(String nodeId, String scientificName, String rank, int resourceId, int parentGeneratedNodeId, Neo4jHandler neo4jHandler, int pageId) {
         int generatedAutoId = neo4jHandler.updateParent(resourceId, nodeId, scientificName,
-                rank, parentGeneratedNodeId);
+                rank, parentGeneratedNodeId, pageId);
         return generatedAutoId;
     }
 

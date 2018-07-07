@@ -7,6 +7,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.apache.logging.log4j.Logger;
+
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +31,8 @@ public class StrategyHandler {
         JSONParser parser = new JSONParser();
         JSONArray jsonArray = null;
         try {
-            jsonArray = (JSONArray) parser.parse(new FileReader(ResourceHandler.getPropertyValue("strategiesFilePath")));
+            ClassLoader classLoader = getClass().getClassLoader();
+            jsonArray = (JSONArray) parser.parse(new FileReader(classLoader.getResource("strategies.json").getFile()));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {

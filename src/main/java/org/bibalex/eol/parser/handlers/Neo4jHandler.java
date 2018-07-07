@@ -20,9 +20,9 @@ public class Neo4jHandler {
      * Methods for ancestry format
      */
     public int createAncestorIfNotExist(int resourceId, String scientificName, String rank, String taxonId,
-                                int parentGeneratedId){
+                                int parentGeneratedId, int pageId){
         //TODO call the neo4j and return the id
-        Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedId);
+        Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedId, pageId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createAncestor"), node);
         System.out.println("===============================");
         System.out.println("The node is " + response);
@@ -79,9 +79,9 @@ public class Neo4jHandler {
     }
 
     public int createAcceptedNode(int resourceId, String taxonId, String scientificName, String rank,
-                                                 int parentGeneratedNodeId){
+                                                 int parentGeneratedNodeId, int pageId){
         //TODO call the neo4j and return the id
-        Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedNodeId);
+        Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedNodeId, pageId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNeo4jNode"), node);
         System.out.println("===============================");
         System.out.println("A node is created with id " + response);
@@ -189,8 +189,8 @@ public class Neo4jHandler {
         //TODO link between parent and node
     }
 
-    public int updateParent(int resourceId, String nodeId, String scientificName, String rank, int parentGeneratedNodeId) {
-        Node node = new Node(resourceId, nodeId, scientificName, rank, parentGeneratedNodeId);
+    public int updateParent(int resourceId, String nodeId, String scientificName, String rank, int parentGeneratedNodeId, int pageId) {
+        Node node = new Node(resourceId, nodeId, scientificName, rank, parentGeneratedNodeId, pageId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNodeWithFulldata"), node);
         System.out.println("===============================");
         System.out.println("A node is created with id " + response);
@@ -217,6 +217,14 @@ public class Neo4jHandler {
         Boolean response = restClientHandler.updateTaxonInNeo4jAncestoryFormat(PropertiesHandler.getProperty("updateAncestoryFormat"), nodes);
         System.out.println("===============================");
         System.out.println("A node is updated " + response);
+        System.out.println("===============================");
+        return response;
+    }
+
+    public int getPageIdOfNode(int generatedNodeId){
+        int response = restClientHandler.getPageId(PropertiesHandler.getProperty("getNodePageId"), generatedNodeId);
+        System.out.println("===============================");
+        System.out.println("A node has Page id = " + response);
         System.out.println("===============================");
         return response;
     }

@@ -38,8 +38,13 @@ public class AncestryFormat extends Format{
     private boolean handleLine(Taxon node, boolean normalResource){
         ArrayList<AncestorNode> currentAncestry = adjustNodeAncestry(node);
         int lastNodeGeneratedId = createAncestors(currentAncestry);
-        int originalGeneratedNodeId = createOriginalNode(node.getScientificName(), node.getTaxonomicStatus(), node.getAcceptedNodeId(),
-                node.getTaxonRank(), lastNodeGeneratedId, node.getIdentifier(), normalResource, node.getParentTaxonId());
+        int originalGeneratedNodeId=0;
+        if(node.getPageEolId() != null)
+            originalGeneratedNodeId = createOriginalNode(node.getScientificName(), node.getTaxonomicStatus(), node.getAcceptedNodeId(),
+                node.getTaxonRank(), lastNodeGeneratedId, node.getIdentifier(), normalResource, node.getParentTaxonId(), Integer.parseInt(node.getPageEolId()));
+        else
+            originalGeneratedNodeId = createOriginalNode(node.getScientificName(), node.getTaxonomicStatus(), node.getAcceptedNodeId(),
+                    node.getTaxonRank(), lastNodeGeneratedId, node.getIdentifier(), normalResource, node.getParentTaxonId(), 0);
         if(originalGeneratedNodeId > 0){
             logger.debug("Successfully created the original node");
             return true;
@@ -78,11 +83,11 @@ public class AncestryFormat extends Format{
 
     private int createAncestorIfNotExist(AncestorNode ancestor, String taxonId, int parentGeneratedId){
         return neo4jHandler.createAncestorIfNotExist(resourceId, ancestor.getScientificName(),
-                ancestor.getRank(), taxonId, parentGeneratedId);
+                ancestor.getRank(), taxonId, parentGeneratedId, 0);
     }
 
     private int createOriginalNode(String scientificName, String taxonomicStatus, String acceptedNodeId, String rank,
-                                    int parentGeneratedNodeId, String nodeId, boolean normalResource, String parentUsageId){
+                                    int parentGeneratedNodeId, String nodeId, boolean normalResource, String parentUsageId, int pageId){
         int generatedNodeId;
         if(normalResource) {
             if (acceptedNodeId != null && !acceptedNodeId.equalsIgnoreCase(nodeId)) {
@@ -93,7 +98,7 @@ public class AncestryFormat extends Format{
             else {
                 logger.debug("The node is not synonym");
                 generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
-                        neo4jHandler);
+                        neo4jHandler, pageId);
             }
         }
         else {
@@ -106,7 +111,7 @@ public class AncestryFormat extends Format{
             } else {
                 logger.debug("The node is not synonym");
                 generatedNodeId = handleNonSynonymNode(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId,
-                        neo4jHandler);
+                        neo4jHandler, pageId);
             }
         }
         return generatedNodeId;
@@ -124,7 +129,7 @@ public class AncestryFormat extends Format{
         ArrayList<AncestorNode> ancestorNodes = adjustNodeAncestry(taxon);
         for(AncestorNode ancestorNode : ancestorNodes){
             nodes.add(new Node(resourceId, ancestorTaxonId,
-                    ancestorNode.getScientificName(), ancestorNode.getRank(), 0));
+                    ancestorNode.getScientificName(), ancestorNode.getRank(), 0, 0));
         }
         neo4jHandler.updateTaxonAncestoryFormat(taxon.getIdentifier(), resourceId, taxon.getScientificName(), taxon.getTaxonRank(), taxon.getParentTaxonId(), nodes);
     }

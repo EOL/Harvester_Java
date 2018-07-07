@@ -26,8 +26,6 @@ public class HarvesterAPI {
             validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
 //            return true;
             boolean done = callParser(FilenameUtils.removeExtension(path)+".out_valid", resourceID, newResource);
-            RunTaxonMatching runTaxonMatching = new RunTaxonMatching();
-            runTaxonMatching.RunTaxonMatching(resourceID);
             return done;
         } catch (IOException e) {
 //            e.printStackTrace();

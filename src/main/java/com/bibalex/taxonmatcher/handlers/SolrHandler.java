@@ -77,8 +77,8 @@ public class SolrHandler {
         JSONObject obj = returnedJson.get(0);
 
         Neo4jSolr neo4jSolr = new Neo4jSolr();
-//        int resource_id = neo4jSolr.getInt(obj, "resource id");
-        int resource_id = node.getResourceId();
+        int resource_id = neo4jSolr.getInt(obj, "resource id");
+//        int resource_id = node.getResourceId();
         String scientificName = neo4jSolr.getString(obj, "scientific name");
         String rank = neo4jSolr.getString(obj, "Rank");
         String canonicalName = neo4jSolr.getString(obj, "canonical name");
@@ -108,6 +108,7 @@ public class SolrHandler {
             doc.addField("other_synonyms", otherSynonyms);
         }
         else{
+            doc.addField("other_scientific_name", scientificName);
             doc.addField("other_canonical_synonyms", canonicalSynonyms);
             doc.addField("other_synonyms", synonyms);
         }

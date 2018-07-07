@@ -41,6 +41,7 @@ public class NodeMapper {
         fileHandler = new FileHandler();
         neo4jHandler = new Neo4jHandler();
         this.resourceId = resourceId;
+        this.solrHandler = new SolrHandler();
     }
 
     public void mapAllNodesToPages(ArrayList<Node> rootNodes){

@@ -28,12 +28,13 @@ public class Taxon {
     String datasetId;
     String eolIdAnnotations;
     String deltaStatus;
+    String landmark;
     ArrayList<String> guids;
 
     public Taxon(String identifier, String scientificName, String parentTaxonId, String kingdom, String phylum, String taxonClass, String order,
                  String family, String genus, String taxonRank, String furtherInformationURI, String taxonomicStatus, String taxonRemarks,
                  String namePublishedIn, String referenceId, String pageEolId, String acceptedNodeId, String source, String canonicalName,
-                 String scientificNameAuthorship, String scientificNameID, String datasetId, String eolIdAnnotations, String deltaStatus) {
+                 String scientificNameAuthorship, String scientificNameID, String datasetId, String eolIdAnnotations, String deltaStatus, String landmark) {
         this.identifier = identifier;
         this.taxonId = identifier;
         this.scientificName = scientificName;
@@ -59,6 +60,7 @@ public class Taxon {
         this.datasetId = datasetId;
         this.eolIdAnnotations = eolIdAnnotations;
         this.deltaStatus = deltaStatus;
+        this.landmark = landmark;
     }
 
     public ArrayList<String> getGuids() {
@@ -260,5 +262,13 @@ public class Taxon {
 
     public void setPageEolId(String pageEolId) {
         this.pageEolId = pageEolId;
+    }
+
+    public String getLandmark() {
+        return landmark;
+    }
+
+    public void setLandmark(String landmark) {
+        this.landmark = landmark;
     }
 }

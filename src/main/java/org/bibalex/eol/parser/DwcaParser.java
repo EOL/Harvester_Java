@@ -1,5 +1,6 @@
 package org.bibalex.eol.parser;
 
+import com.bibalex.taxonmatcher.controllers.RunTaxonMatching;
 import com.sun.javafx.collections.MappingChange;
 import org.apache.commons.io.FilenameUtils;
 import org.bibalex.eol.harvester.StorageLayerClient;
@@ -137,6 +138,10 @@ public class DwcaParser {
         Neo4jHandler neo4jHandler = new Neo4jHandler();
 
         buildGraph(resourceId);
+        if(resourceId != Integer.valueOf(PropertiesHandler.getProperty("DWHId"))) {
+            RunTaxonMatching runTaxonMatching = new RunTaxonMatching();
+            runTaxonMatching.RunTaxonMatching(resourceID);
+        }
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
         for (StarRecord rec : dwca) {
             int generatedNodeId = neo4jHandler.getNodeIfExist
@@ -145,7 +150,7 @@ public class DwcaParser {
             NodeRecord tableRecord = new NodeRecord(
                     generatedNodeId + "", resourceId);
 
-            Taxon taxon = parseTaxon(rec);
+            Taxon taxon = parseTaxon(rec, generatedNodeId);
             if (taxon != null)
                 tableRecord.setTaxon(taxon);
 
@@ -218,9 +223,9 @@ public class DwcaParser {
                         if (action.equalsIgnoreCase(Constants.INSERT)) {
                             System.out.println("insert that action is insert");
                             i++;
-                            taxaList.add(parseTaxon(rec));
+                            taxaList.add(parseTaxon(rec, -1));
                         } else if (action.equalsIgnoreCase(Constants.UPDATE)) {
-                            format.updateTaxon(parseTaxon(rec));
+                            format.updateTaxon(parseTaxon(rec, -1));
                         } else if (action.equalsIgnoreCase(Constants.DELETE)) {
                             int generatedNodeId = format.deleteTaxon(taxonID, resourceId, rec.core().value(DwcTerm.scientificName));
                             deletedTaxons.put(taxonID, generatedNodeId);
@@ -228,7 +233,7 @@ public class DwcaParser {
                     } else {
                         System.out.println("insert from else of action is null");
                         i++;
-                        taxaList.add(parseTaxon(rec));
+                        taxaList.add(parseTaxon(rec, -1));
                     }
                 } /*else {
                     System.out.println("insert from else of actions is null");
@@ -238,7 +243,7 @@ public class DwcaParser {
                 if(newResource){
                     System.out.println("insert new resource");
                     i++;
-                    taxaList.add(parseTaxon(rec));
+                    taxaList.add(parseTaxon(rec, -1));
                 }
 
             }
@@ -493,7 +498,7 @@ public class DwcaParser {
         return vernaculars;
     }
 
-    private Taxon parseTaxon(StarRecord record) {
+    private Taxon parseTaxon(StarRecord record, int generatedNodeId) {
         Map<String, String> actions = actionFiles.get(dwca.getCore().getLocation() + "_action");
         String taxonID = record.core().value(DwcTerm.taxonID);
         String action = "";
@@ -516,8 +521,15 @@ public class DwcaParser {
                 record.core().value(TermFactory.instance().findTerm(TermURIs.scientificNameID)),
                 record.core().value(TermFactory.instance().findTerm(TermURIs.datasetID)),
                 record.core().value(TermFactory.instance().findTerm(TermURIs.eolIdAnnotations)),
-                action
+                action, record.core().value(TermFactory.instance().findTerm(TermURIs.landmark))
         );
+
+        if(resourceID != Integer.valueOf(PropertiesHandler.getProperty("DWHId")) && generatedNodeId != -1){
+            Neo4jHandler neo4jHandler = new Neo4jHandler();
+            int pageId= neo4jHandler.getPageIdOfNode(generatedNodeId);
+            if(pageId != 0)
+                taxonData.setPageEolId(String.valueOf(pageId));
+        }
         System.out.println("taxon ------>" + taxonData.getIdentifier());
         return taxonData;
     }

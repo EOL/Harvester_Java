@@ -33,9 +33,9 @@ public abstract class Format {
     }
 
     protected int handleNonSynonymNode(String scientificName, String rank, String nodeId, int resourceId,
-                                       int parentGeneratedNodeId, Neo4jHandler neo4jHandler){
+                                       int parentGeneratedNodeId, Neo4jHandler neo4jHandler, int pageId){
         int acceptedNodeGeneratedId = createAcceptedNodeIfNotExist(nodeId, scientificName, rank, parentGeneratedNodeId,
-                resourceId, neo4jHandler);
+                resourceId, neo4jHandler, pageId);
         if (deleteFromOrphanSynonymsIfExist(nodeId, acceptedNodeGeneratedId, neo4jHandler, resourceId)){
             logger.debug("Deleted from the orphan synonyms successfully");
         }else{
@@ -45,11 +45,11 @@ public abstract class Format {
     }
 
     private int createAcceptedNodeIfNotExist(String nodeId, String scientificName, String rank, int parentGeneratedNodeId,
-                                               int resourceId, Neo4jHandler neo4jHandler){
+                                               int resourceId, Neo4jHandler neo4jHandler, int pageId){
 //        int generatedNodeId = neo4jHandler.getAcceptedNodeIfExist(nodeId, scientificName, resourceId);
 //        if(generatedNodeId <= 0){
         int generatedNodeId = neo4jHandler.createAcceptedNode(resourceId, nodeId, scientificName,
-                    rank, parentGeneratedNodeId);
+                    rank, parentGeneratedNodeId, pageId);
 //        }
         return generatedNodeId;
     }

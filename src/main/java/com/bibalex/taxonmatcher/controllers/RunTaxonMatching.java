@@ -8,10 +8,15 @@ public class RunTaxonMatching {
     public void RunTaxonMatching(int resourceId)
 
     {
-        ResourceHandler.initialize("config.properties");
+        ResourceHandler.initialize("configs.properties");
         LogHandler.initializeHandler();
         Neo4jHandler neo4jHandler = new Neo4jHandler();
         NodeMapper nodeMapper = new NodeMapper(resourceId);
         nodeMapper.mapAllNodesToPages(neo4jHandler.getRootNodes(resourceId));
+    }
+
+    public static void main (String[]args){
+        RunTaxonMatching runTaxonMatching = new RunTaxonMatching();
+        runTaxonMatching.RunTaxonMatching(1);
     }
 }

@@ -14,6 +14,7 @@ public class Node {
     String parentNodeId;
     String acceptedNodeId;
     int acceptedNodeGeneratedId;
+    int pageId;
 
     public Node(String nodeId, int resourceId, String scientificName, int generatedNodeId, String rank, int parentGeneratedNodeId,
                 String parentNodeId, String acceptedNodeId, int acceptedNodeGeneratedId) {
@@ -28,12 +29,13 @@ public class Node {
         this.acceptedNodeGeneratedId = acceptedNodeGeneratedId;
     }
 
-    public Node(int resourceId, String nodeId, String scientificName, String rank, int parentGeneratedNodeId) {
+    public Node(int resourceId, String nodeId, String scientificName, String rank, int parentGeneratedNodeId, int pageId) {
         this.nodeId = nodeId;
         this.resourceId = resourceId;
         this.scientificName = scientificName;
         this.rank = rank;
         this.parentGeneratedNodeId = parentGeneratedNodeId;
+        this.pageId = pageId;
     }
 
     public Node(int resourceId, String nodeId){
@@ -149,5 +151,13 @@ public class Node {
 
     public void setAcceptedNodeGeneratedId(int acceptedNodeGeneratedId) {
         this.acceptedNodeGeneratedId = acceptedNodeGeneratedId;
+    }
+
+    public int getPageId() {
+        return pageId;
+    }
+
+    public void setPageId(int pageId) {
+        this.pageId = pageId;
     }
 }
