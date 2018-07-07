@@ -746,7 +746,7 @@ public class DwcaParser {
 //            System.out.println(nodeRecord.getReferences().size() + "\n" + nodeRecord.getOccurrences().
 //                    get(0).getSex() + " " + nodeRecord.getOccurrences().get(0).getBehavior());
 
-        System.out.println("----------------Vernaculars---------------");
+            System.out.println("----------------Vernaculars---------------");
 
         if (nodeRecord.getVernaculars() != null && nodeRecord.getVernaculars().size() > 0)
             System.out.println(nodeRecord.getVernaculars().size() + "\n" + nodeRecord.getVernaculars().

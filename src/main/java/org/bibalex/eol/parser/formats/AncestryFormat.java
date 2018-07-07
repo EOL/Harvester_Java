@@ -7,6 +7,7 @@ import org.bibalex.eol.parser.models.Node;
 import org.bibalex.eol.parser.models.Taxon;
 import org.apache.log4j.Logger;
 
+
 import java.util.ArrayList;
 
 /**
@@ -18,6 +19,7 @@ public class AncestryFormat extends Format{
     private Neo4jHandler neo4jHandler;
     private static final String ancestorTaxonId = "placeholder";
     private static final Logger logger = Logger.getLogger(AncestryFormat.class);
+
 
     public AncestryFormat(int resourceId){
         this.resourceId = resourceId;

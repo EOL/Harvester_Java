@@ -6,6 +6,7 @@ import org.bibalex.eol.parser.models.Taxon;
 import org.apache.log4j.Logger;
 
 
+
 import java.util.ArrayList;
 
 /**
@@ -36,6 +37,7 @@ public abstract class Format {
                                        int parentGeneratedNodeId, Neo4jHandler neo4jHandler, int pageId){
         int acceptedNodeGeneratedId = createAcceptedNodeIfNotExist(nodeId, scientificName, rank, parentGeneratedNodeId,
                 resourceId, neo4jHandler, pageId);
+
         if (deleteFromOrphanSynonymsIfExist(nodeId, acceptedNodeGeneratedId, neo4jHandler, resourceId)){
             logger.debug("Deleted from the orphan synonyms successfully");
         }else{

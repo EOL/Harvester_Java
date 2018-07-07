@@ -81,6 +81,7 @@ public class Node {
         this.scientificName = scientificName;
         this.rank = rank;
     }
+
     public String getNodeId() {
         return nodeId;
     }

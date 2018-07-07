@@ -108,8 +108,8 @@
             <scope>test</scope>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-data-jpa</artifactId>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-data-jpa</artifactId>-->
         <!--</dependency>-->
 
         <dependency>
@@ -187,9 +187,9 @@
             <version>20171018</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.gbif</groupId>-->
-            <!--<artifactId>dwca-io</artifactId>-->
-            <!--<version>1.23</version>-->
+        <!--<groupId>org.gbif</groupId>-->
+        <!--<artifactId>dwca-io</artifactId>-->
+        <!--<version>1.23</version>-->
         <!--</dependency>-->
 
         <!-- taxonMatching -->

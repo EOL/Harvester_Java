@@ -86,6 +86,7 @@ public class RestClientHandler {
                     e.printStackTrace();
                     System.out.println("can't connect");
                 }
+
                 System.out.println("IIIIIIIIIIIIIIIIIIIIIIIIIIIII");
                 System.out.println(response);
 
@@ -108,6 +109,7 @@ public class RestClientHandler {
     }
 
     private RestTemplate handleProxy(String proxyUrl, int port, String username, String password) {
+
         CredentialsProvider credsProvider = new BasicCredentialsProvider();
         credsProvider.setCredentials(new AuthScope(proxyUrl, port), new UsernamePasswordCredentials(username, password));
         HttpClientBuilder clientBuilder = HttpClientBuilder.create();

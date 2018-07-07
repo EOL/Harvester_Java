@@ -29,6 +29,7 @@ public class Taxon {
     String eolIdAnnotations;
     String deltaStatus;
     String landmark;
+
     ArrayList<String> guids;
 
     public Taxon(String identifier, String scientificName, String parentTaxonId, String kingdom, String phylum, String taxonClass, String order,
