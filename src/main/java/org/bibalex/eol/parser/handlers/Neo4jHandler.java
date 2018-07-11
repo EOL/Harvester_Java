@@ -228,4 +228,13 @@ public class Neo4jHandler {
         System.out.println("===============================");
         return response;
     }
+
+    public int updateAcceptedNode(int resourceId, String taxonId, String scientificName, String rank,
+                                  int parentGeneratedNodeId, int pageId) {
+        Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedNodeId, pageId);        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("updateAcceptedNode"), node);
+        System.out.println("===============================");
+        System.out.println("A node is updated with response " + response);
+        System.out.println("===============================");
+        return Integer.valueOf(response);
+    }
 }

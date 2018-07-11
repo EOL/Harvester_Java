@@ -2,6 +2,7 @@ package org.bibalex.eol.harvester;
 
 import org.apache.log4j.Logger;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
+import org.bibalex.eol.parser.handlers.SynonymNodeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class HarvesterController {
             System.out.println("maped true");
             boolean newResource = false;
             PropertiesHandler.initializeProperties();
+            SynonymNodeHandler.setSynonymNodeHandler();
             System.out.println("before download");
             StorageLayerClient.downloadResource(resourceID + "", "1", "1");
             String updatedPath = PropertiesHandler.getProperty

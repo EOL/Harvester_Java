@@ -15,8 +15,22 @@ public class SynonymNodeHandler {
     public HashMap<String, ArrayList<Integer>> orphanSynonyms;
     private static final String placeholder = "placeholder";
     private static final Logger logger = Logger.getLogger(SynonymNodeHandler.class);
+    private static SynonymNodeHandler synonymNodeHandler = null;
 
-    public SynonymNodeHandler(int resourceId, Neo4jHandler neo4jHandler){
+    public static SynonymNodeHandler getSynonymNodeHandler(int resourceId, Neo4jHandler neo4jHandler) {
+        if(synonymNodeHandler !=null)
+            return synonymNodeHandler;
+        else{
+            synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
+            return synonymNodeHandler;
+        }
+    }
+
+    public static void setSynonymNodeHandler(){
+        synonymNodeHandler = null;
+    }
+
+    private SynonymNodeHandler(int resourceId, Neo4jHandler neo4jHandler){
         this.neo4jHandler = neo4jHandler;
         this.resourceId = resourceId;
         this.orphanSynonyms = new HashMap<>();

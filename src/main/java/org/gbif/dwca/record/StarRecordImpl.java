@@ -22,6 +22,11 @@ public class StarRecordImpl implements StarRecord {
     }
   }
 
+  public StarRecordImpl(Record core, Map<Term, List<Record>> extensions){
+    this.core =core;
+    this.extensions=extensions;
+  }
+
   public void addRecord(Term rowType, Record record) {
     if (!extensions.containsKey(rowType)) {
       throw new IllegalArgumentException("RowType not supported");

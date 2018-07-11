@@ -35,10 +35,8 @@ public abstract class Format {
 
     protected int handleNonSynonymNode(String scientificName, String rank, String nodeId, int resourceId,
                                        int parentGeneratedNodeId, Neo4jHandler neo4jHandler, int pageId){
-        int acceptedNodeGeneratedId = createAcceptedNodeIfNotExist(nodeId, scientificName, rank, parentGeneratedNodeId,
-                resourceId, neo4jHandler, pageId);
-
-        if (deleteFromOrphanSynonymsIfExist(nodeId, acceptedNodeGeneratedId, neo4jHandler, resourceId)){
+        int acceptedNodeGeneratedId = deleteFromOrphanSynonymsIfExist(scientificName, rank, nodeId, resourceId, parentGeneratedNodeId, neo4jHandler, pageId);
+        if (acceptedNodeGeneratedId > 0){
             logger.debug("Deleted from the orphan synonyms successfully");
         }else{
             logger.debug("Error when deleting from the orphan node");
@@ -56,16 +54,24 @@ public abstract class Format {
         return generatedNodeId;
     }
 
-    private boolean deleteFromOrphanSynonymsIfExist(String nodeId, int generatedNodeId, Neo4jHandler neo4jHandler,
-                                                    int resourceId){
-        SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
+    private int deleteFromOrphanSynonymsIfExist(String scientificName, String rank, String nodeId, int resourceId,
+                                                    int parentGeneratedNodeId, Neo4jHandler neo4jHandler, int pageId){
+        int generatedNodeId =0;
+        SynonymNodeHandler synonymNodeHandler = SynonymNodeHandler.getSynonymNodeHandler(resourceId, neo4jHandler);
         if(synonymNodeHandler.orphanSynonyms.containsKey(nodeId)) {
+            generatedNodeId = neo4jHandler.updateAcceptedNode(resourceId, nodeId, scientificName,
+                    rank, parentGeneratedNodeId, pageId);
             logger.debug("The accepted node was mentioned before");
-            ArrayList<Integer> synonyms = synonymNodeHandler.orphanSynonyms.get(nodeId);
-            for(Integer synonymGeneratedId : synonyms)
-                neo4jHandler.createRelationBetweenNodeAndSynonyms(generatedNodeId, synonymGeneratedId);
+            synonymNodeHandler.orphanSynonyms.remove(nodeId);
+//            ArrayList<Integer> synonyms = synonymNodeHandler.orphanSynonyms.get(nodeId);
+//            for(Integer synonymGeneratedId : synonyms)
+//                neo4jHandler.createRelationBetweenNodeAndSynonyms(generatedNodeId, synonymGeneratedId);
         }
-        return true;
+        else{
+            generatedNodeId = createAcceptedNodeIfNotExist(nodeId, scientificName, rank, parentGeneratedNodeId,
+                    resourceId, neo4jHandler, pageId);
+        }
+        return generatedNodeId;
     }
 
 //    protected boolean deleteTaxon(String nodeId, Neo4jHandler neo4jHandler, int resourceId){

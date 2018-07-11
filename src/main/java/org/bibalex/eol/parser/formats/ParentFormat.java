@@ -84,7 +84,7 @@ public class ParentFormat extends Format {
                 if (acceptedNodeId != null && !acceptedNodeId.equalsIgnoreCase(nodeId)) {
                     //synonym node
                     logger.debug("The node is synonym");
-                    SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
+                    SynonymNodeHandler synonymNodeHandler = SynonymNodeHandler.getSynonymNodeHandler(resourceId, neo4jHandler);
                     generatedNodeId = synonymNodeHandler.handleSynonymNode(nodeId, scientificName, rank, acceptedNodeId);
                 } else {
                     //accepted node
@@ -96,7 +96,7 @@ public class ParentFormat extends Format {
                 if (isSynonym(taxonomicStatus)) {
                     // as it synonym and we don't have acceptedNameUsageID so we send parentUsageId instead of acceptedNameUsageId
                     logger.debug("The node is synonym");
-                    SynonymNodeHandler synonymNodeHandler = new SynonymNodeHandler(resourceId, neo4jHandler);
+                    SynonymNodeHandler synonymNodeHandler = SynonymNodeHandler.getSynonymNodeHandler(resourceId, neo4jHandler);
                     generatedNodeId = synonymNodeHandler.handleSynonymNode(nodeId, scientificName, rank, parentUsageId);
                 } else {
                     int parentGeneratedNodeId = createParentIfNotExist(parentUsageId);

@@ -451,3 +451,11 @@
 2018-07-05 15:19:15,587 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] depth is greater than max depth
 2018-07-05 15:19:21,084 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] New page is created for node named: Tracheophyta
 2018-07-05 15:19:21,762 ERROR c.b.t.c.NodeMapper [http-nio-8090-exec-2] output file exception java.io.FileNotFoundException: output/output.txt (No such file or directory)
+2018-07-08 13:28:18,843 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-07-08 13:28:18,891 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-07-08 13:28:18,924 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-07-08 13:28:18,961 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-07-08 13:28:18,983 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-07-08 13:28:19,015 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-07-08 13:28:19,057 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-07-08 13:28:19,080 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method

@@ -25,13 +25,11 @@ import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
 import org.apache.log4j.Logger;
+import org.gbif.dwca.record.StarRecordImpl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.Condition;
 
 public class DwcaParser {
@@ -135,15 +133,41 @@ public class DwcaParser {
 
     public void prepareNodesRecord(int resourceId) {
         this.resourceID = resourceId;
+        deletedTaxons.clear();
         Neo4jHandler neo4jHandler = new Neo4jHandler();
+        ArrayList<StarRecord> starRecords = new ArrayList<>();
+        int i=0;
+        for (StarRecord record : dwca) {
+            if(i % 1000==0 && i!=0){
+                parseRecords(resourceId, starRecords, neo4jHandler);
+                starRecords.clear();
+            }
+            else{
+                i++;
+                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
+                starRecords.add(sr);
+            }
+        }
+        if(starRecords.size() != 0){
+            parseRecords(resourceId, starRecords, neo4jHandler);
+            starRecords.clear();
+        }
+//
+    }
 
-        buildGraph(resourceId);
-        if(resourceId != Integer.valueOf(PropertiesHandler.getProperty("DWHId"))) {
+    public void parseRecords(int resourceId, ArrayList<StarRecord> starRecords, Neo4jHandler neo4jHandler){
+        //neo4j
+        buildGraph(resourceId, starRecords);
+
+        //Taxon Matching
+        if (resourceId != Integer.valueOf(PropertiesHandler.getProperty("DWHId"))) {
             RunTaxonMatching runTaxonMatching = new RunTaxonMatching();
             runTaxonMatching.RunTaxonMatching(resourceID);
         }
+
+        //HBase
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
-        for (StarRecord rec : dwca) {
+        for (StarRecord rec : starRecords) {
             int generatedNodeId = neo4jHandler.getNodeIfExist
                     (rec.core().value(DwcTerm.taxonID), resourceId);
             System.out.println(rec.core().value(DwcTerm.taxonID));
@@ -171,7 +195,6 @@ public class DwcaParser {
             adjustReferences(tableRecord);
             checkActionFiles(rec, actions, tableRecord);
         }
-//
     }
 
     private ArrayList<Association> parseAssociationOfTaxon(NodeRecord tableRecord) {
@@ -194,8 +217,7 @@ public class DwcaParser {
         return measurementOrFacts;
     }
 
-    private void buildGraph(int resourceId) {
-        deletedTaxons.clear();
+    private void buildGraph(int resourceId, ArrayList<StarRecord> starRecords) {
         Map<String, String> actions = actionFiles.get(dwca.getCore().getLocation() + "_action");
         System.out.println("BUILD");
         ArrayList<Taxon> taxaList = new ArrayList<>();
@@ -205,7 +227,7 @@ public class DwcaParser {
         System.out.println("parent format: " + parentFormat);
         Format format = parentFormat ? new ParentFormat(resourceId) : new AncestryFormat(resourceId);
         boolean normalResource = dwca.getCore().hasTerm(DwcTerm.acceptedNameUsageID);
-        for (StarRecord rec : dwca) {
+        for (StarRecord rec : starRecords) {
             logger.debug("for loop i is: " + i);
             System.out.println("for loop i is: " + i);
             if (i >= batchSize) {
