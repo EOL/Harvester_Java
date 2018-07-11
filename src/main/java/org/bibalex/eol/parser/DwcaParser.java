@@ -175,6 +175,10 @@ public class DwcaParser {
                     generatedNodeId + "", resourceId);
 
             Taxon taxon = parseTaxon(rec, generatedNodeId);
+            if(taxon.getIdentifier() == "-100001")
+            {
+                System.out.println("hena");
+            }
             if (taxon != null)
                 tableRecord.setTaxon(taxon);
 

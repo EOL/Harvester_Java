@@ -24,7 +24,12 @@ public class StarRecordImpl implements StarRecord {
 
   public StarRecordImpl(Record core, Map<Term, List<Record>> extensions){
     this.core =core;
-    this.extensions=extensions;
+    this.extensions= new HashMap<Term, List<Record>>();
+    for (Map.Entry<Term, List<Record>> entry : extensions.entrySet()){
+      this.extensions.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+    }
+
+//    this.extensions.putAll(extensions);
   }
 
   public void addRecord(Term rowType, Record record) {
