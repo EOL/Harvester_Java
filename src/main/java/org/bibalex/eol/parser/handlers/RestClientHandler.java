@@ -30,32 +30,12 @@ import java.util.Map;
 public class RestClientHandler {
 
     public String doConnection(String uri, Object object) {
-        System.out.println("do connection");
-        RestTemplate restTemplate;
-        System.out.println("after restTemplate, uri: " + uri);
         if (!uri.equalsIgnoreCase("")) {
-            System.out.println("gowa el if");
-            if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
-                System.out.println("gowa el proper");
-                restTemplate = handleProxy(PropertiesHandler.getProperty("proxy"),
-                        Integer.parseInt(PropertiesHandler.getProperty("port")),
-                        PropertiesHandler.getProperty("proxyUserName"),
-                        PropertiesHandler.getProperty("password"));
-            } else {
-                System.out.println("else of proper");
-                restTemplate = new RestTemplate();
-            }
 
-            //create the json converter
-            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-            List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
-            list.add(converter);
-            restTemplate.setMessageConverters(list);
-
+            RestTemplate restTemplate = handleRestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("Accept", "application/json");
-            System.out.println("after header");
             // Pass the object and the needed headers
             ResponseEntity response = null;
             if (object instanceof NodeRecord) {
@@ -78,22 +58,16 @@ public class RestClientHandler {
                 // Send the request as POST
                 try {
                     System.out.println(uri);
-//                    if (uri.equalsIgnoreCase(PropertiesHandler.getProperty("deleteNodeParentFormat")) || uri.equalsIgnoreCase(PropertiesHandler.getProperty("deleteNodeAncestryFormat")))
-//                        response = restTemplate.exchange(uri, HttpMethod.POST, entity, Boolean.class);
-//                    else
-                        response = restTemplate.exchange(uri, HttpMethod.POST, entity, Integer.class);
+                    response = restTemplate.exchange(uri, HttpMethod.POST, entity, Integer.class);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("can't connect");
                 }
 
-                System.out.println("IIIIIIIIIIIIIIIIIIIIIIIIIIIII");
                 System.out.println(response);
 
                 if (response.getStatusCode() == HttpStatus.OK) {
                     System.out.println(response.getBody());
-//                    if (uri.equalsIgnoreCase(PropertiesHandler.getProperty("deleteNodeParentFormat")) || uri.equalsIgnoreCase(PropertiesHandler.getProperty("deleteNodeAncestryFormat")))
-//                        return Boolean.toString((Boolean) response.getBody());
                     return Integer.toString((Integer) response.getBody());
                 } else {
                     System.out.println("returned code(" + response.getStatusCode() + ")");
@@ -108,44 +82,14 @@ public class RestClientHandler {
         return "";
     }
 
-    private RestTemplate handleProxy(String proxyUrl, int port, String username, String password) {
-
-        CredentialsProvider credsProvider = new BasicCredentialsProvider();
-        credsProvider.setCredentials(new AuthScope(proxyUrl, port), new UsernamePasswordCredentials(username, password));
-        HttpClientBuilder clientBuilder = HttpClientBuilder.create();
-        clientBuilder.useSystemProperties();
-        clientBuilder.setProxy(new HttpHost(proxyUrl, port));
-        clientBuilder.setDefaultCredentialsProvider(credsProvider);
-        clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
-        CloseableHttpClient client = clientBuilder.build();
-        //set the HTTP client
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setHttpClient(client);
-        return new RestTemplate(factory);
-    }
-
     public String deleteTaxon(String uri, NodeRecord nodeRecord) {
-        RestTemplate restTemplate;
+
         if (!uri.equalsIgnoreCase("")) {
-            if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
-                restTemplate = handleProxy(PropertiesHandler.getProperty("proxy"),
-                        Integer.parseInt(PropertiesHandler.getProperty("port")),
-                        PropertiesHandler.getProperty("proxyUserName"),
-                        PropertiesHandler.getProperty("password"));
-            } else {
-                restTemplate = new RestTemplate();
-            }
 
-            //create the json converter
-            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-            List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
-            list.add(converter);
-            restTemplate.setMessageConverters(list);
-
+            RestTemplate restTemplate= handleRestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("Accept", "application/json");
-            // Pass the object and the needed headers
             ResponseEntity response = null;
             Map<String, Integer> params = new HashMap<String, Integer>();
             params.put(PropertiesHandler.getProperty("resourceId"), nodeRecord.getResourceId());
@@ -163,33 +107,14 @@ public class RestClientHandler {
     }
 
     public Boolean updateTaxonInNeo4jAncestoryFormat(String uri, ArrayList<Node> nodes) {
-        System.out.println("do connection");
-        RestTemplate restTemplate;
-        System.out.println("after restTemplate, uri: " + uri);
+
         if (!uri.equalsIgnoreCase("")) {
-            System.out.println("gowa el if");
-            if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
-                System.out.println("gowa el proper");
-                restTemplate = handleProxy(PropertiesHandler.getProperty("proxy"),
-                        Integer.parseInt(PropertiesHandler.getProperty("port")),
-                        PropertiesHandler.getProperty("proxyUserName"),
-                        PropertiesHandler.getProperty("password"));
-            } else {
-                System.out.println("else of proper");
-                restTemplate = new RestTemplate();
-            }
 
-            //create the json converter
-            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-            List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
-            list.add(converter);
-            restTemplate.setMessageConverters(list);
-
+            RestTemplate restTemplate = handleRestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("Accept", "application/json");
             System.out.println("after header");
-            // Pass the object and the needed headers
             ResponseEntity response = null;
             HttpEntity<ArrayList<Node>> entity = new HttpEntity<ArrayList<Node>>(nodes, headers);
             System.out.println("before send post request");
@@ -207,39 +132,18 @@ public class RestClientHandler {
                 e.printStackTrace();
                 System.out.println("can't connect");
             }
-
-
         }
         return false;
     }
 
     public int getPageId(String uri, int generatedNodeId) {
-        System.out.println("do connection");
-        RestTemplate restTemplate;
-        System.out.println("after restTemplate, uri: " + uri);
+
         if (!uri.equalsIgnoreCase("")) {
-            System.out.println("gowa el if");
-            if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
-                System.out.println("gowa el proper");
-                restTemplate = handleProxy(PropertiesHandler.getProperty("proxy"),
-                        Integer.parseInt(PropertiesHandler.getProperty("port")),
-                        PropertiesHandler.getProperty("proxyUserName"),
-                        PropertiesHandler.getProperty("password"));
-            } else {
-                System.out.println("else of proper");
-                restTemplate = new RestTemplate();
-            }
-
-            //create the json converter
-            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-            List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
-            list.add(converter);
-            restTemplate.setMessageConverters(list);
-
+            
+            RestTemplate restTemplate = handleRestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.set("Accept", "application/json");
-            // Pass the object and the needed headers
             ResponseEntity response = null;
             Map<String, Integer> params = new HashMap<String, Integer>();
             params.put(PropertiesHandler.getProperty("generatedNodeId"), generatedNodeId);
@@ -254,5 +158,42 @@ public class RestClientHandler {
 
         }
         return 0;
+    }
+
+    private RestTemplate handleRestTemplate(){
+        RestTemplate restTemplate;
+        if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
+            System.out.println("gowa el proper");
+            restTemplate = handleProxy(PropertiesHandler.getProperty("proxy"),
+                    Integer.parseInt(PropertiesHandler.getProperty("port")),
+                    PropertiesHandler.getProperty("proxyUserName"),
+                    PropertiesHandler.getProperty("password"));
+        } else {
+            System.out.println("else of proper");
+            restTemplate = new RestTemplate();
+        }
+
+        //create the json converter
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        List<HttpMessageConverter<?>> list = new ArrayList<HttpMessageConverter<?>>();
+        list.add(converter);
+        restTemplate.setMessageConverters(list);
+        return restTemplate;
+    }
+
+    private RestTemplate handleProxy(String proxyUrl, int port, String username, String password) {
+
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(new AuthScope(proxyUrl, port), new UsernamePasswordCredentials(username, password));
+        HttpClientBuilder clientBuilder = HttpClientBuilder.create();
+        clientBuilder.useSystemProperties();
+        clientBuilder.setProxy(new HttpHost(proxyUrl, port));
+        clientBuilder.setDefaultCredentialsProvider(credsProvider);
+        clientBuilder.setProxyAuthenticationStrategy(new ProxyAuthenticationStrategy());
+        CloseableHttpClient client = clientBuilder.build();
+        //set the HTTP client
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setHttpClient(client);
+        return new RestTemplate(factory);
     }
 }

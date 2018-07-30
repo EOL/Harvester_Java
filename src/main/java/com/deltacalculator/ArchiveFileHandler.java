@@ -188,7 +188,8 @@ public class ArchiveFileHandler {
                                 sortedFile2 = commandExecutor.executeSort(file2, (archiveFile2.getFieldsTerminatedBy()), getSortingColumnIndex(archiveFile2)),
                                 differenceFile = commandExecutor.executeDiff(sortedFile1.getPath(), sortedFile2.getPath(), sortedFile2.getName(), archiveFile2, isVernacular);
 
-                        if ((version2.getExtension(archiveRowTypesArrayList.get(i)).getIgnoreHeaderLines()) == 1)
+                        if ((version2.getExtension(archiveRowTypesArrayList.get(i)).getIgnoreHeaderLines()) == 1 && !archiveFile2.getRowType().equals(CommonTerms.occurrenceTerm)
+                        && archiveFile2.getRowType().equals(CommonTerms.associationTerm) && archiveFile2.getRowType().equals(DwcTerm.MeasurementOrFact))
                             archiveFileHandler.addHeader(differenceFile, fileHeader);
                     } catch (Exception e) {
                         logger.error(e);

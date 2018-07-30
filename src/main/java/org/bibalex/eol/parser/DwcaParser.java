@@ -141,6 +141,9 @@ public class DwcaParser {
             if(i % 1000==0 && i!=0){
                 parseRecords(resourceId, starRecords, neo4jHandler);
                 starRecords.clear();
+                i=1;
+                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
+                starRecords.add(sr);
             }
             else{
                 i++;
@@ -175,10 +178,7 @@ public class DwcaParser {
                     generatedNodeId + "", resourceId);
 
             Taxon taxon = parseTaxon(rec, generatedNodeId);
-            if(taxon.getIdentifier() == "-100001")
-            {
-                System.out.println("hena");
-            }
+
             if (taxon != null)
                 tableRecord.setTaxon(taxon);
 

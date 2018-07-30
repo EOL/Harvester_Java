@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.Date;
 
 public class DeltaCalculator {
-    static File DWCADiff = new File("/home/a-amorad/eol_workspace/originals/DifferenceArchive_" + new Date().getTime());
+    static File DWCADiff = new File("/home/ba/eol_workspace/originals/DifferenceArchive_" + new Date().getTime());
 
     public DeltaCalculator() {
     }
@@ -16,8 +16,8 @@ public class DeltaCalculator {
     private static final Logger logger = Logger.getLogger(DeltaCalculator.class);
 
     public static void main(String[] args) {
-      File file1 = new File ("/home/ba/329_old_org.tar.gz");
-      File file2 = new File ("/home/ba/329_org.tar.gz");
+      File file1 = new File ("/home/ba/eol_workspace/originals/421_org.out_valid.zip");
+      File file2 = new File ("/home/ba/eol_workspace/originals/421_org.out_valid.zip");
       DeltaCalculator deltaCalculator = new DeltaCalculator();
       deltaCalculator.deltaCalculatorMain(file1, file2);
     }
