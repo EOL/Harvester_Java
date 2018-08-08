@@ -160,7 +160,7 @@ public class DwcaParser {
 
     public void parseRecords(int resourceId, ArrayList<StarRecord> starRecords, Neo4jHandler neo4jHandler){
         //neo4j
-        buildGraph(resourceId, starRecords);
+//        buildGraph(resourceId, starRecords);
 
         //Taxon Matching
         if (resourceId != Integer.valueOf(PropertiesHandler.getProperty("DWHId"))) {
