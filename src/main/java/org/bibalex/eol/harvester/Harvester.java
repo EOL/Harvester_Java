@@ -32,7 +32,7 @@ public class Harvester {
             System.out.println("henaaaaaaaaaaaaaa "+ path);
 
 //            return true;
-            harvesterAPI.callValidation(path, 179, true);
+//            harvesterAPI.callValidation(path, 179, true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,7 +57,7 @@ public class Harvester {
 
     public String harvest(String dwcArchivePath, int resourceId){
         Archive dwcArchive = openDwcAFolder(dwcArchivePath);
-        DwcaParser dwcaP = new DwcaParser(dwcArchive, true);
+        DwcaParser dwcaP = new DwcaParser(dwcArchive, true, null);
         dwcaP.prepareNodesRecord(resourceId);
         return "success";
     }

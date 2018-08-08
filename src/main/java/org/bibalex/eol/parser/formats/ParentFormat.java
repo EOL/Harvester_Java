@@ -2,9 +2,17 @@ package org.bibalex.eol.parser.formats;
 
 import org.bibalex.eol.parser.handlers.Neo4jHandler;
 import org.bibalex.eol.parser.handlers.SynonymNodeHandler;
+import org.bibalex.eol.parser.models.Neo4jTaxon;
 import org.bibalex.eol.parser.models.Taxon;
 import org.apache.log4j.Logger;
+import org.bibalex.eol.utils.CommonTerms;
+import org.gbif.dwc.terms.DwcTerm;
+import org.gbif.dwca.io.Archive;
+import org.gbif.dwca.record.StarRecord;
 
+import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -18,6 +26,7 @@ public class ParentFormat extends Format {
     private Neo4jHandler neo4jHandler;
     private static final Logger logger = Logger.getLogger(ParentFormat.class);
     private HashSet<String> missingParents;
+    private EntityManager entityManager;
 
     public ParentFormat(int resourceId) {
         this.resourceId = resourceId;
@@ -136,6 +145,162 @@ public class ParentFormat extends Format {
         int response =  neo4jHandler.updateTaxonParentFormat(taxon.getIdentifier(), resourceId, taxon.getScientificName(), taxon.getTaxonRank(), taxon.getParentTaxonId());
         if(response == 400)
             missingParents.add(taxon.getIdentifier());
+    }
+
+
+    public void insertTaxontoMysql(Archive dwca, EntityManager EM){
+        this.entityManager=EM;
+        int i=0;
+        for (StarRecord record : dwca) {
+            i++;
+            System.out.println("insert record to database "+i);
+
+            StoredProcedureQuery insertTaxon = entityManager
+                    .createStoredProcedureQuery("insertTaxon")
+                    .registerStoredProcedureParameter(
+                            "taxon_id", String.class, ParameterMode.IN)
+                    .registerStoredProcedureParameter(
+                            "resource_id", Integer.class, ParameterMode.IN)
+                    .registerStoredProcedureParameter(
+                            "parent_id", String.class, ParameterMode.IN)
+                    .registerStoredProcedureParameter(
+                            "scientific_name", String.class, ParameterMode.IN)
+                    .registerStoredProcedureParameter(
+                            "rank", String.class, ParameterMode.IN)
+                    .registerStoredProcedureParameter(
+                            "page_id", Integer.class, ParameterMode.IN)
+                    .registerStoredProcedureParameter(
+                            "created", Boolean.class, ParameterMode.IN);
+
+            insertTaxon.setParameter("taxon_id", record.core().value(DwcTerm.taxonID));
+            insertTaxon.setParameter("resource_id", resourceId);
+            if (record.core().value(DwcTerm.parentNameUsageID) == null) {
+                insertTaxon.setParameter("parent_id", "0");
+            } else {
+                insertTaxon.setParameter("parent_id", record.core().value(DwcTerm.parentNameUsageID));
+            }
+            insertTaxon.setParameter("scientific_name", record.core().value(DwcTerm.scientificName));
+            insertTaxon.setParameter("rank", record.core().value(DwcTerm.taxonRank));
+            if (record.core().value(CommonTerms.eolPageTerm) == null) {
+                insertTaxon.setParameter("page_id", -1);
+            } else {
+                insertTaxon.setParameter("page_id", Integer.valueOf(record.core().value(CommonTerms.eolPageTerm)));
+            }
+            insertTaxon.setParameter("created", false);
+            try {
+                insertTaxon.execute();
+            }catch (Exception e){
+                System.out.println("duplicate line");
+            }
+        }
+        System.out.println("get roots");
+        StoredProcedureQuery getRoots =
+                entityManager.createStoredProcedureQuery("getRoots_2");
+        getRoots.registerStoredProcedureParameter("p_resource_id", Integer.class, ParameterMode.IN);
+        getRoots.setParameter("p_resource_id", resourceId);
+        getRoots.execute();
+
+        ArrayList<Neo4jTaxon> roots = new ArrayList<>();
+        getRoots.getResultList()
+                .forEach(taxon -> {
+                    Object[] object_taxon = (Object[]) taxon;
+                    roots.add(new Neo4jTaxon((String)object_taxon[0], (Integer)object_taxon[1], (String)object_taxon[2],
+                            (String)object_taxon[3], (String)object_taxon[4], (Integer)object_taxon[5], (Boolean)object_taxon[6]));
+
+                });
+        buildGraphRecursive(roots, 0);
+
+        //get missing parents
+        getOrphans();
+    }
+
+    private void getOrphans() {
+        StoredProcedureQuery getOrphans =
+                entityManager.createStoredProcedureQuery("getOrphans");
+        getOrphans.registerStoredProcedureParameter("p_resource_id", Integer.class, ParameterMode.IN);
+        getOrphans.setParameter("p_resource_id", resourceId);
+        getOrphans.execute();
+
+        ArrayList<Neo4jTaxon> orphans = new ArrayList<>();
+        HashSet<String> ids = new HashSet<>();
+        getOrphans.getResultList()
+                .forEach(taxon -> {
+                    Object[] object_taxon = (Object[]) taxon;
+                    orphans.add(new Neo4jTaxon((String)object_taxon[0], (Integer)object_taxon[1], (String)object_taxon[2],
+                            (String)object_taxon[3], (String)object_taxon[4], (Integer)object_taxon[5], (Boolean)object_taxon[6]));
+                    ids.add((String)object_taxon[0]);
+
+                });
+        createOrphans(orphans, ids);
+    }
+
+    private void createOrphans(ArrayList<Neo4jTaxon> orphans, HashSet<String> ids) {
+        if(orphans.size()==0)
+            return;
+        for(Neo4jTaxon orphan:orphans){
+            if(!ids.contains(orphan.getParent_id())){
+                Neo4jHandler neo4jHandler = new Neo4jHandler();
+                int parentGeneratedNodeId=neo4jHandler.createParentWithPlaceholder(orphan.getResource_id(), orphan.getParent_id());
+                ArrayList<Neo4jTaxon> children =getChildren(orphan.getParent_id(), orphan.getResource_id());
+                buildGraphRecursive(children, parentGeneratedNodeId);
+            }
+            break;
+        }
+        getOrphans();
+    }
+
+    public void buildGraphRecursive(ArrayList<Neo4jTaxon> parents, int parentGeneratedNodeId){
+        System.out.println("build graph of parent "+parentGeneratedNodeId);
+        if(parents.size()==0)
+            return;
+        else{
+            Neo4jHandler neo4jHandler = new Neo4jHandler();
+            int globalparentGeneratedNodeId = parentGeneratedNodeId;
+            for(Neo4jTaxon parent: parents) {
+
+                parentGeneratedNodeId = neo4jHandler.createAcceptedNode(parent.getResource_id(), parent.getTaxon_id(), parent.getScientific_name(),
+                        parent.getRank(), globalparentGeneratedNodeId, parent.getPage_id());
+                if(parentGeneratedNodeId != -1){
+                    StoredProcedureQuery updateTaxon =
+                            entityManager.createStoredProcedureQuery("updateTaxon");
+                    updateTaxon.registerStoredProcedureParameter("p_taxon_id", String.class, ParameterMode.IN);
+                    updateTaxon.registerStoredProcedureParameter("p_resource_id", Integer.class, ParameterMode.IN);
+
+                    updateTaxon.setParameter("p_taxon_id", parent.getTaxon_id());
+                    updateTaxon.setParameter("p_resource_id", parent.getResource_id());
+                    updateTaxon.execute();
+                }
+
+                ArrayList<Neo4jTaxon> children = getChildren(parent.getTaxon_id(), parent.getResource_id());
+
+
+                buildGraphRecursive(children, parentGeneratedNodeId);
+            }
+        }
+
+    }
+
+    public ArrayList<Neo4jTaxon> getChildren(String taxon_id, int resource_id){
+        System.out.println("get children of taxon "+taxon_id);
+        ArrayList<Neo4jTaxon> children =new ArrayList<>();
+        StoredProcedureQuery getChildren =
+                entityManager.createStoredProcedureQuery("getChildren");
+        getChildren.registerStoredProcedureParameter("p_parent_id", String.class, ParameterMode.IN);
+        getChildren.registerStoredProcedureParameter("p_resource_id", Integer.class, ParameterMode.IN);
+
+        getChildren.setParameter("p_parent_id", taxon_id);
+        getChildren.setParameter("p_resource_id", resource_id);
+        getChildren.execute();
+
+
+        getChildren.getResultList()
+                .forEach(taxon -> {
+                    Object[] object_taxon = (Object[]) taxon;
+                    children.add(new Neo4jTaxon((String)object_taxon[0], (Integer)object_taxon[1], (String)object_taxon[2],
+                            (String)object_taxon[3], (String)object_taxon[4], (Integer)object_taxon[5], (Boolean)object_taxon[6]));
+
+                });
+        return children;
     }
 
 }
