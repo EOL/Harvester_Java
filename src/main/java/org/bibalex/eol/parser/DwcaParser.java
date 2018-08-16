@@ -27,10 +27,10 @@ import org.gbif.dwca.record.StarRecord;
 import org.apache.log4j.Logger;
 import org.gbif.dwca.record.StarRecordImpl;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.locks.Condition;
+import javax.persistence.*;
 
 public class DwcaParser {
 
@@ -50,8 +50,9 @@ public class DwcaParser {
     private boolean newResource;
     public static final ArrayList<String> expectedMediaFormat = new ArrayList<>();
     private HashMap<String, Integer> deletedTaxons = new HashMap<>();
+    private EntityManager entityManager;
 
-    public DwcaParser(Archive dwca, boolean newResource) {
+    public DwcaParser(Archive dwca, boolean newResource, EntityManager entityManager) {
         this.dwca = dwca;
         referencesMap = new HashMap<>();
         agentsMap = new HashMap<>();
@@ -66,6 +67,7 @@ public class DwcaParser {
         loadAllAssociationsINOneMap();
         actionFiles = ActionFiles.loadActionFiles(dwca);
         this.newResource = newResource;
+        this.entityManager=entityManager;
     }
 
     private void loadAllReferences() {
@@ -131,34 +133,68 @@ public class DwcaParser {
         }
     }
 
+    private void insertNodesToMysql(){
+
+        String nodesPath = PropertiesHandler.getProperty("nodesFilePath");
+        try {
+            FileReader fileReader = new FileReader(nodesPath);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = null;
+            while((line = bufferedReader.readLine()) != null){
+                StoredProcedureQuery insertNode = entityManager
+                        .createStoredProcedureQuery("insertNode")
+                        .registerStoredProcedureParameter(
+                                "node_id", String.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(
+                                "resource_id", Integer.class, ParameterMode.IN)
+                        .registerStoredProcedureParameter(
+                                "generated_node_id", Integer.class, ParameterMode.IN);
+                String [] columns = line.split(",");
+                insertNode.setParameter("node_id", columns[0]);
+                insertNode.setParameter("resource_id", resourceID);
+                insertNode.setParameter("generated_node_id", Integer.valueOf(columns[1]));
+                insertNode.execute();
+            }
+        } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+            return;
+        } catch (IOException e) {
+//                e.printStackTrace();
+            return;
+        }
+    }
+
     public void prepareNodesRecord(int resourceId) {
         this.resourceID = resourceId;
         deletedTaxons.clear();
         Neo4jHandler neo4jHandler = new Neo4jHandler();
-        ArrayList<StarRecord> starRecords = new ArrayList<>();
-        int i=0;
-        for (StarRecord record : dwca) {
-            if(i % 1000==0 && i!=0){
-                parseRecords(resourceId, starRecords, neo4jHandler);
-                starRecords.clear();
-                i=1;
-                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
-                starRecords.add(sr);
-            }
-            else{
-                i++;
-                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
-                starRecords.add(sr);
-            }
-        }
-        if(starRecords.size() != 0){
-            parseRecords(resourceId, starRecords, neo4jHandler);
-            starRecords.clear();
-        }
+        insertNodesToMysql();
+        parseRecords(resourceId, neo4jHandler);
+
+//        ArrayList<StarRecord> starRecords = new ArrayList<>();
+//        int i=0;
+//        for (StarRecord record : dwca) {
+//            if(i % 1000==0 && i!=0){
+//                parseRecords(resourceId, neo4jHandler);
+//                starRecords.clear();
+//                i=1;
+//                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
+//                starRecords.add(sr);
+//            }
+//            else{
+//                i++;
+//                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
+//                starRecords.add(sr);
+//            }
+//        }
+//        if(starRecords.size() != 0){
+//            parseRecords(resourceId, neo4jHandler);
+//            starRecords.clear();
+//        }
 //
     }
 
-    public void parseRecords(int resourceId, ArrayList<StarRecord> starRecords, Neo4jHandler neo4jHandler){
+    public void parseRecords(int resourceId, Neo4jHandler neo4jHandler){
         //neo4j
 //        buildGraph(resourceId, starRecords);
 
@@ -170,9 +206,8 @@ public class DwcaParser {
 
         //HBase
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
-        for (StarRecord rec : starRecords) {
-            int generatedNodeId = neo4jHandler.getNodeIfExist
-                    (rec.core().value(DwcTerm.taxonID), resourceId);
+        for (StarRecord rec : dwca) {
+            int generatedNodeId = getGeneratedNodeId(rec.core().value(DwcTerm.taxonID));
             System.out.println(rec.core().value(DwcTerm.taxonID));
             NodeRecord tableRecord = new NodeRecord(
                     generatedNodeId + "", resourceId);
@@ -201,6 +236,20 @@ public class DwcaParser {
         }
     }
 
+    private int getGeneratedNodeId(String node_id){
+        StoredProcedureQuery getGeneratedNodeId = entityManager
+                .createStoredProcedureQuery("getGeneratedNodeId")
+                .registerStoredProcedureParameter(
+                        "p_node_id", String.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(
+                        "p_resource_id", Integer.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(
+                        "p_generated_node_id", Integer.class, ParameterMode.OUT);
+        getGeneratedNodeId.setParameter("p_node_id", node_id);
+        getGeneratedNodeId.setParameter("p_resource_id", resourceID);
+        getGeneratedNodeId.execute();
+        return (int) getGeneratedNodeId.getOutputParameterValue("p_generated_node_id");
+    }
     private ArrayList<Association> parseAssociationOfTaxon(NodeRecord tableRecord) {
         ArrayList<Association> associations = new ArrayList<>();
         for(MeasurementOrFact measurementOrFact : tableRecord.getMeasurementOrFacts()){
@@ -826,7 +875,7 @@ public class DwcaParser {
         } catch (Exception e) {
             System.out.println(e);
         }
-        DwcaParser dwcaP = new DwcaParser(dwcArchive, false);
+        DwcaParser dwcaP = new DwcaParser(dwcArchive, false, null);
         dwcaP.prepareNodesRecord(346);
 
 //        ArrayList<String> urls = new ArrayList<String>();

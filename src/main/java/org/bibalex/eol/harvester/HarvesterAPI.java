@@ -9,11 +9,15 @@ import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFactory;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.File;
 import java.io.IOException;
 
 @Service
 public class HarvesterAPI {
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public boolean callValidation(String path, int resourceID, boolean newResource){
         try {
@@ -28,12 +32,12 @@ public class HarvesterAPI {
             boolean done = callParser(FilenameUtils.removeExtension(path)+".out_valid", resourceID, newResource);
             return done;
         } catch (IOException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
 //            System.out.println("exceptionnnnnnnnnnnnnnnnnnnnn");
             return false;
         } catch (Exception e) {
 //            System.out.println("exceptionnnnnnnnnnnnnnnnnnnnn");
-//            e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
 
@@ -44,7 +48,7 @@ public class HarvesterAPI {
         try {
             PropertiesHandler.initializeProperties();
             dwcArchive = ArchiveFactory.openArchive(new File(path));
-            DwcaParser dwcaP = new DwcaParser(dwcArchive, newResource);
+            DwcaParser dwcaP = new DwcaParser(dwcArchive, newResource, entityManager);
             dwcaP.prepareNodesRecord(resourceID);
             return true;
         } catch (IOException e) {
