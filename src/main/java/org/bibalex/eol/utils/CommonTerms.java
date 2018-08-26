@@ -33,5 +33,5 @@ public class CommonTerms {
     public static final Term orderTerm = TermFactory.instance().findTerm(TermURIs.orderURI);
     public static final Term familyTerm = TermFactory.instance().findTerm(TermURIs.familyURI);
     public static final Term genusTerm  = TermFactory.instance().findTerm(TermURIs.genusURI);
-
+    public static final Term generatedAutoIdTerm = TermFactory.instance().findTerm(TermURIs.generated_auto_id);
 }

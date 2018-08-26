@@ -130,5 +130,6 @@ public class TermURIs {
     public static final String eolIdAnnotations = "http://eol.org/schema/EOLidAnnotations";
     public static final String landmark = "http://eol.org/schema/landmark";
 
+    public static final String generated_auto_id = "http://eol.org/schema/generated_auto_id";
 }
 

@@ -2,6 +2,8 @@ package org.bibalex.eol.harvester;
 
 import com.bibalex.taxonmatcher.controllers.RunTaxonMatching;
 import org.apache.commons.io.FilenameUtils;
+import org.bibalex.eol.handler.MetaHandler;
+import org.bibalex.eol.handler.ScriptsHandler;
 import org.bibalex.eol.parser.DwcaParser;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
 import org.bibalex.eol.validator.DwcaValidator;
@@ -25,7 +27,11 @@ public class HarvesterAPI {
             System.out.println("call validationnnnnnnnnnnnnn");
             validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
 //            return true;
-            boolean done = callParser(FilenameUtils.removeExtension(path)+".out_valid", resourceID, newResource);
+            MetaHandler metaHandler =new MetaHandler();
+            String validArchivePath= FilenameUtils.removeExtension(path)+".out_valid";
+            metaHandler.editMetaFile(validArchivePath);
+
+            boolean done = callParser(validArchivePath, resourceID, newResource);
             return done;
         } catch (IOException e) {
 //            e.printStackTrace();

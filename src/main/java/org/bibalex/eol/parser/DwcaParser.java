@@ -3,6 +3,7 @@ package org.bibalex.eol.parser;
 import com.bibalex.taxonmatcher.controllers.RunTaxonMatching;
 import com.sun.javafx.collections.MappingChange;
 import org.apache.commons.io.FilenameUtils;
+import org.bibalex.eol.handler.ScriptsHandler;
 import org.bibalex.eol.harvester.StorageLayerClient;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
 import org.bibalex.eol.parser.formats.AncestryFormat;
@@ -21,6 +22,7 @@ import org.gbif.dwc.terms.Term;
 import org.gbif.dwc.terms.TermFactory;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFactory;
+import org.gbif.dwca.io.ArchiveField;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
@@ -135,30 +137,51 @@ public class DwcaParser {
         this.resourceID = resourceId;
         deletedTaxons.clear();
         Neo4jHandler neo4jHandler = new Neo4jHandler();
-        ArrayList<StarRecord> starRecords = new ArrayList<>();
-        int i=0;
-        for (StarRecord record : dwca) {
-            if(i % 1000==0 && i!=0){
-                parseRecords(resourceId, starRecords, neo4jHandler);
-                starRecords.clear();
-                i=1;
-                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
-                starRecords.add(sr);
-            }
-            else{
-                i++;
-                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
-                starRecords.add(sr);
-            }
+
+        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
+        ArrayList<Term> termsSorted = new ArrayList<Term>();
+        for (ArchiveField archiveField : fieldsSorted) {
+            termsSorted.add(archiveField.getTerm());
         }
-        if(starRecords.size() != 0){
-            parseRecords(resourceId, starRecords, neo4jHandler);
-            starRecords.clear();
-        }
+
+
+        ScriptsHandler scriptsHandler = new ScriptsHandler();
+        String zft = dwca.getCore().getLocationFile().getPath();
+        scriptsHandler.runNeo4jInit();
+
+        scriptsHandler.runPreProc(dwca.getCore().getLocationFile().getPath(), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1),
+                String.valueOf(termsSorted.indexOf(DwcTerm.scientificName)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank)+1));
+
+        scriptsHandler.runGenerateIds(dwca.getCore().getLocationFile().getPath());
+        scriptsHandler.runLoadNodes(dwca.getCore().getLocationFile().getPath(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1),
+                String.valueOf(termsSorted.indexOf(DwcTerm.scientificName)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank)+1));
+
+        scriptsHandler.runLoadRelations(dwca.getCore().getLocationFile().getPath(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1),
+                String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1));
+//        ArrayList<StarRecord> starRecords = new ArrayList<>();
+//        int i=0;
+//        for (StarRecord record : dwca) {
+//            if(i % 1000==0 && i!=0){
+        parseRecords(resourceId, neo4jHandler);
+//                starRecords.clear();
+//                i=1;
+//                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
+//                starRecords.add(sr);
+//            }
+//            else{
+//                i++;
+//                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
+//                starRecords.add(sr);
+//            }
+//        }
+//        if(starRecords.size() != 0){
+//            parseRecords(resourceId, starRecords, neo4jHandler);
+//            starRecords.clear();
+//        }
 //
     }
 
-    public void parseRecords(int resourceId, ArrayList<StarRecord> starRecords, Neo4jHandler neo4jHandler){
+    public void parseRecords(int resourceId, Neo4jHandler neo4jHandler) {
         //neo4j
 //        buildGraph(resourceId, starRecords);
 
@@ -170,9 +193,8 @@ public class DwcaParser {
 
         //HBase
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
-        for (StarRecord rec : starRecords) {
-            int generatedNodeId = neo4jHandler.getNodeIfExist
-                    (rec.core().value(DwcTerm.taxonID), resourceId);
+        for (StarRecord rec : dwca) {
+            int generatedNodeId = Integer.valueOf(rec.core().value(CommonTerms.generatedAutoIdTerm));
             System.out.println(rec.core().value(DwcTerm.taxonID));
             NodeRecord tableRecord = new NodeRecord(
                     generatedNodeId + "", resourceId);
@@ -203,8 +225,8 @@ public class DwcaParser {
 
     private ArrayList<Association> parseAssociationOfTaxon(NodeRecord tableRecord) {
         ArrayList<Association> associations = new ArrayList<>();
-        for(MeasurementOrFact measurementOrFact : tableRecord.getMeasurementOrFacts()){
-            if(measurementOrFact.getAssociationId()!= null){
+        for (MeasurementOrFact measurementOrFact : tableRecord.getMeasurementOrFacts()) {
+            if (measurementOrFact.getAssociationId() != null) {
                 associations.add(associationHashMap.get(measurementOrFact.getAssociationId()));
             }
         }
@@ -213,9 +235,9 @@ public class DwcaParser {
 
     private ArrayList<MeasurementOrFact> parseMeasurementOrFactOfTaxon(StarRecord rec) {
         ArrayList<MeasurementOrFact> measurementOrFacts = new ArrayList<>();
-        for(Record record: rec.extension(CommonTerms.occurrenceTerm)){
+        for (Record record : rec.extension(CommonTerms.occurrenceTerm)) {
             ArrayList<MeasurementOrFact> measurementOrFactsOfOcc = measurementOrFactHashMap.get(record.value(DwcTerm.occurrenceID));
-            if(measurementOrFactsOfOcc!= null)
+            if (measurementOrFactsOfOcc != null)
                 measurementOrFacts.addAll(measurementOrFactsOfOcc);
         }
         return measurementOrFacts;
@@ -266,7 +288,7 @@ public class DwcaParser {
                     i++;
                     taxaList.add(parseTaxon(rec));
                 }*/
-                if(newResource){
+                if (newResource) {
                     System.out.println("insert new resource");
                     i++;
                     taxaList.add(parseTaxon(rec, -1));
@@ -286,7 +308,7 @@ public class DwcaParser {
                 if (action.equalsIgnoreCase(Constants.INSERT)) {
                     System.out.println("insert that action is insert");
                     insertTaxonToHBase(tableRecord);
-                } else if (action.equalsIgnoreCase(Constants.UPDATE)|| action.equalsIgnoreCase(Constants.UNCHANGED)) {
+                } else if (action.equalsIgnoreCase(Constants.UPDATE) || action.equalsIgnoreCase(Constants.UNCHANGED)) {
                     updateTaxonInHBase(tableRecord);
                 } else if (action.equalsIgnoreCase(Constants.DELETE)) {
                     deleteTaxonInHBase(tableRecord);
@@ -299,7 +321,7 @@ public class DwcaParser {
             System.out.println("insert from else of actions is null");
             insertTaxonToHBase(tableRecord);
         }*/
-        if(newResource){
+        if (newResource) {
             System.out.println("new resource");
             insertTaxonToHBase(tableRecord);
         }
@@ -313,15 +335,15 @@ public class DwcaParser {
         System.out.println();
     }
 
-    private void updateTaxonInHBase(NodeRecord tableRecord){
+    private void updateTaxonInHBase(NodeRecord tableRecord) {
         RestClientHandler restClientHandler = new RestClientHandler();
         restClientHandler.doConnection(PropertiesHandler.getProperty("updateEntryHBase"), tableRecord);
         printRecord(tableRecord);
         System.out.println();
     }
 
-    private void deleteTaxonInHBase(NodeRecord tableRecord){
-        tableRecord.setGeneratedNodeId(deletedTaxons.get(tableRecord.getTaxon().getIdentifier())+"");
+    private void deleteTaxonInHBase(NodeRecord tableRecord) {
+        tableRecord.setGeneratedNodeId(deletedTaxons.get(tableRecord.getTaxon().getIdentifier()) + "");
         RestClientHandler restClientHandler = new RestClientHandler();
         restClientHandler.deleteTaxon(PropertiesHandler.getProperty("deleteEntryHBase"), tableRecord);
         printRecord(tableRecord);
@@ -336,7 +358,7 @@ public class DwcaParser {
             action = actions.get(extensionRecord.value(CommonTerms.occurrenceID));
         else
             action = "I";
-        System.out.println("occ "+action);
+        System.out.println("occ " + action);
         return action;
 
     }
@@ -350,7 +372,7 @@ public class DwcaParser {
         } else {
             action = "I";
         }
-        System.out.println("media "+action);
+        System.out.println("media " + action);
         return action;
     }
 
@@ -358,7 +380,7 @@ public class DwcaParser {
     private String checkIfAgentsChanged(String agentId) {
         ArchiveFile agentFile = dwca.getExtension(CommonTerms.agentTerm);
         String action = "";
-        if(agentFile != null) {
+        if (agentFile != null) {
             Map<String, String> actions = actionFiles.get(agentFile.getLocation() + "_action");
             System.out.println(actions);
             if (actions != null && actions.get(agentId) != null) {
@@ -376,7 +398,7 @@ public class DwcaParser {
     private String checkIfReferencesChanged(String referenceId) {
         ArchiveFile referenceFile = dwca.getExtension(CommonTerms.referenceTerm);
         String action = "";
-        if(referenceFile != null) {
+        if (referenceFile != null) {
             Map<String, String> actions = actionFiles.get(referenceFile.getLocation() + "_action");
             System.out.println(actions);
             if (actions != null && actions.get(referenceId) != null) {
@@ -393,7 +415,7 @@ public class DwcaParser {
     private String checkIfVernacularChanged(Record extensionRecord) {
         ArchiveFile vernacularFile = dwca.getExtension(GbifTerm.VernacularName);
         String action = "";
-        if(vernacularFile != null) {
+        if (vernacularFile != null) {
             Map<String, String> actions = actionFiles.get(vernacularFile.getLocation() + "_action");
             if (actions != null) {
                 System.out.println(actions);
@@ -431,7 +453,7 @@ public class DwcaParser {
             String[] references = nodeRecord.getTaxon().getReferenceId().split(";");
             for (String referenceId : references) {
                 Reference reference = referencesMap.get(referenceId);
-                if(reference != null && !refIds.contains(referenceId) ) {
+                if (reference != null && !refIds.contains(referenceId)) {
                     String action = checkIfReferencesChanged(referenceId);
                     reference.setDeltaStatus(action);
                     addReference(nodeRecord, reference);
@@ -441,11 +463,11 @@ public class DwcaParser {
 
         if (nodeRecord.getMedia() != null) {
             for (Media media : nodeRecord.getMedia()) {
-                if (media.getReferenceId() != null){
+                if (media.getReferenceId() != null) {
                     String[] references = media.getReferenceId().split(";");
                     for (String referenceId : references) {
                         Reference reference = referencesMap.get(referenceId);
-                        if(reference != null&& !refIds.contains(referenceId)) {
+                        if (reference != null && !refIds.contains(referenceId)) {
                             String action = checkIfReferencesChanged(referenceId);
                             reference.setDeltaStatus(action);
                             addReference(nodeRecord, reference);
@@ -460,7 +482,7 @@ public class DwcaParser {
                 if (association.getReferenceId() != null) {
                     String[] references = association.getReferenceId().split(";");
                     for (String reference : references) {
-                        if(referencesMap.get(reference) != null && !refIds.contains(reference) )
+                        if (referencesMap.get(reference) != null && !refIds.contains(reference))
                             addReference(nodeRecord, referencesMap.get(reference));
                     }
                 }
@@ -472,7 +494,7 @@ public class DwcaParser {
                 if (measurementOrFact.getReferenceId() != null && !refIds.contains(measurementOrFact.getReferenceId())) {
                     String[] references = measurementOrFact.getReferenceId().split(";");
                     for (String reference : references) {
-                        if(referencesMap.get(reference) != null&& !refIds.contains(reference))
+                        if (referencesMap.get(reference) != null && !refIds.contains(reference))
                             addReference(nodeRecord, referencesMap.get(reference));
                     }
                 }
@@ -497,7 +519,7 @@ public class DwcaParser {
             String[] agentIds = agents.split(";");
             for (String agentId : agentIds) {
                 Agent agent = agentsMap.get(agentId);
-                if(agent != null) {
+                if (agent != null) {
                     String action = checkIfAgentsChanged(agentId);
                     agent.setDeltaStatus(action);
                     tempAgents.add(agent);
@@ -532,7 +554,7 @@ public class DwcaParser {
             action = actions.get(taxonID);
         else
             action = "I";
-        System.out.println("taxon "+action);
+        System.out.println("taxon " + action);
         Taxon taxonData = new Taxon(record.core().value(DwcTerm.taxonID), record.core().value(DwcTerm.scientificName),
                 record.core().value(DwcTerm.parentNameUsageID), record.core().value(DwcTerm.kingdom),
                 record.core().value(DwcTerm.phylum), record.core().value(DwcTerm.class_),
@@ -550,10 +572,10 @@ public class DwcaParser {
                 action, record.core().value(TermFactory.instance().findTerm(TermURIs.landmark))
         );
 
-        if(resourceID != Integer.valueOf(PropertiesHandler.getProperty("DWHId")) && generatedNodeId != -1){
+        if (resourceID != Integer.valueOf(PropertiesHandler.getProperty("DWHId")) && generatedNodeId != -1) {
             Neo4jHandler neo4jHandler = new Neo4jHandler();
-            int pageId= neo4jHandler.getPageIdOfNode(generatedNodeId);
-            if(pageId != 0)
+            int pageId = neo4jHandler.getPageIdOfNode(generatedNodeId);
+            if (pageId != 0)
                 taxonData.setPageEolId(String.valueOf(pageId));
         }
         System.out.println("taxon ------>" + taxonData.getIdentifier());
@@ -712,8 +734,7 @@ public class DwcaParser {
             StorageLayerClient client = new StorageLayerClient();
             ArrayList<ArrayList<String>> mediaFileType = new ArrayList<ArrayList<String>>();
             ArrayList<String> mediaTypeArray = new ArrayList<>();
-            for(int i=0;i<mediaFiles.size();i++)
-            {
+            for (int i = 0; i < mediaFiles.size(); i++) {
                 mediaTypeArray.add(mediaFiles.get(i));
                 mediaTypeArray.add(expectedMediaFormat.get(i));
                 mediaFileType.add(mediaTypeArray);
@@ -737,7 +758,7 @@ public class DwcaParser {
         return path;
     }
 
-    private boolean checkParentFormat(){
+    private boolean checkParentFormat() {
         ArrayList<Term> ancestryTerms = new ArrayList<>();
         ancestryTerms.add(CommonTerms.kingdomTerm);
         ancestryTerms.add(CommonTerms.phylumTerm);
@@ -746,8 +767,8 @@ public class DwcaParser {
         ancestryTerms.add(CommonTerms.familyTerm);
         ancestryTerms.add(CommonTerms.genusTerm);
 
-        for(Term term : ancestryTerms){
-            if(dwca.getCore().hasTerm(term)){
+        for (Term term : ancestryTerms) {
+            if (dwca.getCore().hasTerm(term)) {
                 return false;
             }
         }
@@ -805,8 +826,8 @@ public class DwcaParser {
         System.out.print("===================================================");
     }
 
-    private String getNameOfActionFile(String title){
-        return title+"_action";
+    private String getNameOfActionFile(String title) {
+        return title + "_action";
     }
 
     public static void main(String[] args) throws IOException {
@@ -816,7 +837,7 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/test/DifferenceArchive_1524729687324.tar.out_valid.tar.gz";
+        String path = "/home/ba/test/test.tar.gz";
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
