@@ -169,36 +169,23 @@ public class DwcaParser {
                     String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
         } else {
             if (dwca.getCore().hasTerm(DwcTerm.taxonomicStatus)) {
+                scriptsHandler.runloadNodeWithTaxonomicStatus(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)),
+                        String.valueOf(termsSorted.indexOf(DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank)),
+                        String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
 
             } else {
-
+                scriptsHandler.runLoadAcceptedNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)),
+                        String.valueOf(termsSorted.indexOf(DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank)),
+                        String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
             }
         }
 
 
         scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)),
                 String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)));
-//        ArrayList<StarRecord> starRecords = new ArrayList<>();
-//        int i=0;
-//        for (StarRecord record : dwca) {
-//            if(i % 1000==0 && i!=0){
+
         parseRecords(resourceId, neo4jHandler);
-//                starRecords.clear();
-//                i=1;
-//                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
-//                starRecords.add(sr);
-//            }
-//            else{
-//                i++;
-//                StarRecord sr = new StarRecordImpl(record.core(),record.extensions());
-//                starRecords.add(sr);
-//            }
-//        }
-//        if(starRecords.size() != 0){
-//            parseRecords(resourceId, starRecords, neo4jHandler);
-//            starRecords.clear();
-//        }
-//
+
     }
 
     public void parseRecords(int resourceId, Neo4jHandler neo4jHandler) {
