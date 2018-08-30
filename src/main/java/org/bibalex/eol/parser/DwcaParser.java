@@ -31,6 +31,8 @@ import org.gbif.dwca.record.StarRecordImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.locks.Condition;
 
@@ -146,18 +148,36 @@ public class DwcaParser {
 
 
         ScriptsHandler scriptsHandler = new ScriptsHandler();
-        String zft = dwca.getCore().getLocationFile().getPath();
+
+        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
+        final Path base = Paths.get("/", "home", "a-amorad");
+        System.out.println("full " + fullPath);
+        System.out.println("base " + base);
+        final Path relativePath = base.relativize(fullPath);
+        System.out.println("relative " + relativePath);
+
         scriptsHandler.runNeo4jInit();
 
-        scriptsHandler.runPreProc(dwca.getCore().getLocationFile().getPath(), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1),
-                String.valueOf(termsSorted.indexOf(DwcTerm.scientificName)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank)+1));
+        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID) + 1),
+                String.valueOf(termsSorted.indexOf(DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank) + 1));
 
-        scriptsHandler.runGenerateIds(dwca.getCore().getLocationFile().getPath());
-        scriptsHandler.runLoadNodes(dwca.getCore().getLocationFile().getPath(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1),
-                String.valueOf(termsSorted.indexOf(DwcTerm.scientificName)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank)+1));
+        scriptsHandler.runGenerateIds(fullPath.toString());
 
-        scriptsHandler.runLoadRelations(dwca.getCore().getLocationFile().getPath(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1),
-                String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1));
+        if (dwca.getCore().hasTerm(DwcTerm.acceptedNameUsageID)) {
+            scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)),
+                    String.valueOf(termsSorted.indexOf(DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank)),
+                    String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
+        } else {
+            if (dwca.getCore().hasTerm(DwcTerm.taxonomicStatus)) {
+
+            } else {
+
+            }
+        }
+
+
+        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)),
+                String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)));
 //        ArrayList<StarRecord> starRecords = new ArrayList<>();
 //        int i=0;
 //        for (StarRecord record : dwca) {
@@ -837,7 +857,7 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/test/test.tar.gz";
+        String path = "/home/ba/taxa/eoldynamichierarchywithlandmarks.zip";
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
@@ -848,7 +868,15 @@ public class DwcaParser {
             System.out.println(e);
         }
         DwcaParser dwcaP = new DwcaParser(dwcArchive, false);
-        dwcaP.prepareNodesRecord(346);
+        ArchiveFile core = dwcArchive.getCore();
+        int count = 0;
+        for (Record rec : core) {
+            if (rec.value(CommonTerms.eolPageTerm) == null) {
+                count++;
+            }
+        }
+        System.out.println(count);
+//        dwcaP.prepareNodesRecord(346);
 
 //        ArrayList<String> urls = new ArrayList<String>();
 ////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");

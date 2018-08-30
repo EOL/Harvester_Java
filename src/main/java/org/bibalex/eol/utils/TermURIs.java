@@ -128,7 +128,7 @@ public class TermURIs {
     public static final String scientificNameID = "http://rs.tdwg.org/dwc/terms/scientificNameID";
     public static final String datasetID = "http://rs.tdwg.org/dwc/terms/datasetID";
     public static final String eolIdAnnotations = "http://eol.org/schema/EOLidAnnotations";
-    public static final String landmark = "http://eol.org/schema/landmark";
+    public static final String landmark = "http://eol.org/schema/Landmark";
 
     public static final String generated_auto_id = "http://eol.org/schema/generated_auto_id";
 }
