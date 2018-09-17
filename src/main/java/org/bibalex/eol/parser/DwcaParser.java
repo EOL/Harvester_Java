@@ -160,7 +160,7 @@ public class DwcaParser {
 
         scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank) + 1));
         scriptsHandler.runGenerateIds(fullPath.toString());
-        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
+        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
         scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)));
 
         parseRecords(resourceId, neo4jHandler);
