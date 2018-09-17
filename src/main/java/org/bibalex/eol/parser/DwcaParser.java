@@ -150,39 +150,18 @@ public class DwcaParser {
         ScriptsHandler scriptsHandler = new ScriptsHandler();
 
         final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
-        final Path base = Paths.get("/", "home", "a-amorad");
+        final Path base = Paths.get("/", "san");
         System.out.println("full " + fullPath);
         System.out.println("base " + base);
         final Path relativePath = base.relativize(fullPath);
         System.out.println("relative " + relativePath);
 
-        scriptsHandler.runNeo4jInit();
+//        scriptsHandler.runNeo4jInit();
 
-        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID) + 1),
-                String.valueOf(termsSorted.indexOf(DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank) + 1));
-
+        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank) + 1));
         scriptsHandler.runGenerateIds(fullPath.toString());
-
-        if (dwca.getCore().hasTerm(DwcTerm.acceptedNameUsageID)) {
-            scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)),
-                    String.valueOf(termsSorted.indexOf(DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank)),
-                    String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
-        } else {
-            if (dwca.getCore().hasTerm(DwcTerm.taxonomicStatus)) {
-                scriptsHandler.runloadNodeWithTaxonomicStatus(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)),
-                        String.valueOf(termsSorted.indexOf(DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank)),
-                        String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
-
-            } else {
-                scriptsHandler.runLoadAcceptedNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)),
-                        String.valueOf(termsSorted.indexOf(DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf(DwcTerm.taxonRank)),
-                        String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
-            }
-        }
-
-
-        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)),
-                String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)));
+        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
+        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)));
 
         parseRecords(resourceId, neo4jHandler);
 
@@ -681,20 +660,14 @@ public class DwcaParser {
 
     private ArrayList<Media> parseMedia(StarRecord record, NodeRecord rec) {
         ArrayList<Media> media = new ArrayList<Media>();
-        expectedMediaFormat.clear();
         for (Record extensionRecord : record.extension(CommonTerms.mediaTerm)) {
-            expectedMediaFormat.add(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaFormatURI)));
             String storageLayerPath = "", storageLayerThumbnailPath = "";
-            ArrayList<String> paths = new ArrayList<String>();
 
             if (extensionRecord.value(CommonTerms.accessURITerm) != null) {
-                paths.add(extensionRecord.value(CommonTerms.accessURITerm));
-                storageLayerPath = getMediaPath(resourceID, paths);
+                storageLayerPath = getMediaPath(extensionRecord.value(CommonTerms.accessURITerm));
             }
-            paths.clear();
             if (extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)) != null) {
-                paths.add(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)));
-                storageLayerThumbnailPath = getMediaPath(resourceID, paths);
+                storageLayerThumbnailPath =getMediaPath(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)));
             }
 
             String action = checkIfMediaChanged(extensionRecord);
@@ -736,24 +709,29 @@ public class DwcaParser {
         return media;
     }
 
-    public String getMediaPath(int resourceID, ArrayList<String> mediaFiles) {
-        try {
-            StorageLayerClient client = new StorageLayerClient();
-            ArrayList<ArrayList<String>> mediaFileType = new ArrayList<ArrayList<String>>();
-            ArrayList<String> mediaTypeArray = new ArrayList<>();
-            for (int i = 0; i < mediaFiles.size(); i++) {
-                mediaTypeArray.add(mediaFiles.get(i));
-                mediaTypeArray.add(expectedMediaFormat.get(i));
-                mediaFileType.add(mediaTypeArray);
-            }
-
-            ArrayList<String> SLPaths = client.downloadMedia(String.valueOf(resourceID), mediaFileType);
-            return convertArrayListToString(SLPaths);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
+    public String getMediaPath(String URL) {
+        String [] files = URL.split("/");
+        return PropertiesHandler.getProperty("storage.layer.media.path")+String.valueOf(resourceID)+"/media/"+files[files.length-1];
     }
+
+//    public String getMediaPath(int resourceID, ArrayList<String> mediaFiles) {
+//        try {
+//            StorageLayerClient client = new StorageLayerClient();
+//            ArrayList<ArrayList<String>> mediaFileType = new ArrayList<ArrayList<String>>();
+//            ArrayList<String> mediaTypeArray = new ArrayList<>();
+//            for (int i = 0; i < mediaFiles.size(); i++) {
+//                mediaTypeArray.add(mediaFiles.get(i));
+//                mediaTypeArray.add(expectedMediaFormat.get(i));
+//                mediaFileType.add(mediaTypeArray);
+//            }
+//
+//            ArrayList<String> SLPaths = client.downloadMedia(String.valueOf(resourceID), mediaFileType);
+//            return convertArrayListToString(SLPaths);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return "";
+//    }
 
     private String convertArrayListToString(ArrayList<String> SLPaths) {
         String path = "";
@@ -844,7 +822,7 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/taxa/eoldynamichierarchywithlandmarks.zip";
+        String path = "/home/ba/test/71.zip";
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
@@ -855,14 +833,15 @@ public class DwcaParser {
             System.out.println(e);
         }
         DwcaParser dwcaP = new DwcaParser(dwcArchive, false);
-        ArchiveFile core = dwcArchive.getCore();
-        int count = 0;
-        for (Record rec : core) {
-            if (rec.value(CommonTerms.eolPageTerm) == null) {
-                count++;
-            }
-        }
-        System.out.println(count);
+        dwcaP.prepareNodesRecord(5555);
+//        ArchiveFile core = dwcArchive.getCore();
+//        int count = 0;
+//        for (Record rec : core) {
+//            if (rec.value(CommonTerms.eolPageTerm) == null) {
+//                count++;
+//            }
+//        }
+//        System.out.println(count);
 //        dwcaP.prepareNodesRecord(346);
 
 //        ArrayList<String> urls = new ArrayList<String>();

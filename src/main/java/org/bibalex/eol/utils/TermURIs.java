@@ -2,6 +2,7 @@ package org.bibalex.eol.utils;
 
 
 public class TermURIs {
+    public static final String taxonURI = "http://rs.tdwg.org/dwc/terms/Taxon";
     public static final String termTypeURI = "http://purl.org/dc/terms/type";
     public static final String descriptionURI = "http://purl.org/dc/terms/description";
     public static final String stillImageURI = "http://purl.org/dc/dcmitype/stillimage";

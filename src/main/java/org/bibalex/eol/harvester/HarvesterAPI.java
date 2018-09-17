@@ -1,9 +1,7 @@
 package org.bibalex.eol.harvester;
 
-import com.bibalex.taxonmatcher.controllers.RunTaxonMatching;
 import org.apache.commons.io.FilenameUtils;
 import org.bibalex.eol.handler.MetaHandler;
-import org.bibalex.eol.handler.ScriptsHandler;
 import org.bibalex.eol.parser.DwcaParser;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
 import org.bibalex.eol.validator.DwcaValidator;
@@ -19,27 +17,29 @@ public class HarvesterAPI {
 
     public boolean callValidation(String path, int resourceID, boolean newResource){
         try {
+            MetaHandler metaHandler =new MetaHandler();
+
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
+            metaHandler.adjustMetaFileToBeReadableByLibrary(extractToFolder.getPath());
             Archive dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
 //            Archive dwcArchive = ArchiveFactory.openArchive(new File(path));
             System.out.println("call validationnnnnnnnnnnnnn");
             validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
 //            return true;
-            MetaHandler metaHandler =new MetaHandler();
             String validArchivePath= FilenameUtils.removeExtension(path)+".out_valid";
-            metaHandler.editMetaFile(validArchivePath);
+            metaHandler.addGeneratedAutoId(validArchivePath);
 
             boolean done = callParser(validArchivePath, resourceID, newResource);
             return done;
         } catch (IOException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
 //            System.out.println("exceptionnnnnnnnnnnnnnnnnnnnn");
             return false;
         } catch (Exception e) {
 //            System.out.println("exceptionnnnnnnnnnnnnnnnnnnnn");
-//            e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
 

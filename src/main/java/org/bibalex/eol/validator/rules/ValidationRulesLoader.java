@@ -36,6 +36,7 @@ private static final Logger logger = Logger.getLogger(ValidationRulesLoader.clas
      * @param rowType      Row type e.g. Document
      */
     public static void loadFieldValidationRules(Node ruleListNode, String rowType) {
+        fieldValidationRuleList.clear();
         NodeList fieldValidationRulesNodeList = ((Element) ruleListNode).getElementsByTagName
                 ("FieldValidationRule");
         logger.info("\t\t" + "(FieldValidationRules = " + fieldValidationRulesNodeList.getLength
@@ -78,6 +79,7 @@ private static final Logger logger = Logger.getLogger(ValidationRulesLoader.clas
      * @param rowType      Row type e.g. Document
      */
     public static void loadRowValidationRules(Node ruleListNode, String rowType) {
+        rowValidationRuleList.clear();
         NodeList rowValidationRulesNodeList = ((Element) ruleListNode).getElementsByTagName
                 ("RowValidationRule");
         logger.info("\t\t" + "(RowValidationRules = " + rowValidationRulesNodeList.getLength() +
