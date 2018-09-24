@@ -57,7 +57,7 @@ public class Harvester {
 
     public String harvest(String dwcArchivePath, int resourceId){
         Archive dwcArchive = openDwcAFolder(dwcArchivePath);
-        DwcaParser dwcaP = new DwcaParser(dwcArchive, true);
+        DwcaParser dwcaP = new DwcaParser(dwcArchive, true, null);
         dwcaP.prepareNodesRecord(resourceId);
         return "success";
     }

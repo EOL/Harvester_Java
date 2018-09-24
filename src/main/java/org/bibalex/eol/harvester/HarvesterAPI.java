@@ -9,16 +9,21 @@ import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFactory;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.File;
 import java.io.IOException;
 
 @Service
 public class HarvesterAPI {
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public boolean callValidation(String path, int resourceID, boolean newResource){
         try {
             MetaHandler metaHandler =new MetaHandler();
-
+//
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
@@ -31,7 +36,7 @@ public class HarvesterAPI {
             String validArchivePath= FilenameUtils.removeExtension(path)+".out_valid";
             metaHandler.addGeneratedAutoId(validArchivePath);
 
-            boolean done = callParser(validArchivePath, resourceID, newResource);
+            boolean done = callParser(path, resourceID, newResource, entityManager);
             return done;
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,12 +50,20 @@ public class HarvesterAPI {
 
     }
 
-    private boolean callParser(String path, int resourceID, boolean newResource){
+    private boolean callParser(String path, int resourceID, boolean newResource, EntityManager entityManager){
         Archive dwcArchive = null;
         try {
+            //for testing
+//            File myArchiveFile = new File(path);
+//            File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
+//            dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
+
+            // for production
             PropertiesHandler.initializeProperties();
             dwcArchive = ArchiveFactory.openArchive(new File(path));
-            DwcaParser dwcaP = new DwcaParser(dwcArchive, newResource);
+
+            //general
+            DwcaParser dwcaP = new DwcaParser(dwcArchive, newResource, entityManager);
             dwcaP.prepareNodesRecord(resourceID);
             return true;
         } catch (IOException e) {
