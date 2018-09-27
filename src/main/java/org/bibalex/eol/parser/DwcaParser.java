@@ -152,21 +152,21 @@ public class DwcaParser {
         }
 
 
-//        ScriptsHandler scriptsHandler = new ScriptsHandler();
-//
-//        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
-//        final Path base = Paths.get("/", "san");
-//        System.out.println("full " + fullPath);
-//        System.out.println("base " + base);
-//        final Path relativePath = base.relativize(fullPath);
-//        System.out.println("relative " + relativePath);
-//
-////        scriptsHandler.runNeo4jInit();
-//
-//        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank) + 1));
-//        scriptsHandler.runGenerateIds(fullPath.toString());
-//        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
-//        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)));
+        ScriptsHandler scriptsHandler = new ScriptsHandler();
+
+        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
+        final Path base = Paths.get("/", "san");
+        System.out.println("full " + fullPath);
+        System.out.println("base " + base);
+        final Path relativePath = base.relativize(fullPath);
+        System.out.println("relative " + relativePath);
+
+//        scriptsHandler.runNeo4jInit();
+
+        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank) + 1));
+        scriptsHandler.runGenerateIds(fullPath.toString());
+        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
+        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)));
 
         parseRecords(resourceId, neo4jHandler);
 
@@ -177,18 +177,18 @@ public class DwcaParser {
 //        buildGraph(resourceId, starRecords);
 
         //Taxon Matching
-//        if (resourceId != Integer.valueOf(PropertiesHandler.getProperty("DWHId"))) {
-//            RunTaxonMatching runTaxonMatching = new RunTaxonMatching();
-//            runTaxonMatching.RunTaxonMatching(resourceID);
-//        }
+        if (resourceId != Integer.valueOf(PropertiesHandler.getProperty("DWHId"))) {
+            RunTaxonMatching runTaxonMatching = new RunTaxonMatching();
+            runTaxonMatching.RunTaxonMatching(resourceID);
+        }
 
         //Mysql
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
         int i=0;
         for (StarRecord rec : dwca) {
+            int generatedNodeId = Integer.valueOf(rec.core().value(CommonTerms.generatedAutoIdTerm));
             i++;
-//            int generatedNodeId = Integer.valueOf(rec.core().value(CommonTerms.generatedAutoIdTerm));
-            int generatedNodeId = i;
+//            int generatedNodeId =i;
             System.out.println(rec.core().value(DwcTerm.taxonID));
             NodeRecord tableRecord = new NodeRecord(
                     generatedNodeId + "", resourceId);
@@ -324,26 +324,10 @@ public class DwcaParser {
 
 
     private void insertTaxonToMysql(NodeRecord tableRecord) {
-
-        MysqlConnector mysqlConnector = new MysqlConnector(entityManager, resourceID);
-        int rank_id = mysqlConnector.insertRankToMysql(tableRecord);
-        int node_id = mysqlConnector.insertNodeToMysql(tableRecord, rank_id);
-        if(tableRecord.getTaxon().getPageEolId()!= "0" || tableRecord.getTaxon().getPageEolId() != null){
-
-            mysqlConnector.insertPageToMysql(tableRecord, node_id);
-            mysqlConnector.insertPagesNodesToMysql(node_id, Integer.valueOf(tableRecord.getTaxon().getPageEolId()));
-            mysqlConnector.insertScientificNameToMysql(tableRecord, node_id);
-
-            if(tableRecord.getVernaculars()!= null)
-                mysqlConnector.insertVernacularsToMysql(tableRecord, node_id);
-            if(tableRecord.getMedia() != null)
-                mysqlConnector.insertMediaToMysql(tableRecord);
-        }
-//        RestClientHandler restClientHandler = new RestClientHandler();
-//        restClientHandler.doConnection(PropertiesHandler.getProperty("addEntryHBase"), tableRecord);
-//        printRecord(tableRecord);
-//        System.out.println();
-
+        RestClientHandler restClientHandler = new RestClientHandler();
+        restClientHandler.doConnection(PropertiesHandler.getProperty("addEntryMysql"), tableRecord);
+        printRecord(tableRecord);
+        System.out.println();
     }
 
 

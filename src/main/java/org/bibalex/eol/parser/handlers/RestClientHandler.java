@@ -42,11 +42,11 @@ public class RestClientHandler {
                 System.out.println("iffffffffffffff");
                 HttpEntity<NodeRecord> entity = new HttpEntity<NodeRecord>((NodeRecord) object, headers);
                 // Send the request as POST
-                response = restTemplate.exchange(uri, HttpMethod.POST, entity, HbaseResult.class);
+                response = restTemplate.exchange(uri, HttpMethod.POST, entity, Boolean.class);
 
                 if (response.getStatusCode() == HttpStatus.OK) {
                     System.out.println(response.getBody());
-                    return ((HbaseResult) response.getBody()).getStatus() + "";
+                    return ((Boolean) response.getBody()) + "";
                 } else {
                     System.out.println("returned code(" + response.getStatusCode() + ")");
                 }
