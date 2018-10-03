@@ -77,7 +77,7 @@ public class NodeMapper {
             logger.info("mapIfNeeded: before mapNode");
             mapNode(node, usedAncestorDepth, usedStrategy);
         }
-        System.out.println("---------------- has children is ------------- " + node.hasChildren() + " size " + node.getChildren().size());
+//        System.out.println("---------------- has children is ------------- " + node.hasChildren() + " size " + node.getChildren().size());
         if(node.hasChildren()){
             System.out.println("====================children=================");
 
@@ -162,7 +162,7 @@ public class NodeMapper {
         ArrayList<MatchingScore> scores = new ArrayList<MatchingScore>();
 
         for(SearchResult result : results){
-            System.out.println(neo4jHandler.getNodesFromIds(result.getChildren()));
+//            System.out.println(neo4jHandler.getNodesFromIds(result.getChildren()));
             int matchedChildrenCount = matchingScoreHandler.countMatches(nodeHandler.nodeMapper(neo4jHandler.getNodesFromIds(result.getChildren())),nodeHandler.nodeMapper(node.getChildren()));
             System.out.println("**********************************************************************************");
             logger.info("matched children count " + matchedChildrenCount);
