@@ -97,7 +97,9 @@ public class NodeMapper {
                 System.out.println("map node: virus");
                 logger.info("map node: virus");
                 //not finalized as we need ancestor to be arraylist
-                ancestor = nodeHandler.nodeMapper(nodeHandler.nativeVirus()).get(0);
+                // we don't know the root node of virus
+//                ancestor = nodeHandler.nodeMapper(nodeHandler.nativeVirus()).get(0);
+                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
             }else{
                 System.out.println("map Node : not virus neither surrogate");
                 logger.info("map Node : not virus neither surrogate");

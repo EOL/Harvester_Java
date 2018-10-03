@@ -22,7 +22,7 @@ public class HarvesterAPI {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
-            metaHandler.adjustMetaFileToBeReadableByLibrary(extractToFolder.getPath());
+//            metaHandler.adjustMetaFileToBeReadableByLibrary(extractToFolder.getPath());
             Archive dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
 //            Archive dwcArchive = ArchiveFactory.openArchive(new File(path));
             System.out.println("call validationnnnnnnnnnnnnn");

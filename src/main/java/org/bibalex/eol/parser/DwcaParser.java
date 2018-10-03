@@ -157,10 +157,16 @@ public class DwcaParser {
         System.out.println("relative " + relativePath);
 
 //        scriptsHandler.runNeo4jInit();
+        String page_id_col;
+        if(dwca.getCore().hasTerm(CommonTerms.eolPageTerm))
+            page_id_col = String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm));
+        else
+            page_id_col = "-1";
 
         scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank) + 1));
         scriptsHandler.runGenerateIds(fullPath.toString());
-        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
+        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)),
+                String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", page_id_col);
         scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)));
 
         parseRecords(resourceId, neo4jHandler);
@@ -822,7 +828,8 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/test/71.zip";
+//        String path = "/home/ba/test/71.zip";
+        String path="/home/ba/dynamic/original/eoldynamichierarchyv1revised.zip";
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
@@ -832,15 +839,17 @@ public class DwcaParser {
         } catch (Exception e) {
             System.out.println(e);
         }
-        DwcaParser dwcaP = new DwcaParser(dwcArchive, false);
-        dwcaP.prepareNodesRecord(5555);
-//        ArchiveFile core = dwcArchive.getCore();
-//        int count = 0;
-//        for (Record rec : core) {
-//            if (rec.value(CommonTerms.eolPageTerm) == null) {
-//                count++;
-//            }
-//        }
+//        DwcaParser dwcaP = new DwcaParser(dwcArchive, false);
+//        dwcaP.prepareNodesRecord(5555);
+        ArchiveFile core = dwcArchive.getCore();
+        int count = 1;
+        for (Record rec : core) {
+            if (rec.value(CommonTerms.eolPageTerm) != null) {
+                System.out.println(rec.value(DwcTerm.taxonID)+" "+count);
+                break;
+            }
+            count++;
+        }
 //        System.out.println(count);
 //        dwcaP.prepareNodesRecord(346);
 

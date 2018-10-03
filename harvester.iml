@@ -145,7 +145,7 @@
     <orderEntry type="library" name="Maven: org.neo4j:neo4j-command-line:3.2.6" level="project" />
     <orderEntry type="library" name="Maven: org.neo4j:neo4j-dbms:3.2.6" level="project" />
     <orderEntry type="library" name="Maven: org.neo4j:neo4j-import-tool:3.2.6" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j.driver:neo4j-java-driver:1.7.0-beta01" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j.driver:neo4j-java-driver:1.7.0-beta03" level="project" />
     <orderEntry type="library" name="Maven: org.neo4j.procedure:apoc:3.3.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.hdrhistogram:HdrHistogram:2.1.9" level="project" />
     <orderEntry type="library" name="Maven: com.novell.ldap:jldap:2009-10-07" level="project" />
