@@ -196,4 +196,26 @@ public class RestClientHandler {
         factory.setHttpClient(client);
         return new RestTemplate(factory);
     }
+
+    public boolean loadFilesToMysql(String uri) {
+        if (!uri.equalsIgnoreCase("")) {
+            System.out.println("load files");
+
+            RestTemplate restTemplate = handleRestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Accept", "application/json");
+            ResponseEntity response = null;
+
+            response = restTemplate.exchange(uri, HttpMethod.POST, null, Boolean.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                System.out.println(response.getBody());
+                return Boolean.valueOf((Boolean) response.getBody());
+            } else {
+                System.out.println("returned code(" + response.getStatusCode() + ")");
+            }
+
+        }
+        return false;
+    }
 }

@@ -50,8 +50,5 @@ public class HarvesterController {
             e.printStackTrace();
             return false;
         }
-
-
-
     }
 }

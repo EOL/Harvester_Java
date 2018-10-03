@@ -145,28 +145,28 @@ public class DwcaParser {
         deletedTaxons.clear();
         Neo4jHandler neo4jHandler = new Neo4jHandler();
 
-        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
-        ArrayList<Term> termsSorted = new ArrayList<Term>();
-        for (ArchiveField archiveField : fieldsSorted) {
-            termsSorted.add(archiveField.getTerm());
-        }
-
-
-        ScriptsHandler scriptsHandler = new ScriptsHandler();
-
-        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
-        final Path base = Paths.get("/", "san");
-        System.out.println("full " + fullPath);
-        System.out.println("base " + base);
-        final Path relativePath = base.relativize(fullPath);
-        System.out.println("relative " + relativePath);
-
-//        scriptsHandler.runNeo4jInit();
-
-        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank) + 1));
-        scriptsHandler.runGenerateIds(fullPath.toString());
-        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
-        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)));
+//        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
+//        ArrayList<Term> termsSorted = new ArrayList<Term>();
+//        for (ArchiveField archiveField : fieldsSorted) {
+//            termsSorted.add(archiveField.getTerm());
+//        }
+//
+//
+//        ScriptsHandler scriptsHandler = new ScriptsHandler();
+//
+//        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
+//        final Path base = Paths.get("/", "san");
+//        System.out.println("full " + fullPath);
+//        System.out.println("base " + base);
+//        final Path relativePath = base.relativize(fullPath);
+//        System.out.println("relative " + relativePath);
+//
+////        scriptsHandler.runNeo4jInit();
+//
+//        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank) + 1));
+//        scriptsHandler.runGenerateIds(fullPath.toString());
+//        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
+//        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)));
 
         parseRecords(resourceId, neo4jHandler);
 
@@ -215,6 +215,9 @@ public class DwcaParser {
             adjustReferences(tableRecord);
             checkActionFiles(rec, actions, tableRecord);
         }
+        RestClientHandler restClientHandler=new RestClientHandler();
+        restClientHandler.loadFilesToMysql(PropertiesHandler.getProperty("loadFilesToMysql"));
+
     }
 
     private ArrayList<Association> parseAssociationOfTaxon(NodeRecord tableRecord) {
