@@ -145,28 +145,28 @@ public class DwcaParser {
         deletedTaxons.clear();
         Neo4jHandler neo4jHandler = new Neo4jHandler();
 
-//        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
-//        ArrayList<Term> termsSorted = new ArrayList<Term>();
-//        for (ArchiveField archiveField : fieldsSorted) {
-//            termsSorted.add(archiveField.getTerm());
-//        }
-//
-//
-//        ScriptsHandler scriptsHandler = new ScriptsHandler();
-//
-//        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
-//        final Path base = Paths.get("/", "san");
-//        System.out.println("full " + fullPath);
-//        System.out.println("base " + base);
-//        final Path relativePath = base.relativize(fullPath);
-//        System.out.println("relative " + relativePath);
-//
-////        scriptsHandler.runNeo4jInit();
-//
-//        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank) + 1));
-//        scriptsHandler.runGenerateIds(fullPath.toString());
-//        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
-//        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)));
+        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
+        ArrayList<Term> termsSorted = new ArrayList<Term>();
+        for (ArchiveField archiveField : fieldsSorted) {
+            termsSorted.add(archiveField.getTerm());
+        }
+
+
+        ScriptsHandler scriptsHandler = new ScriptsHandler();
+
+        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
+        final Path base = Paths.get("/", "san");
+        System.out.println("full " + fullPath);
+        System.out.println("base " + base);
+        final Path relativePath = base.relativize(fullPath);
+        System.out.println("relative " + relativePath);
+
+//        scriptsHandler.runNeo4jInit();
+
+        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank) + 1));
+        scriptsHandler.runGenerateIds(fullPath.toString());
+        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
+        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)));
 
         parseRecords(resourceId, neo4jHandler);
 
@@ -836,7 +836,7 @@ public class DwcaParser {
 //        String path = "/home/ba/EOL_Recources/4.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
 //        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/test/asscoiations.zip";
+        String path = "/home/ba/dynamic/original/eoldynamichierarchyv1revised.zip";
         try {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
@@ -847,15 +847,21 @@ public class DwcaParser {
             System.out.println(e);
         }
         DwcaParser dwcaP = new DwcaParser(dwcArchive, false, null);
-        dwcaP.prepareNodesRecord(5555);
-//        ArchiveFile core = dwcArchive.getCore();
-//        int count = 0;
-//        for (Record rec : core) {
-//            if (rec.value(CommonTerms.eolPageTerm) == null) {
-//                count++;
-//            }
-//        }
-//        System.out.println(count);
+//        dwcaP.prepareNodesRecord(5555);
+        ArchiveFile core = dwcArchive.getCore();
+        int count = -1, i=0, line=0;
+        for (Record rec : core) {
+            i++;
+            if (rec.value(CommonTerms.eolPageTerm) != null) {
+                int page_id =Integer.valueOf(rec.value(CommonTerms.eolPageTerm));
+                System.out.println(page_id);
+                if(page_id>count) {
+                    count = page_id;
+                    line=i;
+                }
+            }
+        }
+        System.out.println(count+" "+line);
 //        dwcaP.prepareNodesRecord(346);
 
 //        ArrayList<String> urls = new ArrayList<String>();
