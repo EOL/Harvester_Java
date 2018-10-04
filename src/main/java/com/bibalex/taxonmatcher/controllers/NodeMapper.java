@@ -45,12 +45,14 @@ public class NodeMapper {
     }
 
     public void mapAllNodesToPages(ArrayList<Node> rootNodes){
+        logger.info("before getting root nodes");
        ArrayList<Node> mappedRootNodes= nodeHandler.nodeMapper(rootNodes);
+        logger.info("after getting root nodes");
         mapNodes(mappedRootNodes);
     }
 
     public void mapNodes(ArrayList<Node> rootNodes){
-
+        logger.info("Inside Map Node method");
         System.out.println("mapNodes");
         logger.info("Inside Map Node method");
         for(Node node : rootNodes){
@@ -103,8 +105,9 @@ public class NodeMapper {
             }else{
                 System.out.println("map Node : not virus neither surrogate");
                 logger.info("map Node : not virus neither surrogate");
+                logger.info("before matched ancestors");
             ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
-
+                logger.info("after matched ancestors");
             }
             mapUnflaggedNode(node, ancestor, depth, strategy);
         }
@@ -114,7 +117,6 @@ public class NodeMapper {
         ArrayList<SearchResult> results = searchHandler.getResults(node, strategy, ancestor);
         Strategy nextStrategy;
         if(results.size() == 1){
-            System.out.println("results returned is one");
             logger.info("results returned is one");
             if (results.get(0).getPageId() == 0) {
                 unmappedNode(node);
@@ -124,9 +126,10 @@ public class NodeMapper {
 
 
         }else if(results.size() > 1){
-            System.out.println("results returned is greater than one");
             logger.info("results returned is greater than one");
+            logger.info("before getting best match");
             MatchingScore matchingScore = findBestMatch(node, results);
+            logger.info("after getting best match");
             if(matchingScore != null){
                 mapToPage(node, matchingScore.getPageId(), matchingScore.getNodeId());
             }
@@ -134,17 +137,15 @@ public class NodeMapper {
                 unmappedNode(node);
             }
         }else{
-
+            logger.info("no result found start node id is "+node.getGeneratedNodeId()+" depth is"+depth);
             nextStrategy = strategyHandler.getNextStrategy(strategy);
             if (nextStrategy == null) {
 
                 nextStrategy = strategyHandler.firstNonScientificStrategy();
                 depth++;
                 ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
-                System.out.println("depth is: " + depth);
                 logger.info("depth is: " + depth);
                 if (depth > maxAncestorDepth) {
-                    System.out.println("depth is greater than max depth");
                     logger.info("depth is greater than max depth");
                     unmappedNode(node);
                     return;
@@ -152,7 +153,6 @@ public class NodeMapper {
                 System.out.println("depth is less than max depth and will call recursion");
                 logger.info("depth is less than max depth and will call recursion");
             }
-            System.out.println("Recursive call");
             logger.info("Recursive call");
             mapUnflaggedNode(node, ancestor, depth, nextStrategy);
         }
@@ -162,14 +162,21 @@ public class NodeMapper {
         ArrayList<MatchingScore> scores = new ArrayList<MatchingScore>();
 
         for(SearchResult result : results){
+
+            logger.info("before getting matched children count");
 //            System.out.println(neo4jHandler.getNodesFromIds(result.getChildren()));
             int matchedChildrenCount = matchingScoreHandler.countMatches(nodeHandler.nodeMapper(neo4jHandler.getNodesFromIds(result.getChildren())),nodeHandler.nodeMapper(node.getChildren()));
             System.out.println("**********************************************************************************");
+            logger.info("after getting matched children count");
             logger.info("matched children count " + matchedChildrenCount);
+            logger.info("before getting matched ancestors count");
             int matchedAncestorsCount = matchingScoreHandler.countAncestors(nodeHandler.nodeMapper(neo4jHandler.getNodesFromIds(result.getAncestors())));
 //            int matchedAncestorsCount = matchingScoreHandler.countAncestors(node);
+            logger.info("after getting matched ancestors count");
             logger.info("matched Ancestors count " + matchedAncestorsCount);
+            logger.info("before calculating score");
             double overallScore = matchingScoreHandler.calculateScore(matchedChildrenCount, matchedAncestorsCount);
+            logger.info("after calculating score");
             logger.info("overall score: "+overallScore);
             MatchingScore score = new MatchingScore(matchedChildrenCount,
                     matchedAncestorsCount, overallScore, result.getPageId(), result.getNodeId());
@@ -177,7 +184,7 @@ public class NodeMapper {
             System.out.println("**********************************************************************************");
             scores.add(score);
         }
-
+        logger.info("before sorting and reversing score");
         Collections.sort(scores,new Comparator<MatchingScore>(){
             public int compare(MatchingScore score1, MatchingScore score2)
             {
@@ -185,6 +192,7 @@ public class NodeMapper {
             }
         });
         Collections.reverse(scores);
+        logger.info("after sorting and reversing score");
 
         for( int i=0 ; i<scores.size() ;i++)
         {
@@ -216,9 +224,14 @@ public class NodeMapper {
         System.out.println("New page is created for node named: "+node.getScientificName());
         logger.info("New page is created for node named: "+node.getScientificName());
         fileHandler.writeToFile("New page is created for node named: "+node.getScientificName());
+        logger.info("before calling neo4j function to create and assign page to node");
         int page_id = neo4jHandler.assignPageToNode(node.getGeneratedNodeId());
+        logger.info("after calling neo4j function to create and assign page to node");
+        logger.info("map Node : not virus neither surrogate");
         try {
+            logger.info("before adding document in solr");
             solrHandler.addDocument(node, page_id);
+            logger.info("after adding document in solr");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SolrServerException e) {

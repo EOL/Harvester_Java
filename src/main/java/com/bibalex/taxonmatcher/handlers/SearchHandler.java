@@ -120,8 +120,12 @@ public class SearchHandler {
     public ArrayList<SearchResult> getResults(Node node, Strategy strategy, Node ancestor){
         ArrayList<Integer> children = new ArrayList<Integer>();
         ArrayList<Integer> ancestors = new ArrayList<Integer>();
+        logger.info("before build search query");
         String searchQuery = buildSearchQuery(node, strategy, ancestor);
+        logger.info(" after build search query");
+        logger.info(" before performing query");
         SolrDocumentList solrResultDocuments = solrHandler.performQuery(searchQuery);
+        logger.info(" after performing query");
         System.out.println("tttttttttt"+ solrResultDocuments.toString());
         ArrayList<SearchResult> results = new ArrayList<SearchResult>();
         for(SolrDocument document : solrResultDocuments){
