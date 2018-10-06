@@ -176,7 +176,7 @@ public class DwcaParser {
         //neo4j
 //        buildGraph(resourceId, starRecords);
 
-        //Taxon Matching
+//        Taxon Matching
         if (resourceId != Integer.valueOf(PropertiesHandler.getProperty("DWHId"))) {
             RunTaxonMatching runTaxonMatching = new RunTaxonMatching();
             runTaxonMatching.RunTaxonMatching(resourceID);
