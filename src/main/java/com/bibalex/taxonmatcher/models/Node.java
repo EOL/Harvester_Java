@@ -153,7 +153,7 @@ public class Node implements Serializable {
 
     public boolean needsToBeMapped(){
         //resourceId = 0 indicates the DWH id
-        if (this != null && ((this.getPageId() == 0) && (this.resourceId != 0)))
+        if (this != null && ((this.getPageId() == 0) && (this.resourceId != 0) && (!this.getScientificName().equalsIgnoreCase("placeholder"))))
             return true;
         return false;
     }
