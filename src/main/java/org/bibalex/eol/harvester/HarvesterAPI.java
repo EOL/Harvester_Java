@@ -27,16 +27,20 @@ public class HarvesterAPI {
             DwcaValidator validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
-//            metaHandler.adjustMetaFileToBeReadableByLibrary(extractToFolder.getPath());
-            Archive dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
-//            Archive dwcArchive = ArchiveFactory.openArchive(new File(path));
+            Archive dwcArchive=null;
+            try {
+                dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
+            }catch (Exception e){
+                System.out.println("folder need to editing to be readable by library");
+                metaHandler.adjustMetaFileToBeReadableByLibrary(extractToFolder.getPath());
+                dwcArchive = ArchiveFactory.openArchive(extractToFolder);
+            }
             System.out.println("call validationnnnnnnnnnnnnn");
             validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
-//            return true;
             String validArchivePath= FilenameUtils.removeExtension(path)+".out_valid";
             metaHandler.addGeneratedAutoId(validArchivePath);
 
-            boolean done = callParser(validArchivePath, resourceID, newResource, entityManager);
+            boolean done = callParser(path, resourceID, newResource, entityManager);
             return done;
         } catch (IOException e) {
             e.printStackTrace();

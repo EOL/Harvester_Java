@@ -3,6 +3,7 @@ package org.bibalex.eol.parser;
 import com.bibalex.taxonmatcher.controllers.RunTaxonMatching;
 import com.sun.javafx.collections.MappingChange;
 import org.apache.commons.io.FilenameUtils;
+import org.bibalex.eol.handler.MetaHandler;
 import org.bibalex.eol.handler.ScriptsHandler;
 import org.bibalex.eol.harvester.StorageLayerClient;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
@@ -74,7 +75,7 @@ public class DwcaParser {
         loadAllAssociationsINOneMap();
         actionFiles = ActionFiles.loadActionFiles(dwca);
         this.newResource = newResource;
-        this.entityManager=entityManager;
+        this.entityManager = entityManager;
     }
 
     private void loadAllReferences() {
@@ -163,10 +164,18 @@ public class DwcaParser {
 
 //        scriptsHandler.runNeo4jInit();
 
-        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank) + 1));
+        String page_id_col;
+
+
+        if (dwca.getCore().hasTerm(CommonTerms.eolPageTerm))
+            page_id_col = String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm));
+        else
+            page_id_col = "-1";
+        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank) + 1));
         scriptsHandler.runGenerateIds(fullPath.toString());
-        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonRank)), String.valueOf(termsSorted.indexOf((Object)CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
-        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object)DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object)DwcTerm.parentNameUsageID)));
+        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
+                String.valueOf(termsSorted.indexOf((Object) CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", page_id_col);
+        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)));
 
         parseRecords(resourceId, neo4jHandler);
 
@@ -184,12 +193,19 @@ public class DwcaParser {
 
         //Mysql
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
-        int i=0;
+        int i = 0, count = 0;
+        ArrayList<NodeRecord> records = new ArrayList<>();
         for (StarRecord rec : dwca) {
+            if(count %10000 ==0 && count!=0){
+                InsertNodeRecordsToMysql(records);
+                records.clear();
+                count =0;
+            }
+            count++;
             int generatedNodeId = Integer.valueOf(rec.core().value(CommonTerms.generatedAutoIdTerm));
             i++;
 //            int generatedNodeId =i;
-            System.out.println(rec.core().value(DwcTerm.taxonID));
+            System.out.println(rec.core().value(DwcTerm.taxonID)+" count"+count);
             NodeRecord tableRecord = new NodeRecord(
                     generatedNodeId + "", resourceId);
 
@@ -213,11 +229,20 @@ public class DwcaParser {
 
             System.out.println("before adjust refe");
             adjustReferences(tableRecord);
-            checkActionFiles(rec, actions, tableRecord);
+//            checkActionFiles(rec, actions, tableRecord);
+            records.add(tableRecord);
         }
-        RestClientHandler restClientHandler=new RestClientHandler();
-        restClientHandler.loadFilesToMysql(PropertiesHandler.getProperty("loadFilesToMysql"));
+        InsertNodeRecordsToMysql(records);
+//        RestClientHandler restClientHandler=new RestClientHandler();
+//        restClientHandler.loadFilesToMysql(PropertiesHandler.getProperty("loadFilesToMysql"));
 
+    }
+
+    private void InsertNodeRecordsToMysql(ArrayList<NodeRecord> records) {
+        RestClientHandler restClientHandler = new RestClientHandler();
+        restClientHandler.insertNodeRecordsToMysql(PropertiesHandler.getProperty("addEntriesMysql"), records);
+//        printRecord(tableRecord);
+        System.out.println();
     }
 
     private ArrayList<Association> parseAssociationOfTaxon(NodeRecord tableRecord) {
@@ -332,7 +357,6 @@ public class DwcaParser {
         printRecord(tableRecord);
         System.out.println();
     }
-
 
 
     private void updateTaxonInHBase(NodeRecord tableRecord) {
@@ -681,7 +705,7 @@ public class DwcaParser {
                 storageLayerPath = getMediaPath(extensionRecord.value(CommonTerms.accessURITerm));
             }
             if (extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)) != null) {
-                storageLayerThumbnailPath =getMediaPath(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)));
+                storageLayerThumbnailPath = getMediaPath(extensionRecord.value(TermFactory.instance().findTerm(TermURIs.thumbnailUrlURI)));
             }
 
             String action = checkIfMediaChanged(extensionRecord);
@@ -724,8 +748,8 @@ public class DwcaParser {
     }
 
     public String getMediaPath(String URL) {
-        String [] files = URL.split("/");
-        return PropertiesHandler.getProperty("storage.layer.media.path")+String.valueOf(resourceID)+"/media/"+files[files.length-1];
+        String[] files = URL.split("/");
+        return PropertiesHandler.getProperty("storage.layer.media.path") + String.valueOf(resourceID) + "/media/" + files[files.length - 1];
     }
 
 //    public String getMediaPath(int resourceID, ArrayList<String> mediaFiles) {
@@ -830,48 +854,83 @@ public class DwcaParser {
     }
 
     public static void main(String[] args) throws IOException {
-        Archive dwcArchive = null;
-        PropertiesHandler.initializeProperties();
-//        String path = "/home/ba/EOL_Recources/EOL_dynamic_hierarchyV1Revised.tar.gz";
-//        String path = "/home/ba/EOL_Recources/4.tar.gz";
-//        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
-//        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
-        String path = "/home/ba/dynamic/original/eoldynamichierarchyv1revised.zip";
+
+        DwcaValidator validator = null;
+        MetaHandler metaHandler =new MetaHandler();
+
+        String path="/home/ba/eol_resources/femorale.zip";
         try {
-            DwcaValidator validator = new DwcaValidator("configs.properties");
+            validator = new DwcaValidator("configs.properties");
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
-            dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
-//            validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        DwcaParser dwcaP = new DwcaParser(dwcArchive, false, null);
-//        dwcaP.prepareNodesRecord(5555);
-        ArchiveFile core = dwcArchive.getCore();
-        int count = -1, i=0, line=0;
-        for (Record rec : core) {
-            i++;
-            if (rec.value(CommonTerms.eolPageTerm) != null) {
-                int page_id =Integer.valueOf(rec.value(CommonTerms.eolPageTerm));
-                System.out.println(page_id);
-                if(page_id>count) {
-                    count = page_id;
-                    line=i;
-                }
+            Archive dwcArchive=null;
+            try {
+                dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
+            }catch (Exception e){
+                System.out.println("folder need to editing to be readable by library");
+                metaHandler.adjustMetaFileToBeReadableByLibrary(extractToFolder.getPath());
+                dwcArchive = ArchiveFactory.openArchive(extractToFolder);
             }
+            System.out.println("call validationnnnnnnnnnnnnn");
+            validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
+            String validArchivePath= FilenameUtils.removeExtension(path)+".out_valid";
+            metaHandler.addGeneratedAutoId(validArchivePath);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        System.out.println(count+" "+line);
-//        dwcaP.prepareNodesRecord(346);
 
-//        ArrayList<String> urls = new ArrayList<String>();
-////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");
-////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/031.mp3");
-//        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/2018012915070314586_eternity.jpg");
-//        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
-//        String paths = dwcaP.getMediaPath(5, urls );
-//        System.out.println(paths);
-//        dwcaP.callHBase(new NodeRecord("name", "1", 1));
+
+//        Archive dwcArchive = null;
+//        PropertiesHandler.initializeProperties();
+////        String path = "/home/ba/EOL_Recources/EOL_dynamic_hierarchyV1Revised.tar.gz";
+////        String path = "/home/ba/EOL_Recources/4.tar.gz";
+////        String path = "/home/ba/EOL_Recources/DH_min.tar.gz";
+////        String path = "/home/ba/EOL_Recources/DH_tiny.tar.gz";
+//        String path = "/home/ba/eol_resources/femorale.zip";
+//        File extractToFolder=null;
+//        MetaHandler metaHandler=new MetaHandler();
+//
+//        try {
+////            DwcaValidator validator = new DwcaValidator("configs.properties");
+//            File myArchiveFile = new File(path);
+//            extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
+//            dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
+////            validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            metaHandler.adjustMetaFileToBeReadableByLibrary(extractToFolder.getPath());
+//            dwcArchive = ArchiveFactory.openArchive(extractToFolder);
+//        }
+//        System.out.println("done");
+////        DwcaParser dwcaP = new DwcaParser(dwcArchive, false, null);
+//////        dwcaP.prepareNodesRecord(5555);
+////        ArchiveFile core = dwcArchive.getCore();
+////        int count = -1, i = 0, line = 0;
+////        for (Record rec : core) {
+////            i++;
+////            if (rec.value(CommonTerms.eolPageTerm) != null) {
+////                int page_id = Integer.valueOf(rec.value(CommonTerms.eolPageTerm));
+////                if(page_id == 311544) {
+////                    System.out.println(rec.value(DwcTerm.scientificName));
+//////                if (page_id > count) {
+//////                    count = page_id;
+//////                    line = i;
+//////                }
+////                    break;
+////                }
+////            }
+////        }
+////        System.out.println(count + " " + line);
+////        dwcaP.prepareNodesRecord(346);
+//
+////        ArrayList<String> urls = new ArrayList<String>();
+//////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/033.mp3");
+//////        urls.add("https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/031.mp3");
+////        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/2018012915070314586_eternity.jpg");
+////        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
+////        String paths = dwcaP.getMediaPath(5, urls );
+////        System.out.println(paths);
+////        dwcaP.callHBase(new NodeRecord("name", "1", 1));
 
 
     }

@@ -160,6 +160,54 @@ public class RestClientHandler {
         return 0;
     }
 
+    public boolean loadFilesToMysql(String uri) {
+        if (!uri.equalsIgnoreCase("")) {
+            System.out.println("load files");
+
+            RestTemplate restTemplate = handleRestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Accept", "application/json");
+            ResponseEntity response = null;
+
+            response = restTemplate.exchange(uri, HttpMethod.POST, null, Boolean.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                System.out.println(response.getBody());
+                return Boolean.valueOf((Boolean) response.getBody());
+            } else {
+                System.out.println("returned code(" + response.getStatusCode() + ")");
+            }
+
+        }
+        return false;
+    }
+
+    public boolean insertNodeRecordsToMysql(String uri, ArrayList<NodeRecord> records){
+        if (!uri.equalsIgnoreCase("")) {
+
+            NodeRecord[] records_array = new NodeRecord[records.size()];
+            records_array = records.toArray(records_array);
+
+            System.out.println("insert records to mysql");
+            RestTemplate restTemplate = handleRestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Accept", "application/json");
+            ResponseEntity response = null;
+
+            HttpEntity<Object> entity = new HttpEntity<Object>(records_array, headers);
+            // Send the request as POST
+            response = restTemplate.exchange(uri, HttpMethod.POST, entity, Boolean.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                System.out.println(response.getBody());
+                return ((Boolean) response.getBody()) ;
+            } else {
+                System.out.println("returned code(" + response.getStatusCode() + ")");
+            }
+        }
+        return false;
+    }
+
     private RestTemplate handleRestTemplate(){
         RestTemplate restTemplate;
         if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
@@ -195,27 +243,5 @@ public class RestClientHandler {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
         factory.setHttpClient(client);
         return new RestTemplate(factory);
-    }
-
-    public boolean loadFilesToMysql(String uri) {
-        if (!uri.equalsIgnoreCase("")) {
-            System.out.println("load files");
-
-            RestTemplate restTemplate = handleRestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("Accept", "application/json");
-            ResponseEntity response = null;
-
-            response = restTemplate.exchange(uri, HttpMethod.POST, null, Boolean.class);
-            if (response.getStatusCode() == HttpStatus.OK) {
-                System.out.println(response.getBody());
-                return Boolean.valueOf((Boolean) response.getBody());
-            } else {
-                System.out.println("returned code(" + response.getStatusCode() + ")");
-            }
-
-        }
-        return false;
     }
 }

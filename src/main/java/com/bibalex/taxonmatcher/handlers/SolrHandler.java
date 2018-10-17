@@ -65,7 +65,7 @@ public class SolrHandler {
 
     public CloudSolrClient openConnection(String collectionName) {
         String zkHosts = "localhost:9983";
-        client = new CloudSolrClient.Builder().withZkHost(zkHosts).build();
+        client = new CloudSolrClient(zkHosts);
         client.setDefaultCollection(collectionName);
         return client;
     }
@@ -128,6 +128,7 @@ public class SolrHandler {
 
         logger.info("new added doc: " + doc);
         client.add(doc);
+        client.commit();
         client.close();
 
     }

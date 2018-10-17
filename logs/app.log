@@ -1092,3 +1092,14 @@
 2018-07-30 14:33:21,408 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
 2018-07-30 14:33:22,780 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
 2018-09-10 13:38:31,929 INFO c.b.t.c.NodeMapper [main] Inside Map Node method
+2018-10-08 10:30:39,633 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-10-08 10:33:45,505 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-2] Inside Map Node method
+2018-10-08 10:36:06,538 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-10-17 10:48:06,420 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] before getting root nodes
+2018-10-17 10:48:06,441 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] after getting root nodes
+2018-10-17 10:48:06,441 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-10-17 10:48:06,441 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-10-17 10:48:56,551 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] before getting root nodes
+2018-10-17 10:48:56,552 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] after getting root nodes
+2018-10-17 10:48:56,552 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2018-10-17 10:48:56,552 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
