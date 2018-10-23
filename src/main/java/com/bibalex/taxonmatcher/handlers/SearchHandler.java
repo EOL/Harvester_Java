@@ -137,8 +137,9 @@ public class SearchHandler {
             }
 
             int pageId = document.getFieldValue("page_id") == null? 0:Integer.parseInt(document.getFieldValue("page_id").toString());
+            String scientific_name = document.getFieldValue("scientific_name") == null? null : String.valueOf(document.getFieldValue("scientific_name"));
             SearchResult result = new SearchResult(Integer.parseInt(document.getFieldValue("id").
-                    toString()), pageId, children,ancestors);
+                    toString()), pageId, children,ancestors,scientific_name);
             results.add(result);
         }
         return results;

@@ -11,12 +11,14 @@ public class SearchResult {
     private int pageId;
     private ArrayList<Integer> children;
     private ArrayList<Integer> ancestors;
+    private String scientific_name ;
 
-    public SearchResult(int nodeId, int pageId, ArrayList<Integer> children, ArrayList<Integer> ancestors) {
+    public SearchResult(int nodeId, int pageId, ArrayList<Integer> children, ArrayList<Integer> ancestors, String scientific_name) {
         this.nodeId = nodeId;
         this.pageId = pageId;
         this.children = children;
         this.ancestors = ancestors;
+        this.scientific_name = scientific_name;
     }
 
     public void setNodeId(int nodeId) {
@@ -35,6 +37,8 @@ public class SearchResult {
         this.ancestors = ancestors;
     }
 
+    public  void setScientificName(String scientific_name){this.scientific_name = scientific_name; }
+
     public int getPageId() {
         return pageId;
     }
@@ -49,5 +53,9 @@ public class SearchResult {
 
     public int getNodeId() {
         return nodeId;
+    }
+
+    public String getScientificName() {
+        return scientific_name;
     }
 }

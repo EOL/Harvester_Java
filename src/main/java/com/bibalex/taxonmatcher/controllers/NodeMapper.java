@@ -130,7 +130,7 @@ public class NodeMapper {
             logger.info("before getting best match");
             MatchingScore matchingScore = findBestMatch(node, results);
             logger.info("after getting best match");
-            if(matchingScore != null){
+            if(matchingScore != null && matchingScore.getScore() >= 0.1){
                 mapToPage(node, matchingScore.getPageId(), matchingScore.getNodeId());
             }
             else {
@@ -174,8 +174,14 @@ public class NodeMapper {
 //            int matchedAncestorsCount = matchingScoreHandler.countAncestors(node);
             logger.info("after getting matched ancestors count");
             logger.info("matched Ancestors count " + matchedAncestorsCount);
+            logger.info("before sameness of names ");
+            logger.info("nm node scientific_name "+node.getScientificName());
+            logger.info("nm result scientific_name "+result.getScientificName());
+            double sameness_of_names = matchingScoreHandler.samenessOfNames(node.getScientificName(),result.getScientificName());
+            logger.info("after sameness of names "+ sameness_of_names);
             logger.info("before calculating score");
             double overallScore = matchingScoreHandler.calculateScore(matchedChildrenCount, matchedAncestorsCount);
+            overallScore *= sameness_of_names;
             logger.info("after calculating score");
             logger.info("overall score: "+overallScore);
             MatchingScore score = new MatchingScore(matchedChildrenCount,

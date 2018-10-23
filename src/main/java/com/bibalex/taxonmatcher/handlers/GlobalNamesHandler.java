@@ -54,6 +54,32 @@ public class GlobalNamesHandler {
         return (Boolean) jsonObject.get("parsed") ? (String) ((JSONObject) jsonObject.get("canonical_name")).get("value") : "";
     }
 
+    public JSONArray  getAuthors(String name){
+        JSONObject jsonObject = getParsedJson(name);
+        JSONObject authorship = null;
+        if ((Boolean) jsonObject.get("parsed"))
+        {
+            JSONArray details= (JSONArray) jsonObject.get("details");
+            JSONObject  details_first= (JSONObject)details.get(0);
+
+            if(details_first.get("infraspecific_epithets")!= null){
+                JSONArray infraspecific_epithets = (JSONArray) details_first.get("infraspecific_epithets");
+                JSONObject  infraspecific_epithets_first= (JSONObject)infraspecific_epithets.get(0);
+                authorship = (JSONObject) infraspecific_epithets_first.get("authorship");
+            }
+            else {
+                JSONObject specific_epithet = (JSONObject) details_first.get("specific_epithet");
+                 authorship = (JSONObject) specific_epithet.get("authorship");
+            }
+            JSONObject basionym_authorship = (JSONObject) authorship.get("basionym_authorship");
+            JSONArray authors_arrray = (JSONArray) basionym_authorship.get("authors");
+            return authors_arrray;
+        }
+        return null;
+
+
+    }
+
     public boolean hasAuthority(String name){
         JSONArray nameParts = (JSONArray) getParsedJson(name).get("positions");
         if (nameParts != null) {
@@ -78,7 +104,8 @@ public class GlobalNamesHandler {
 
         GlobalNamesHandler gnh = new GlobalNamesHandler();
 //        gnh.hasAuthority("Parus major Linnaeus, 1788");
-        System.out.println(gnh.getCanonicalForm("Parus major Linnaeus, 1788"));
+        System.out.println(gnh.getAuthors("Parus major Linnaeus, 1788"));
+//        System.out.println(gnh.getAuthors("Globorotalia miocenica subsp. mediterranea Catalano & Sprovieri, 1969"));
 //        gnh.hasAuthority("test");
     }
 }

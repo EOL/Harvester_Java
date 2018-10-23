@@ -2,6 +2,7 @@ package com.bibalex.taxonmatcher;
 
 import com.bibalex.taxonmatcher.controllers.NodeMapper;
 import com.bibalex.taxonmatcher.controllers.RunTaxonMatching;
+import com.bibalex.taxonmatcher.handlers.GlobalNamesHandler;
 import com.bibalex.taxonmatcher.handlers.LogHandler;
 import com.bibalex.taxonmatcher.handlers.Neo4jHandler;
 import com.bibalex.taxonmatcher.handlers.ResourceHandler;
@@ -17,7 +18,10 @@ public class Main {
 
 
         RunTaxonMatching test = new RunTaxonMatching();
-        test.RunTaxonMatching(1);
+        test.RunTaxonMatching(5);
+
+
+
 //        ResourceHandler.initialize("config.properties");
 //        LogHandler.initializeHandler();
 //        Neo4jHandler neo4jHandler = new Neo4jHandler();

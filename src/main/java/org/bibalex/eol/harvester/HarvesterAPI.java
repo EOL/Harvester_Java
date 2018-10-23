@@ -40,7 +40,7 @@ public class HarvesterAPI {
             String validArchivePath= FilenameUtils.removeExtension(path)+".out_valid";
             metaHandler.addGeneratedAutoId(validArchivePath);
 
-            boolean done = callParser(path, resourceID, newResource, entityManager);
+            boolean done = callParser(validArchivePath, resourceID, newResource, entityManager);
             return done;
         } catch (IOException e) {
             e.printStackTrace();

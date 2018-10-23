@@ -2,8 +2,10 @@ package com.bibalex.taxonmatcher.handlers;
 
 import com.bibalex.taxonmatcher.models.Node;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static apoc.coll.Coll.compare;
 
@@ -15,17 +17,29 @@ public class MatchingScoreHandler {
     private double minimumAncestoryMatchPercentage;
     private double childMatchWeight;
     private double ancestorMatchWeight;
+    private GlobalNamesHandler globalNameHandler;
 
     public MatchingScoreHandler(){
         minimumAncestoryMatchPercentage = Double.parseDouble(ResourceHandler.getPropertyValue("minimumAncestoryMatchPercentage"));
         childMatchWeight = Double.parseDouble(ResourceHandler.getPropertyValue("childMatchWeight"));
         ancestorMatchWeight = Double.parseDouble(ResourceHandler.getPropertyValue("ancestorMatchWeight"));
+        globalNameHandler = new GlobalNamesHandler();
     }
 
     public int countMatches(ArrayList<Node> matchingNodeChildren, ArrayList<Node> nodeChildren){
         ArrayList<String> matchingNodeChildrenNames = getChildrenNames( matchingNodeChildren );
-        matchingNodeChildrenNames.retainAll(getChildrenNames(nodeChildren));
-        return matchingNodeChildrenNames.size();
+//        matchingNodeChildrenNames.retainAll(getChildrenNames(nodeChildren));
+//        return matchingNodeChildrenNames.size();
+        ArrayList<String> nodeChildrenNames =getChildrenNames(nodeChildren);
+        HashSet matchingNodeChildrenNamesHash = new HashSet(matchingNodeChildrenNames);
+        int count = 0;
+        for(int i = 0 ; i< nodeChildrenNames.size() ; i++){
+            if(matchingNodeChildrenNamesHash.contains(nodeChildrenNames.get(i)))
+            {
+                count ++;
+            }
+        }
+        return count;
     }
 
     private ArrayList<String> getChildrenNames(ArrayList<Node> childrenNodes){
@@ -72,6 +86,29 @@ public class MatchingScoreHandler {
         return matchingAncestorsCount;
     }
 
+    public double samenessOfNames(String node_scientific_name, String other_scientific_name){
+        if(globalNameHandler.getCanonicalForm(node_scientific_name).equalsIgnoreCase(globalNameHandler.getCanonicalForm(other_scientific_name))){
+            JSONArray node_authors = globalNameHandler.getAuthors(node_scientific_name);
+            JSONArray other_authors = globalNameHandler.getAuthors(other_scientific_name);
+            if(node_authors.size()==other_authors.size()) {
+                int counter = 0;
+                for (int i = 0 ; i<node_authors.size(); i++)
+                {
+                    if(other_authors.contains(node_authors.get(i)))
+                    {
+                        counter ++;
+                    }
+                }
+                if(counter == node_authors.size()){return 2.0;}
+
+            }
+            return 1.0;
+        }
+
+        return 0.5;
+    }
+
+
     public double calculateScore(int matchingChildren, int matchingAncestors){
         return matchingChildren * childMatchWeight + matchingAncestors * ancestorMatchWeight;
     }
@@ -86,5 +123,13 @@ public class MatchingScoreHandler {
             afterMapping.add(n);
         }
         return afterMapping;
+    }
+
+    public static void main(String [] args){
+
+
+       MatchingScoreHandler msh= new MatchingScoreHandler();
+        System.out.println(msh.samenessOfNames("Globorotalia miocenica subsp. mediterranea Conil & Lys, 1964","Globorotalia miocenica subsp. mediterranea Conil & Lys, 1969"));
+
     }
 }
