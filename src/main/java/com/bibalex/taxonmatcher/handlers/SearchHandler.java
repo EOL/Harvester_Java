@@ -124,7 +124,14 @@ public class SearchHandler {
         String searchQuery = buildSearchQuery(node, strategy, ancestor);
         logger.info(" after build search query");
         logger.info(" before performing query");
+        logger.info("before adding document in solr");
+//        long startTime = System.nanoTime();
         SolrDocumentList solrResultDocuments = solrHandler.performQuery(searchQuery);
+//        long endTime = System.nanoTime();
+//
+//        long duration = (endTime - startTime);
+//        System.out.println("duration of performing query in solr: "+ duration);
+
         logger.info(" after performing query");
         System.out.println("tttttttttt"+ solrResultDocuments.toString());
         ArrayList<SearchResult> results = new ArrayList<SearchResult>();
@@ -137,7 +144,7 @@ public class SearchHandler {
             }
 
             int pageId = document.getFieldValue("page_id") == null? 0:Integer.parseInt(document.getFieldValue("page_id").toString());
-            String scientific_name = document.getFieldValue("scientific_name") == null? null : String.valueOf(document.getFieldValue("scientific_name"));
+            String scientific_name = document.getFieldValue("scientific_name") == null? String.valueOf(document.getFieldValue("other_scientific_name")) : String.valueOf(document.getFieldValue("scientific_name"));
             SearchResult result = new SearchResult(Integer.parseInt(document.getFieldValue("id").
                     toString()), pageId, children,ancestors,scientific_name);
             results.add(result);

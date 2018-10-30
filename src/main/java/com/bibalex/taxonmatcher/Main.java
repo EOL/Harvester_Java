@@ -6,9 +6,12 @@ import com.bibalex.taxonmatcher.handlers.GlobalNamesHandler;
 import com.bibalex.taxonmatcher.handlers.LogHandler;
 import com.bibalex.taxonmatcher.handlers.Neo4jHandler;
 import com.bibalex.taxonmatcher.handlers.ResourceHandler;
+import com.bibalex.taxonmatcher.models.MatchingScore;
 import com.bibalex.taxonmatcher.models.Node;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 //import com.bibalex.taxonmatcher.parsers.NewNodesTester;
 
 public class Main {
@@ -18,7 +21,8 @@ public class Main {
 
 
         RunTaxonMatching test = new RunTaxonMatching();
-        test.RunTaxonMatching(5);
+        test.RunTaxonMatching(1);
+
 
 
 

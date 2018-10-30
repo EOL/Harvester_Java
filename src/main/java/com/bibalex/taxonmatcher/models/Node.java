@@ -5,6 +5,7 @@ import com.bibalex.taxonmatcher.handlers.Neo4jHandler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 
 /**

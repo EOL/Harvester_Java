@@ -43,7 +43,7 @@ public class RestClientHandler {
             if (param_2!=null){params.put(ResourceHandler.getPropertyValue(String.valueOf(param_2)), String.valueOf(object_2));}
 
             HttpEntity<String> entity = new HttpEntity<String>(headers);
-            response = restTemplate.exchange(uri,HttpMethod.GET, entity,Object.class, params);
+            response = restTemplate.exchange(uri,HttpMethod.GET, entity, Object.class, params);
 
 
                 if (response.getStatusCode() == HttpStatus.OK) {

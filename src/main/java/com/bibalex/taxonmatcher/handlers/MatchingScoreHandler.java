@@ -90,7 +90,12 @@ public class MatchingScoreHandler {
         if(globalNameHandler.getCanonicalForm(node_scientific_name).equalsIgnoreCase(globalNameHandler.getCanonicalForm(other_scientific_name))){
             JSONArray node_authors = globalNameHandler.getAuthors(node_scientific_name);
             JSONArray other_authors = globalNameHandler.getAuthors(other_scientific_name);
-            if(node_authors.size()==other_authors.size()) {
+            if (node_authors == null || other_authors == null){
+                if (node_authors == null && other_authors == null){
+                    return 2;
+                }
+            }
+            else if(node_authors.size()== other_authors.size()) {
                 int counter = 0;
                 for (int i = 0 ; i<node_authors.size(); i++)
                 {
@@ -129,7 +134,7 @@ public class MatchingScoreHandler {
 
 
        MatchingScoreHandler msh= new MatchingScoreHandler();
-        System.out.println(msh.samenessOfNames("Globorotalia miocenica subsp. mediterranea Conil & Lys, 1964","Globorotalia miocenica subsp. mediterranea Conil & Lys, 1969"));
+        System.out.println(msh.samenessOfNames("Globorotalia miocenica subsp. mediterranea  Conil & Lys, 1969","Globorotalia miocenica subsp. mediterranea Conil & Lys, 1969"));
 
     }
 }

@@ -4,6 +4,8 @@ import com.bibalex.taxonmatcher.models.Node;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 
 /**
  * Created by Amr.Morad on 3/9/2017.
@@ -37,7 +39,7 @@ public class NodeHandler {
     {
         ArrayList<Node> afterMapping = new ArrayList<Node>();
         ObjectMapper mapper = new ObjectMapper();
-        for(int i =0 ; i<beforeMapping.size();i++)
+        for(int i = 0 ; i < beforeMapping.size(); i++)
         {
             Node n = mapper.convertValue(beforeMapping.get(i), Node.class);
             afterMapping.add(n);

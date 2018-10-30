@@ -51,29 +51,49 @@ public class GlobalNamesHandler {
 
     public String getCanonicalForm(String name){
         JSONObject jsonObject = getParsedJson(name);
+//        System.out.println(jsonObject);
         return (Boolean) jsonObject.get("parsed") ? (String) ((JSONObject) jsonObject.get("canonical_name")).get("value") : "";
+    }
+
+    public Boolean isParsed (String name){
+        JSONObject jsonObject = getParsedJson(name);
+        return  (Boolean) jsonObject.get("parsed") ;
     }
 
     public JSONArray  getAuthors(String name){
         JSONObject jsonObject = getParsedJson(name);
         JSONObject authorship = null;
+        JSONObject basionym_authorship = null;
+        JSONArray infraspecific_epithets = null;
         if ((Boolean) jsonObject.get("parsed"))
         {
+//            System.out.println(jsonObject);
             JSONArray details= (JSONArray) jsonObject.get("details");
             JSONObject  details_first= (JSONObject)details.get(0);
 
-            if(details_first.get("infraspecific_epithets")!= null){
-                JSONArray infraspecific_epithets = (JSONArray) details_first.get("infraspecific_epithets");
+            if((infraspecific_epithets = (JSONArray) details_first.get("infraspecific_epithets"))!= null){
                 JSONObject  infraspecific_epithets_first= (JSONObject)infraspecific_epithets.get(0);
-                authorship = (JSONObject) infraspecific_epithets_first.get("authorship");
+                if((authorship = (JSONObject) infraspecific_epithets_first.get("authorship"))!=null) {
+                    if ((basionym_authorship = (JSONObject) authorship.get("basionym_authorship")) != null) {
+                        JSONArray authors_arrray = (JSONArray) basionym_authorship.get("authors");
+                        return authors_arrray;
+
+                    }
+                }
+
             }
-            else {
+            else if(details_first.get("specific_epithet")!=null){
                 JSONObject specific_epithet = (JSONObject) details_first.get("specific_epithet");
-                 authorship = (JSONObject) specific_epithet.get("authorship");
+                if(specific_epithet.get("authorship")!=null){
+                  if((authorship = (JSONObject) specific_epithet.get("authorship"))!=null) {
+                      if ((basionym_authorship = (JSONObject) authorship.get("basionym_authorship")) != null) {
+                          JSONArray authors_arrray = (JSONArray) basionym_authorship.get("authors");
+                          return authors_arrray;
+                      }
+                  }
+                }
             }
-            JSONObject basionym_authorship = (JSONObject) authorship.get("basionym_authorship");
-            JSONArray authors_arrray = (JSONArray) basionym_authorship.get("authors");
-            return authors_arrray;
+
         }
         return null;
 
@@ -104,8 +124,18 @@ public class GlobalNamesHandler {
 
         GlobalNamesHandler gnh = new GlobalNamesHandler();
 //        gnh.hasAuthority("Parus major Linnaeus, 1788");
-        System.out.println(gnh.getAuthors("Parus major Linnaeus, 1788"));
+//        System.out.println(gnh.getAuthors("Parus major"));
+//        System.out.println("================================================");
+//        System.out.println(gnh.getAuthors("Parus major Linnaeus, 1788"));
+//        System.out.println("================================================");
 //        System.out.println(gnh.getAuthors("Globorotalia miocenica subsp. mediterranea Catalano & Sprovieri, 1969"));
+//        System.out.println("================================================");
+//        System.out.println(gnh.getAuthors("Gymnodiniales s.l."));
+//        System.out.println("================================================");
+        System.out.println(gnh.isParsed("Parus major Linnaeus, 1788"));
+        System.out.println(gnh.isParsed("Parus major"));
+        System.out.println(gnh.isParsed("unplaced extinct Diptera"));
+//        System.out.println(gnh.getAuthors("unplaced extinct Diptera"));
 //        gnh.hasAuthority("test");
     }
 }

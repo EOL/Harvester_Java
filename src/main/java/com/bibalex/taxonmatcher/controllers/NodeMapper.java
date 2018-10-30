@@ -24,7 +24,7 @@ public class NodeMapper {
     private SearchHandler searchHandler;
     private int maxAncestorDepth;
     private static Logger logger;
-    private FileHandler fileHandler;
+//    private FileHandler fileHandler;
     private Neo4jHandler neo4jHandler;
     private SolrHandler solrHandler;
     int resourceId;
@@ -38,7 +38,7 @@ public class NodeMapper {
         searchHandler = new SearchHandler();
         maxAncestorDepth = Integer.parseInt(ResourceHandler.getPropertyValue("maxAncestorDepth"));
         logger = LogHandler.getLogger(NodeMapper.class.getName());
-        fileHandler = new FileHandler();
+//        fileHandler = new FileHandler();
         neo4jHandler = new Neo4jHandler();
         this.resourceId = resourceId;
         this.solrHandler = new SolrHandler();
@@ -46,7 +46,7 @@ public class NodeMapper {
 
     public void mapAllNodesToPages(ArrayList<Node> rootNodes){
         logger.info("before getting root nodes");
-       ArrayList<Node> mappedRootNodes= nodeHandler.nodeMapper(rootNodes);
+        ArrayList<Node> mappedRootNodes= nodeHandler.nodeMapper(rootNodes);
         logger.info("after getting root nodes");
         mapNodes(mappedRootNodes);
     }
@@ -67,7 +67,7 @@ public class NodeMapper {
         System.out.println("mapIfNeeded: used strategy is: " + usedStrategy.getAttribute());
         logger.info("mapIfNeeded: used strategy is: " + usedStrategy.getAttribute());
         int usedAncestorDepth = 0;
-        if (node.needsToBeMapped()){
+        if (node.needsToBeMapped()&& globalNameHandler.isParsed(node.getScientificName())){
             System.out.println("mapIfNeeded: needs to be mapped");
             logger.info("mapIfNeeded: needs to be mapped");
             if(!globalNameHandler.hasAuthority(node.getScientificName())){
@@ -81,7 +81,6 @@ public class NodeMapper {
         }
 //        System.out.println("---------------- has children is ------------- " + node.hasChildren() + " size " + node.getChildren().size());
         if(node.hasChildren()){
-            System.out.println("====================children=================");
 
             logger.info("====================children=================");
             mapNodes(nodeHandler.nodeMapper(node.getChildren()));
@@ -95,28 +94,32 @@ public class NodeMapper {
             logger.info("map node: surrogate");
             unmappedNode(node);
         }else{
+            ArrayList<Node> ancestors = nodeHandler.nodeMapper(node.getAncestors());
             if (globalNameHandler.isVirus(node.getScientificName())){
                 System.out.println("map node: virus");
                 logger.info("map node: virus");
                 //not finalized as we need ancestor to be arraylist
                 // we don't know the root node of virus
 //                ancestor = nodeHandler.nodeMapper(nodeHandler.nativeVirus()).get(0);
-                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
+//                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
+                ancestor = nodeHandler.matchedAncestor(ancestors, depth);
             }else{
                 System.out.println("map Node : not virus neither surrogate");
                 logger.info("map Node : not virus neither surrogate");
                 logger.info("before matched ancestors");
-            ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
+//            ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
+                ancestor = nodeHandler.matchedAncestor(ancestors, depth);
                 logger.info("after matched ancestors");
             }
-            mapUnflaggedNode(node, ancestor, depth, strategy);
+            mapUnflaggedNode(node, ancestor, depth, strategy,ancestors);
         }
     }
 
-    private void mapUnflaggedNode(Node node, Node ancestor, int depth, Strategy strategy){
+    private void  mapUnflaggedNode(Node node, Node ancestor, int depth, Strategy strategy,ArrayList<Node> ancestors){
         ArrayList<SearchResult> results = searchHandler.getResults(node, strategy, ancestor);
         Strategy nextStrategy;
         if(results.size() == 1){
+//            System.out.println("other "+results.get(0).getScientificName());
             logger.info("results returned is one");
             if (results.get(0).getPageId() == 0) {
                 unmappedNode(node);
@@ -143,9 +146,13 @@ public class NodeMapper {
 
                 nextStrategy = strategyHandler.firstNonScientificStrategy();
                 depth++;
-                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
+                Node prev_ancestor = ancestor;
+//                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
+                ancestor = nodeHandler.matchedAncestor(ancestors, depth);
                 logger.info("depth is: " + depth);
-                if (depth > maxAncestorDepth) {
+                if(ancestor!=null)System.out.println("ancestor "+ancestor.getGeneratedNodeId());
+                if(prev_ancestor!=null)System.out.println("prev_ancestor "+prev_ancestor.getGeneratedNodeId());
+                if (depth > maxAncestorDepth||ancestor == null||ancestor.getGeneratedNodeId() == prev_ancestor.getGeneratedNodeId() ) {
                     logger.info("depth is greater than max depth");
                     unmappedNode(node);
                     return;
@@ -154,7 +161,7 @@ public class NodeMapper {
                 logger.info("depth is less than max depth and will call recursion");
             }
             logger.info("Recursive call");
-            mapUnflaggedNode(node, ancestor, depth, nextStrategy);
+            mapUnflaggedNode(node, ancestor, depth, nextStrategy,ancestors);
         }
     }
 
@@ -197,10 +204,11 @@ public class NodeMapper {
                 return  Double.compare(score1.getScore(), score2.getScore());
             }
         });
-        Collections.reverse(scores);
+//        Collections.reverse(scores);
+
         logger.info("after sorting and reversing score");
 
-        for( int i=0 ; i<scores.size() ;i++)
+        for( int i = scores.size()-1 ; i >= 0 ;i--)
         {
             if(scores.get(i).getPageId()!=0)
                 return scores.get(i) ;
@@ -222,21 +230,26 @@ public class NodeMapper {
         if (response ==true){node.setPageId(pageId);}
         System.out.println("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
         logger.info("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
-        fileHandler.writeToFile("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
+//        fileHandler.writeToFile("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
         return node;
     }
 
     private void unmappedNode(Node node){
         System.out.println("New page is created for node named: "+node.getScientificName());
         logger.info("New page is created for node named: "+node.getScientificName());
-        fileHandler.writeToFile("New page is created for node named: "+node.getScientificName());
+//        fileHandler.writeToFile("New page is created for node named: "+node.getScientificName());
         logger.info("before calling neo4j function to create and assign page to node");
         int page_id = neo4jHandler.assignPageToNode(node.getGeneratedNodeId());
         logger.info("after calling neo4j function to create and assign page to node");
         logger.info("map Node : not virus neither surrogate");
         try {
             logger.info("before adding document in solr");
+//            long startTime = System.nanoTime();
             solrHandler.addDocument(node, page_id);
+//            long endTime = System.nanoTime();
+//
+//            long duration = (endTime - startTime);
+//            System.out.println("duration of adding document in solr: "+ duration);
             logger.info("after adding document in solr");
         } catch (IOException e) {
             e.printStackTrace();
