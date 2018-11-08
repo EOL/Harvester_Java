@@ -44,8 +44,8 @@ public class DwcaValidator {
         checkIfValidArchiveIsExists(path);
         ValidationResult validationResult = new ValidationResult(path);
         if (!validateArchive(dwcArchive, validationResult)) {
-            throw new Exception("Problem happened while trying to apply the validation rules on " +
-                    "the archive : " + path);
+//            throw new Exception("Problem happened while trying to apply the validation rules on " +
+//                    "the archive : " + path);
         }
         copyActionFiles(path, dwcArchive);
         return validationResult;

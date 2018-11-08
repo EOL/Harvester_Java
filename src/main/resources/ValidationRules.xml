@@ -89,14 +89,14 @@
             <FailureMessage>Invalid license</FailureMessage>
         </FieldValidationRule>
 
-        <FieldValidationRule>
-            <FieldUri>http://rs.tdwg.org/ac/terms/accessURI</FieldUri>
-            <ValidationFunction>
-                org.bibalex.eol.validator.functions.MediaValidationFunctions.checkMediaHasValidURL_FieldValidator
-            </ValidationFunction>
-            <FailureType>error</FailureType>
-            <FailureMessage>Invalid URL</FailureMessage>
-        </FieldValidationRule>
+        <!--<FieldValidationRule>-->
+            <!--<FieldUri>http://rs.tdwg.org/ac/terms/accessURI</FieldUri>-->
+            <!--<ValidationFunction>-->
+                <!--org.bibalex.eol.validator.functions.MediaValidationFunctions.checkMediaHasValidURL_FieldValidator-->
+            <!--</ValidationFunction>-->
+            <!--<FailureType>error</FailureType>-->
+            <!--<FailureMessage>Invalid URL</FailureMessage>-->
+        <!--</FieldValidationRule>-->
 
 
         <!--<FieldValidationRule>

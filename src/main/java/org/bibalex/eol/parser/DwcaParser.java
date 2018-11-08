@@ -29,6 +29,7 @@ import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
 import org.apache.log4j.Logger;
 import org.gbif.dwca.record.StarRecordImpl;
+import org.neo4j.csv.reader.SourceTraceability;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
@@ -239,6 +240,16 @@ public class DwcaParser {
     }
 
     private void InsertNodeRecordsToMysql(ArrayList<NodeRecord> records) {
+        int media_count=0;
+        int vernaculars_count=0;
+        for(NodeRecord record : records){
+            if(record.getMedia()!=null)
+                media_count += record.getMedia().size();
+            if(record.getVernaculars() !=null)
+                vernaculars_count += record.getVernaculars().size();
+        }
+        System.out.println("media count: "+media_count);
+        System.out.println("vernaculars count: "+vernaculars_count);
         RestClientHandler restClientHandler = new RestClientHandler();
         restClientHandler.insertNodeRecordsToMysql(PropertiesHandler.getProperty("addEntriesMysql"), records);
 //        printRecord(tableRecord);

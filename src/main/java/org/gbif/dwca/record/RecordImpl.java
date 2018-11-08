@@ -65,7 +65,8 @@ public class RecordImpl implements Record {
   public String column(int index) {
     if (row.length > index) {
       // if requested return column value cleaned
-      return CleanUtils.clean(row[index], replaceNulls, replaceEntities);
+      return row[index];
+//      return CleanUtils.clean(row[index], replaceNulls, replaceEntities);
     }
     return null;
   }
