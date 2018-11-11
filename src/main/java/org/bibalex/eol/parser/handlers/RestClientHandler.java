@@ -9,7 +9,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.ProxyAuthenticationStrategy;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
-import org.bibalex.eol.parser.models.HbaseResult;
 import org.bibalex.eol.parser.models.Node;
 import org.bibalex.eol.parser.models.NodeRecord;
 import org.springframework.http.*;
@@ -82,30 +81,6 @@ public class RestClientHandler {
         return "";
     }
 
-    public String deleteTaxon(String uri, NodeRecord nodeRecord) {
-
-        if (!uri.equalsIgnoreCase("")) {
-
-            RestTemplate restTemplate= handleRestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("Accept", "application/json");
-            ResponseEntity response = null;
-            Map<String, Integer> params = new HashMap<String, Integer>();
-            params.put(PropertiesHandler.getProperty("resourceId"), nodeRecord.getResourceId());
-            params.put(PropertiesHandler.getProperty("generatedNodeId"), Integer.valueOf(nodeRecord.getGeneratedNodeId()));
-
-            response = restTemplate.exchange(uri, HttpMethod.GET, null, HbaseResult.class, params);
-            if (response.getStatusCode() == HttpStatus.OK) {
-                System.out.println(response.getBody());
-                return ((HbaseResult) response.getBody()).getStatus() + "";
-            } else {
-                System.out.println("returned code(" + response.getStatusCode() + ")");
-            }
-        }
-        return "";
-    }
-
     public Boolean updateTaxonInNeo4jAncestoryFormat(String uri, ArrayList<Node> nodes) {
 
         if (!uri.equalsIgnoreCase("")) {
@@ -158,28 +133,6 @@ public class RestClientHandler {
 
         }
         return 0;
-    }
-
-    public boolean loadFilesToMysql(String uri) {
-        if (!uri.equalsIgnoreCase("")) {
-            System.out.println("load files");
-
-            RestTemplate restTemplate = handleRestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("Accept", "application/json");
-            ResponseEntity response = null;
-
-            response = restTemplate.exchange(uri, HttpMethod.POST, null, Boolean.class);
-            if (response.getStatusCode() == HttpStatus.OK) {
-                System.out.println(response.getBody());
-                return Boolean.valueOf((Boolean) response.getBody());
-            } else {
-                System.out.println("returned code(" + response.getStatusCode() + ")");
-            }
-
-        }
-        return false;
     }
 
     public boolean insertNodeRecordsToMysql(String uri, ArrayList<NodeRecord> records){

@@ -6,7 +6,7 @@ public class VernacularName {
     String language;
     String locality;
     String countryCode;
-    //String as it will be saved to Hbase as string and it is read from file as string. No need to save it as boolean
+    //String as it will be saved to MYsql as string and it is read from file as string. No need to save it as boolean
     String isPreferred;
     String taxonRemarks;
     String deltaStatus;

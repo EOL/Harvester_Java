@@ -183,8 +183,6 @@ public class DwcaParser {
     }
 
     public void parseRecords(int resourceId, Neo4jHandler neo4jHandler) {
-        //neo4j
-//        buildGraph(resourceId, starRecords);
 
 //        Taxon Matching
         if (resourceId != Integer.valueOf(PropertiesHandler.getProperty("DWHId"))) {
@@ -234,9 +232,6 @@ public class DwcaParser {
             records.add(tableRecord);
         }
         InsertNodeRecordsToMysql(records);
-//        RestClientHandler restClientHandler=new RestClientHandler();
-//        restClientHandler.loadFilesToMysql(PropertiesHandler.getProperty("loadFilesToMysql"));
-
     }
 
     private void InsertNodeRecordsToMysql(ArrayList<NodeRecord> records) {
@@ -276,62 +271,6 @@ public class DwcaParser {
         return measurementOrFacts;
     }
 
-//    private void buildGraph(int resourceId, ArrayList<StarRecord> starRecords) {
-//        Map<String, String> actions = actionFiles.get(dwca.getCore().getLocation() + "_action");
-//        System.out.println("BUILD");
-//        ArrayList<Taxon> taxaList = new ArrayList<>();
-//        int i = 0;
-//        boolean parentFormat = checkParentFormat();
-//        logger.debug("parent format: " + parentFormat);
-//        System.out.println("parent format: " + parentFormat);
-//        Format format = parentFormat ? new ParentFormat(resourceId) : new AncestryFormat(resourceId);
-//        boolean normalResource = dwca.getCore().hasTerm(DwcTerm.acceptedNameUsageID);
-//        for (StarRecord rec : starRecords) {
-//            logger.debug("for loop i is: " + i);
-//            System.out.println("for loop i is: " + i);
-//            if (i >= batchSize) {
-//                logger.debug("create batch: " + parentFormat);
-//                System.out.println("create batch: " + parentFormat);
-//                format.handleLines(taxaList, normalResource);
-//                i = 0;
-//                taxaList = new ArrayList<>();
-//            } else {
-//                if (actions != null) {
-//                    String taxonID = rec.core().value(DwcTerm.taxonID);
-//                    String action = actions.get(taxonID);
-//
-//                    if (action != null) {
-//                        if (action.equalsIgnoreCase(Constants.INSERT)) {
-//                            System.out.println("insert that action is insert");
-//                            i++;
-//                            taxaList.add(parseTaxon(rec, -1));
-//                        } else if (action.equalsIgnoreCase(Constants.UPDATE)) {
-//                            format.updateTaxon(parseTaxon(rec, -1));
-//                        } else if (action.equalsIgnoreCase(Constants.DELETE)) {
-//                            int generatedNodeId = format.deleteTaxon(taxonID, resourceId, rec.core().value(DwcTerm.scientificName));
-//                            deletedTaxons.put(taxonID, generatedNodeId);
-//                        }
-//                    } else {
-//                        System.out.println("insert from else of action is null");
-//                        i++;
-//                        taxaList.add(parseTaxon(rec, -1));
-//                    }
-//                } /*else {
-//                    System.out.println("insert from else of actions is null");
-//                    i++;
-//                    taxaList.add(parseTaxon(rec));
-//                }*/
-//                if (newResource) {
-//                    System.out.println("insert new resource");
-//                    i++;
-//                    taxaList.add(parseTaxon(rec, -1));
-//                }
-//
-//            }
-//        }
-//        format.handleLines(taxaList, normalResource);
-//    }
-
     private void checkActionFiles(StarRecord rec, Map<String, String> actions, NodeRecord tableRecord) {
         if (actions != null) {
             String taxonID = rec.core().value(DwcTerm.taxonID);
@@ -343,9 +282,9 @@ public class DwcaParser {
                     insertTaxonToMysql(tableRecord);
                 }
 //                } else if (action.equalsIgnoreCase(Constants.UPDATE) || action.equalsIgnoreCase(Constants.UNCHANGED)) {
-//                    updateTaxonInHBase(tableRecord);
+//                    //update
 //                } else if (action.equalsIgnoreCase(Constants.DELETE)) {
-//                    deleteTaxonInHBase(tableRecord);
+//                    //delete
 //                }
             } else {
                 System.out.println("insert from else of action is null");
@@ -369,21 +308,6 @@ public class DwcaParser {
         System.out.println();
     }
 
-
-    private void updateTaxonInHBase(NodeRecord tableRecord) {
-        RestClientHandler restClientHandler = new RestClientHandler();
-        restClientHandler.doConnection(PropertiesHandler.getProperty("updateEntryHBase"), tableRecord);
-        printRecord(tableRecord);
-        System.out.println();
-    }
-
-    private void deleteTaxonInHBase(NodeRecord tableRecord) {
-        tableRecord.setGeneratedNodeId(deletedTaxons.get(tableRecord.getTaxon().getIdentifier()) + "");
-        RestClientHandler restClientHandler = new RestClientHandler();
-        restClientHandler.deleteTaxon(PropertiesHandler.getProperty("deleteEntryHBase"), tableRecord);
-        printRecord(tableRecord);
-        System.out.println();
-    }
 
     private String checkIfOccurrencesChanged(Record extensionRecord) {
         ArchiveFile occurrencesFile = dwca.getExtension(CommonTerms.occurrenceTerm);
@@ -941,7 +865,6 @@ public class DwcaParser {
 ////        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
 ////        String paths = dwcaP.getMediaPath(5, urls );
 ////        System.out.println(paths);
-////        dwcaP.callHBase(new NodeRecord("name", "1", 1));
 
 
     }

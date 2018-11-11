@@ -1,7 +1,7 @@
 package org.bibalex.eol.parser.models;
 
 /**
- * As this is the harvester, it will put all the fields in HBase. This, in turn, will be transformed to bytes array. No need for casting
+ * As this is the harvester, it will put all the fields in Mysql. This, in turn, will be transformed to bytes array. No need for casting
  * because of that.
  */
 public class Reference {

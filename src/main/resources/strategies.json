@@ -4,6 +4,7 @@
   { "attribute": "scientific_name",  "index": "other_synonyms",           "type": "in" },
   { "attribute": "scientific_name",  "index": "other_scientific_name",    "type": "eq" },
   { "attribute": "canonical_name",   "index": "canonical_name",           "type": "eq" },
+  { "attribute": "canonical_name",  "index": "other_scientific_name",    "type": "eq" },
   { "attribute": "canonical_name",   "index": "canonical_synonyms",       "type": "in" },
   { "attribute": "canonical_name",   "index": "other_canonical_synonyms", "type": "in" }
 ]

@@ -22,11 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//import org.bibalex.eol.handler.PropertiesHandler;
-//import org.bibalex.eol.parser.models.HbaseResult;
-//import org.bibalex.eol.parser.models.Node;
-//import org.bibalex.eol.parser.models.NodeRecord;
-
 /**
  * Created by Amr Morad
  */
