@@ -165,17 +165,10 @@ public class DwcaParser {
 
 //        scriptsHandler.runNeo4jInit();
 
-        String page_id_col;
-
-
-        if (dwca.getCore().hasTerm(CommonTerms.eolPageTerm))
-            page_id_col = String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm));
-        else
-            page_id_col = "-1";
         scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank) + 1));
-        scriptsHandler.runGenerateIds(fullPath.toString());
+        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1));
         scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
-                String.valueOf(termsSorted.indexOf((Object) CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", page_id_col);
+                String.valueOf(termsSorted.indexOf((Object) CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)));
         scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)));
 
         parseRecords(resourceId, neo4jHandler);
@@ -790,29 +783,50 @@ public class DwcaParser {
 
     public static void main(String[] args) throws IOException {
 
-        DwcaValidator validator = null;
-        MetaHandler metaHandler =new MetaHandler();
-
-        String path="/home/ba/eol_resources/femorale.zip";
-        try {
-            validator = new DwcaValidator("configs.properties");
-            File myArchiveFile = new File(path);
-            File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
-            Archive dwcArchive=null;
-            try {
-                dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
-            }catch (Exception e){
-                System.out.println("folder need to editing to be readable by library");
-                metaHandler.adjustMetaFileToBeReadableByLibrary(extractToFolder.getPath());
-                dwcArchive = ArchiveFactory.openArchive(extractToFolder);
-            }
-            System.out.println("call validationnnnnnnnnnnnnn");
-            validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
-            String validArchivePath= FilenameUtils.removeExtension(path)+".out_valid";
-            metaHandler.addGeneratedAutoId(validArchivePath);
-        } catch (Exception e) {
-            e.printStackTrace();
+//        DwcaValidator validator = null;
+//        MetaHandler metaHandler =new MetaHandler();
+//
+//        String path="/home/ba/eol_resources/femorale.zip";
+//        try {
+//            validator = new DwcaValidator("configs.properties");
+//            File myArchiveFile = new File(path);
+//            File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
+//            Archive dwcArchive=null;
+//            try {
+//                dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
+//            }catch (Exception e){
+//                System.out.println("folder need to editing to be readable by library");
+//                metaHandler.adjustMetaFileToBeReadableByLibrary(extractToFolder.getPath());
+//                dwcArchive = ArchiveFactory.openArchive(extractToFolder);
+//            }
+//            System.out.println("call validationnnnnnnnnnnnnn");
+//            validator.validateArchive(dwcArchive.getLocation().getPath(), dwcArchive);
+//            String validArchivePath= FilenameUtils.removeExtension(path)+".out_valid";
+//            metaHandler.addGeneratedAutoId(validArchivePath);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        PropertiesHandler.initializeProperties();
+        Archive dwca = ArchiveFactory.openArchive(new File("/home/ba/test/asscoiations.out"));
+        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
+        ArrayList<Term> termsSorted = new ArrayList<Term>();
+        for (ArchiveField archiveField : fieldsSorted) {
+            termsSorted.add(archiveField.getTerm());
         }
+
+
+        ScriptsHandler scriptsHandler = new ScriptsHandler();
+
+        String fullPath = "/home/ba/neo4j-community-3.3.1/import/taxa.txt";
+        String relativePath= "taxa.txt";
+
+        scriptsHandler.runNeo4jInit();
+        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank) + 1));
+        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1));
+        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
+                String.valueOf(16), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)));
+        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)));
+
 
 
 //        Archive dwcArchive = null;

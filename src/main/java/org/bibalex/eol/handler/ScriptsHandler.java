@@ -42,12 +42,15 @@ public class ScriptsHandler {
         }
     }
 
-    public void runGenerateIds(String taxaFilepath) {
+    public void runGenerateIds(String taxaFilepath, String acceptedNameUsageId_col, String taxonomic_status_col, String parent_col_id) {
         System.out.println("run generate ids");
         try {
             System.out.println(taxaFilepath);
             System.out.println(PropertiesHandler.getProperty((String) "scriptsPath") + "taxa_generate_ids.sh");
-            ProcessBuilder pb = new ProcessBuilder(PropertiesHandler.getProperty((String) "scriptsPath") + "taxa_generate_ids.sh", taxaFilepath);
+            acceptedNameUsageId_col = acceptedNameUsageId_col!= null ? acceptedNameUsageId_col:"-1";
+            taxonomic_status_col = taxonomic_status_col != null ? taxonomic_status_col : "-1";
+            parent_col_id = parent_col_id != null ? parent_col_id : "-1";
+            ProcessBuilder pb = new ProcessBuilder(PropertiesHandler.getProperty((String) "scriptsPath") + "taxa_generate_ids.sh", taxaFilepath, acceptedNameUsageId_col, taxonomic_status_col, parent_col_id);
             Process p = null;
             p = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -65,6 +68,7 @@ public class ScriptsHandler {
         try {
             System.out.println(taxaFilePath);
             System.out.println(PropertiesHandler.getProperty((String) "scriptsPath") + "taxa_load_nodes_with_ids.sh");
+            page_id_col = page_id_col != null ? page_id_col : "-1";
             ProcessBuilder pb = new ProcessBuilder(PropertiesHandler.getProperty((String) "scriptsPath") + "taxa_load_nodes_with_ids.sh", taxaFilePath, resource_id, node_id_col, scientific_name_col, rank_col, generated_auto_id_col, parent_id_col, has_header, page_id_col);
             Process p = null;
             p = pb.start();
