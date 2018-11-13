@@ -42,15 +42,20 @@ public class ScriptsHandler {
         }
     }
 
-    public void runGenerateIds(String taxaFilepath, String acceptedNameUsageId_col, String taxonomic_status_col, String parent_col_id) {
+    public void runGenerateIds(String taxaFilepath, String acceptedNameUsageId_col, String taxonomic_status_col, String parent_col_id, String node_id_col, String has_header, String separator) {
         System.out.println("run generate ids");
         try {
             System.out.println(taxaFilepath);
             System.out.println(PropertiesHandler.getProperty((String) "scriptsPath") + "taxa_generate_ids.sh");
+            if(separator.contains("\t")){
+                separator = "\\t";
+            }
+            System.out.println(separator);
             acceptedNameUsageId_col = acceptedNameUsageId_col!= null ? acceptedNameUsageId_col:"-1";
             taxonomic_status_col = taxonomic_status_col != null ? taxonomic_status_col : "-1";
             parent_col_id = parent_col_id != null ? parent_col_id : "-1";
-            ProcessBuilder pb = new ProcessBuilder(PropertiesHandler.getProperty((String) "scriptsPath") + "taxa_generate_ids.sh", taxaFilepath, acceptedNameUsageId_col, taxonomic_status_col, parent_col_id);
+            ProcessBuilder pb = new ProcessBuilder(PropertiesHandler.getProperty((String) "scriptsPath") + "taxa_generate_ids.sh", taxaFilepath, acceptedNameUsageId_col, taxonomic_status_col,
+                    parent_col_id, node_id_col, has_header, separator);
             Process p = null;
             p = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));

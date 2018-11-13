@@ -166,7 +166,8 @@ public class DwcaParser {
 //        scriptsHandler.runNeo4jInit();
 
         scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank) + 1));
-        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1));
+        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1),
+                this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false",  this.dwca.getCore().getFieldsTerminatedBy());
         scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
                 String.valueOf(termsSorted.indexOf((Object) CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)));
         scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)));
@@ -822,10 +823,11 @@ public class DwcaParser {
 
         scriptsHandler.runNeo4jInit();
         scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank) + 1));
-        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1));
-        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
-                String.valueOf(16), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)));
-        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)));
+        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1),
+                String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false",  dwca.getCore().getFieldsTerminatedBy());
+//        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
+//                String.valueOf(16), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)));
+//        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)));
 
 
 
