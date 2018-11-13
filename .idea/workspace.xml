@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eed71ae0-16b5-45c1-b66f-1279bc55d5dd" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/handler/ScriptsHandler.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/handler/ScriptsHandler.java" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" afterPath="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" />
     </list>
@@ -33,8 +32,8 @@
       <file leaf-file-name="ScriptsHandler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/handler/ScriptsHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
-              <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+            <state relative-caret-position="272">
+              <caret line="76" column="287" lean-forward="false" selection-start-line="76" selection-start-column="287" selection-end-line="76" selection-end-column="287" />
               <folding />
             </state>
           </provider>
@@ -43,8 +42,8 @@
       <file leaf-file-name="DwcaParser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="825" column="0" lean-forward="false" selection-start-line="825" selection-start-column="0" selection-end-line="825" selection-end-column="0" />
+            <state relative-caret-position="342">
+              <caret line="171" column="333" lean-forward="false" selection-start-line="171" selection-start-column="333" selection-end-line="171" selection-end-column="333" />
               <folding />
             </state>
           </provider>
@@ -165,8 +164,8 @@
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/Reference.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/models/VernacularName.java" />
         <option value="$PROJECT_DIR$/src/main/resources/configs.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/handler/ScriptsHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java" />
       </list>
     </option>
   </component>
@@ -1119,16 +1118,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/parser/DwcaParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="825" column="0" lean-forward="false" selection-start-line="825" selection-start-column="0" selection-end-line="825" selection-end-column="0" />
+        <state relative-caret-position="342">
+          <caret line="171" column="333" lean-forward="false" selection-start-line="171" selection-start-column="333" selection-end-line="171" selection-end-column="333" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/bibalex/eol/handler/ScriptsHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+        <state relative-caret-position="272">
+          <caret line="76" column="287" lean-forward="false" selection-start-line="76" selection-start-column="287" selection-end-line="76" selection-end-column="287" />
           <folding />
         </state>
       </provider>
