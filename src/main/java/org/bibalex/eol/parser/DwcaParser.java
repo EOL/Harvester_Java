@@ -151,15 +151,15 @@ public class DwcaParser {
     public void runScripts(int resourceId, ArrayList<Term> termsSorted, boolean parent_format){
         ScriptsHandler scriptsHandler = new ScriptsHandler();
 
-//        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
-//        final Path base = Paths.get("/", "san");
-//        System.out.println("full " + fullPath);
-//        System.out.println("base " + base);
-//        final Path relativePath = base.relativize(fullPath);
-//        System.out.println("relative " + relativePath);
+        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
+        final Path base = Paths.get("/", "san");
+        System.out.println("full " + fullPath);
+        System.out.println("base " + base);
+        final Path relativePath = base.relativize(fullPath);
+        System.out.println("relative " + relativePath);
 
-        final Path fullPath= Paths.get("/home/ba/neo4j-community-3.3.1/import/taxa.txt");
-        final Path relativePath=Paths.get("taxa.txt");
+//        final Path fullPath= Paths.get("/home/ba/neo4j-community-3.3.1/import/taxa.txt");
+//        final Path relativePath=Paths.get("taxa.txt");
 
 //        scriptsHandler.runNeo4jInit();
 
