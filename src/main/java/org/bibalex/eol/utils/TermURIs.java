@@ -15,14 +15,22 @@ public class TermURIs {
     public static final String identifierURI = "http://purl.org/dc/terms/identifier";
     public static final String sourceURI = "http://purl.org/dc/terms/source";
     public static final String isPreferredNameURI = "http://rs.gbif.org/terms/1.0/isPreferredName";
-
     public static final String scientificNameURI = "http://rs.tdwg.org/dwc/terms/scientificName";
+
+    public static final String domainURI = "http://rs.tdwg.org/dwc/terms/domain";
     public static final String kingdomURI = "http://rs.tdwg.org/dwc/terms/kingdom";
     public static final String phylumURI = "http://rs.tdwg.org/dwc/terms/phylum";
     public static final String classURI = "http://rs.tdwg.org/dwc/terms/class";
+    public static final String cohortURI = "http://rs.tdwg.org/dwc/terms/cohort";
+    public static final String divisionURI = "http://rs.tdwg.org/dwc/terms/division";
     public static final String orderURI = "http://rs.tdwg.org/dwc/terms/order";
     public static final String familyURI = "http://rs.tdwg.org/dwc/terms/family";
+    public static final String tribeURI = "http://rs.tdwg.org/dwc/terms/tribe";
     public static final String genusURI = "http://rs.tdwg.org/dwc/terms/genus";
+    public static final String speciesURI = "http://rs.tdwg.org/dwc/terms/species";
+    public static final String varietyURI = "http://rs.tdwg.org/dwc/terms/variety";
+    public static final String formURI = "http://rs.tdwg.org/dwc/terms/form";
+
 
     public static final String referenceURI = "http://eol.org/schema/reference/full_reference";
     public static final String EOLReferenceURI = "http://eol.org/schema/reference/Reference";

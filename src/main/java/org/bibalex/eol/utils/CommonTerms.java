@@ -27,11 +27,18 @@ public class CommonTerms {
     public static final Term parentId = TermFactory.instance().findTerm(TermURIs.furtherInformationURL);
     public static final Term occurrenceID = TermFactory.instance().findTerm(TermURIs.occurrenceID);
 
+    public static final Term domainTerm = TermFactory.instance().findTerm(TermURIs.domainURI);
     public static final Term kingdomTerm = TermFactory.instance().findTerm(TermURIs.kingdomURI);
     public static final Term phylumTerm = TermFactory.instance().findTerm(TermURIs.phylumURI);
     public static final Term classTerm = TermFactory.instance().findTerm(TermURIs.classURI);
+    public static final Term cohortTerm = TermFactory.instance().findTerm(TermURIs.cohortURI);
+    public static final Term divisionTerm = TermFactory.instance().findTerm(TermURIs.divisionURI);
     public static final Term orderTerm = TermFactory.instance().findTerm(TermURIs.orderURI);
     public static final Term familyTerm = TermFactory.instance().findTerm(TermURIs.familyURI);
+    public static final Term tribeTerm = TermFactory.instance().findTerm(TermURIs.tribeURI);
     public static final Term genusTerm  = TermFactory.instance().findTerm(TermURIs.genusURI);
+    public static final Term speciesTerm  = TermFactory.instance().findTerm(TermURIs.speciesURI);
+    public static final Term varietyTerm  = TermFactory.instance().findTerm(TermURIs.varietyURI);
+    public static final Term formTerm  = TermFactory.instance().findTerm(TermURIs.formURI);
     public static final Term generatedAutoIdTerm = TermFactory.instance().findTerm(TermURIs.generated_auto_id);
 }

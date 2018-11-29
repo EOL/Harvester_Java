@@ -1,22 +1,14 @@
 package org.bibalex.eol.parser;
 
 import com.bibalex.taxonmatcher.controllers.RunTaxonMatching;
-import com.sun.javafx.collections.MappingChange;
-import org.apache.commons.io.FilenameUtils;
-import org.bibalex.eol.handler.MetaHandler;
 import org.bibalex.eol.handler.ScriptsHandler;
-import org.bibalex.eol.harvester.StorageLayerClient;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
-import org.bibalex.eol.parser.formats.AncestryFormat;
-import org.bibalex.eol.parser.formats.Format;
-import org.bibalex.eol.parser.formats.ParentFormat;
 import org.bibalex.eol.parser.handlers.Neo4jHandler;
 import org.bibalex.eol.parser.handlers.RestClientHandler;
 import org.bibalex.eol.parser.models.*;
 import org.bibalex.eol.utils.CommonTerms;
 import org.bibalex.eol.utils.Constants;
 import org.bibalex.eol.utils.TermURIs;
-import org.bibalex.eol.validator.DwcaValidator;
 import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwc.terms.GbifTerm;
 import org.gbif.dwc.terms.Term;
@@ -28,18 +20,13 @@ import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
 import org.apache.log4j.Logger;
-import org.gbif.dwca.record.StarRecordImpl;
-import org.neo4j.csv.reader.SourceTraceability;
 
 import javax.persistence.EntityManager;
-import javax.persistence.ParameterMode;
-import javax.persistence.StoredProcedureQuery;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.locks.Condition;
 
 public class DwcaParser {
 
@@ -153,28 +140,106 @@ public class DwcaParser {
             termsSorted.add(archiveField.getTerm());
         }
 
+        boolean parent_format=checkParentFormat();
 
-        ScriptsHandler scriptsHandler = new ScriptsHandler();
-
-        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
-        final Path base = Paths.get("/", "san");
-        System.out.println("full " + fullPath);
-        System.out.println("base " + base);
-        final Path relativePath = base.relativize(fullPath);
-        System.out.println("relative " + relativePath);
-
-//        scriptsHandler.runNeo4jInit();
-
-        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank) + 1));
-        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1),
-                this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false",  this.dwca.getCore().getFieldsTerminatedBy());
-        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
-                String.valueOf(termsSorted.indexOf((Object) CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm))
-                , String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+1), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2));
-        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2));
+        runScripts(resourceId, termsSorted, parent_format);
 
         parseRecords(resourceId, neo4jHandler);
 
+    }
+
+    public void runScripts(int resourceId, ArrayList<Term> termsSorted, boolean parent_format){
+        ScriptsHandler scriptsHandler = new ScriptsHandler();
+
+//        final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
+//        final Path base = Paths.get("/", "san");
+//        System.out.println("full " + fullPath);
+//        System.out.println("base " + base);
+//        final Path relativePath = base.relativize(fullPath);
+//        System.out.println("relative " + relativePath);
+
+        final Path fullPath= Paths.get("/home/ba/neo4j-community-3.3.1/import/taxa.txt");
+        final Path relativePath=Paths.get("taxa.txt");
+
+//        scriptsHandler.runNeo4jInit();
+
+        if(parent_format)
+            scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank) + 1));
+        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1),
+                this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false",  this.dwca.getCore().getFieldsTerminatedBy());
+
+        if(parent_format){
+            scriptsHandler.runLoadNodesParentFormat(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
+                    String.valueOf(termsSorted.indexOf((Object) CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm))
+                    , String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+1), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2));
+            scriptsHandler.runLoadRelationsParentFormat(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2));
+        }
+
+        else{
+            String ancestors_and_ranks = getAncestorsInResource(termsSorted);
+            String [] ancestors_and_ranks_arr = ancestors_and_ranks.split("\t");
+            String ancestors= ancestors_and_ranks_arr[0];
+            String ranks=ancestors_and_ranks_arr[1];
+
+            System.out.println(ancestors);
+            System.out.println(ranks);
+
+            scriptsHandler.runLoadNodesAncestryFormat(relativePath.toString(), String.valueOf(resourceId), ancestors,ranks,
+                    String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)),
+                    String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
+                    String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+1),
+                    String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2),this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
+
+//            scriptsHandler.runLoadRelationsAncestryFormat(relativePath.toString(), String.valueOf(resourceId), ancestors,
+//                    String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2));
+        }
+    }
+
+    public String getAncestorsInResource(ArrayList<Term> termsSorted){
+        String ancestors ="[";
+        String ranks ="[";
+
+        ArrayList<String> ancestors_list=getAllAncestors();
+        for(String term : ancestors_list){
+            if(this.dwca.getCore().hasTerm(term)) {
+                ancestors += termsSorted.indexOf(TermFactory.instance().findTerm(term)) + ",";
+                String [] uri = term.split("/");
+                ranks += "\""+uri[uri.length-1]+"\",";
+            }
+        }
+        ancestors = ancestors.substring(0,ancestors.length()-1)+"]";
+        ranks = ranks.substring(0, ranks.length()-1)+"]";
+        return ancestors+"\t"+ranks;
+    }
+
+    public  ArrayList<String> getAllAncestors(){
+        ArrayList<String> ancestors_list=new ArrayList<>();
+        ancestors_list.addAll(addPrefixes("domain"));
+        ancestors_list.addAll(addPrefixes("kingdom"));
+        ancestors_list.addAll(addPrefixes("phylum"));
+        ancestors_list.addAll(addPrefixes("class"));
+        ancestors_list.addAll(addPrefixes("cohort"));
+        ancestors_list.addAll(addPrefixes("division"));
+        ancestors_list.addAll(addPrefixes("order"));
+        ancestors_list.addAll(addPrefixes("family"));
+        ancestors_list.addAll(addPrefixes("genus"));
+        ancestors_list.addAll(addPrefixes("species"));
+        ancestors_list.addAll(addPrefixes("variety"));
+        ancestors_list.addAll(addPrefixes("form"));
+        return ancestors_list;
+    }
+
+    public ArrayList<String> addPrefixes(String rank){
+        String [] prefixes = {"mege","super","epi","_group","","sub","infra","subter"};
+        String uri = PropertiesHandler.getProperty("ranksURI");
+        ArrayList<String> rank_with_prefixes = new ArrayList<>();
+        for(int i=0; i< prefixes.length;i++){
+            if(prefixes[i].startsWith("_"))
+                rank_with_prefixes.add(uri+rank+prefixes[i]);
+            else
+                rank_with_prefixes.add(uri+prefixes[i]+rank);
+        }
+        return rank_with_prefixes;
     }
 
     public void parseRecords(int resourceId, Neo4jHandler neo4jHandler) {
@@ -711,22 +776,22 @@ public class DwcaParser {
 //        return path;
 //    }
 
-//    private boolean checkParentFormat() {
-//        ArrayList<Term> ancestryTerms = new ArrayList<>();
-//        ancestryTerms.add(CommonTerms.kingdomTerm);
-//        ancestryTerms.add(CommonTerms.phylumTerm);
-//        ancestryTerms.add(CommonTerms.classTerm);
-//        ancestryTerms.add(CommonTerms.orderTerm);
-//        ancestryTerms.add(CommonTerms.familyTerm);
-//        ancestryTerms.add(CommonTerms.genusTerm);
-//
-//        for (Term term : ancestryTerms) {
-//            if (dwca.getCore().hasTerm(term)) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
+    private boolean checkParentFormat() {
+        ArrayList<Term> ancestryTerms = new ArrayList<>();
+        ancestryTerms.add(CommonTerms.kingdomTerm);
+        ancestryTerms.add(CommonTerms.phylumTerm);
+        ancestryTerms.add(CommonTerms.classTerm);
+        ancestryTerms.add(CommonTerms.orderTerm);
+        ancestryTerms.add(CommonTerms.familyTerm);
+        ancestryTerms.add(CommonTerms.genusTerm);
+
+        for (Term term : ancestryTerms) {
+            if (dwca.getCore().hasTerm(term)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private void printRecord(NodeRecord nodeRecord) {
 
@@ -809,26 +874,26 @@ public class DwcaParser {
 //            e.printStackTrace();
 //        }
         PropertiesHandler.initializeProperties();
-        Archive dwca = ArchiveFactory.openArchive(new File("/home/ba/test/asscoiations_edit_2.out"));
-        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
-        ArrayList<Term> termsSorted = new ArrayList<Term>();
-        for (ArchiveField archiveField : fieldsSorted) {
-            termsSorted.add(archiveField.getTerm());
-        }
-
-
-        ScriptsHandler scriptsHandler = new ScriptsHandler();
-
-        String fullPath = "/home/ba/neo4j-community-3.3.1/import/taxa.txt";
-        String relativePath= "taxa.txt";
-
-//        scriptsHandler.runNeo4jInit();
-        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank) + 1));
-        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1),
-                String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false",  dwca.getCore().getFieldsTerminatedBy());
-//        scriptsHandler.runLoadNodes(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
+//        Archive dwca = ArchiveFactory.openArchive(new File("/home/ba/test/asscoiations_edit_2.out"));
+//        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
+//        ArrayList<Term> termsSorted = new ArrayList<Term>();
+//        for (ArchiveField archiveField : fieldsSorted) {
+//            termsSorted.add(archiveField.getTerm());
+//        }
+//
+//
+//        ScriptsHandler scriptsHandler = new ScriptsHandler();
+//
+//        String fullPath = "/home/ba/neo4j-community-3.3.1/import/taxa.txt";
+//        String relativePath= "taxa.txt";
+//
+////        scriptsHandler.runNeo4jInit();
+//        scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank) + 1));
+//        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1),
+//                String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false",  dwca.getCore().getFieldsTerminatedBy());
+//        scriptsHandler.runLoadNodesParentFormat(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
 //                String.valueOf(16), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)));
-//        scriptsHandler.runLoadRelations(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)));
+//        scriptsHandler.runLoadRelationsParentFormat(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)));
 
 
 
@@ -854,7 +919,7 @@ public class DwcaParser {
 //            dwcArchive = ArchiveFactory.openArchive(extractToFolder);
 //        }
 //        System.out.println("done");
-////        DwcaParser dwcaP = new DwcaParser(dwcArchive, false, null);
+//        DwcaParser dwcaP = new DwcaParser(dwcArchive, false, null);
 //////        dwcaP.prepareNodesRecord(5555);
 ////        ArchiveFile core = dwcArchive.getCore();
 ////        int count = -1, i = 0, line = 0;
@@ -882,7 +947,19 @@ public class DwcaParser {
 ////        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
 ////        String paths = dwcaP.getMediaPath(5, urls );
 ////        System.out.println(paths);
+        Archive dwca = ArchiveFactory.openArchive(new File("/home/ba/eol_resources/arnoldarboretum (copy).out"));
+        DwcaParser dwcaParser=new DwcaParser(dwca,false,null);
 
+        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
+        ArrayList<Term> termsSorted = new ArrayList<Term>();
+        for (ArchiveField archiveField : fieldsSorted) {
+            termsSorted.add(archiveField.getTerm());
+        }
+//        dwcaParser.parseRecords(55555, null);
 
+        dwcaParser.runScripts(13,termsSorted, false);
+
+//        String ranks=dwcaParser.getAncestorsInResource(termsSorted);
+//        System.out.println(ranks);
     }
 }
