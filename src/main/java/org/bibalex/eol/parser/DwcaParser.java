@@ -35,10 +35,11 @@ public class DwcaParser {
     HashMap<String, Agent> agentsMap;
     HashMap<String, ArrayList<MeasurementOrFact>> measurementOrFactHashMap;
     //this is used to save the associations with target occurrence
-    HashMap<String, Association> twoSidedAccoiationsMap;
-    //this is used to save the associations without target occurrence
-    HashMap<String, Association> oneSidedAccoiationsMap;
-    HashMap<String, Association> associationHashMap;
+//    HashMap<String, Association> twoSidedAccoiationsMap;
+//    //this is used to save the associations without target occurrence
+//    HashMap<String, Association> oneSidedAccoiationsMap;
+    HashMap<String, ArrayList<Association>> occurrencesAssociationsHashMap;
+//    HashMap<String, Association> associationHashMap;
     private static final Logger logger = Logger.getLogger(DwcaParser.class);
     private int resourceID;
     private Map<String, Map<String, String>> actionFiles;
@@ -52,15 +53,17 @@ public class DwcaParser {
         this.dwca = dwca;
         referencesMap = new HashMap<>();
         agentsMap = new HashMap<>();
-        twoSidedAccoiationsMap = new HashMap<>();
-        oneSidedAccoiationsMap = new HashMap<>();
+//        twoSidedAccoiationsMap = new HashMap<>();
+//        oneSidedAccoiationsMap = new HashMap<>();
         measurementOrFactHashMap = new HashMap<>();
-        associationHashMap = new HashMap<>();
+        occurrencesAssociationsHashMap =new HashMap<>();
+//        associationHashMap = new HashMap<>();
         loadAllReferences();
         loadAllAgents();
         loadAllMeasurementOrFacts();
-        loadAllAssociations();
-        loadAllAssociationsINOneMap();
+//        loadAllAssociations();
+//        loadAllAssociationsINOneMap();
+        loadAssociationsByOccurrences();
         actionFiles = ActionFiles.loadActionFiles(dwca);
         this.newResource = newResource;
         this.entityManager = entityManager;
@@ -104,27 +107,43 @@ public class DwcaParser {
         }
     }
 
-    private void loadAllAssociations() {
-        logger.debug("Loading all associations with term: " + dwca.getExtension(CommonTerms.associationTerm));
-        if (dwca.getExtension(CommonTerms.associationTerm) != null) {
-            for (Iterator<Record> it = dwca.getExtension(CommonTerms.associationTerm).iterator(); it.hasNext(); ) {
-                Association association = parseAssociation(it.next());
-                if (association.getTargetOccurrenceId() != null && !association.getTargetOccurrenceId().isEmpty()) {
-                    twoSidedAccoiationsMap.put(association.getOccurrenceId(), association);
-                } else {
-                    oneSidedAccoiationsMap.put(association.getAssociationId(), association);
-                }
-            }
-        }
-    }
+//    private void loadAllAssociations() {
+//        logger.debug("Loading all associations with term: " + dwca.getExtension(CommonTerms.associationTerm));
+//        if (dwca.getExtension(CommonTerms.associationTerm) != null) {
+//            for (Iterator<Record> it = dwca.getExtension(CommonTerms.associationTerm).iterator(); it.hasNext(); ) {
+//                Association association = parseAssociation(it.next());
+//                if (association.getTargetOccurrenceId() != null && !association.getTargetOccurrenceId().isEmpty()) {
+//                    twoSidedAccoiationsMap.put(association.getOccurrenceId(), association);
+//                } else {
+//                    oneSidedAccoiationsMap.put(association.getAssociationId(), association);
+//                }
+//            }
+//        }
+//    }
 
-    private void loadAllAssociationsINOneMap() {
+//    private void loadAllAssociationsINOneMap() {
+//        logger.debug("Loading all associations with term: " + dwca.getExtension(CommonTerms.associationTerm));
+//        if (dwca.getExtension(CommonTerms.associationTerm) != null) {
+//            for (Iterator<Record> it = dwca.getExtension(CommonTerms.associationTerm).iterator(); it.hasNext(); ) {
+//                Association association = parseAssociation(it.next());
+//                logger.debug("Adding association to the map with id: " + association.getAssociationId());
+//                associationHashMap.put(association.getAssociationId(), association);
+//            }
+//        }
+//    }
+
+    private void loadAssociationsByOccurrences(){
         logger.debug("Loading all associations with term: " + dwca.getExtension(CommonTerms.associationTerm));
         if (dwca.getExtension(CommonTerms.associationTerm) != null) {
             for (Iterator<Record> it = dwca.getExtension(CommonTerms.associationTerm).iterator(); it.hasNext(); ) {
                 Association association = parseAssociation(it.next());
                 logger.debug("Adding association to the map with id: " + association.getAssociationId());
-                associationHashMap.put(association.getAssociationId(), association);
+                ArrayList<Association> associations = occurrencesAssociationsHashMap.get(association.getOccurrenceId());
+                if(associations ==null)
+                    associations = new ArrayList<>();
+                associations.add(association);
+                occurrencesAssociationsHashMap.put(association.getOccurrenceId(),associations);
+
             }
         }
     }
@@ -279,7 +298,7 @@ public class DwcaParser {
             if (rec.hasExtension(CommonTerms.occurrenceTerm)) {
                 tableRecord.setOccurrences(parseOccurrences(rec));
                 tableRecord.setMeasurementOrFacts(parseMeasurementOrFactOfTaxon(rec));
-                tableRecord.setAssociations(parseAssociationOfTaxon(tableRecord));
+                tableRecord.setAssociations(parseAssociationOfTaxon(rec));
             }
             if (rec.hasExtension(CommonTerms.mediaTerm)) {
                 System.out.println("==============>  parse media");
@@ -311,12 +330,12 @@ public class DwcaParser {
         System.out.println();
     }
 
-    private ArrayList<Association> parseAssociationOfTaxon(NodeRecord tableRecord) {
+    private ArrayList<Association> parseAssociationOfTaxon(StarRecord rec) {
         ArrayList<Association> associations = new ArrayList<>();
-        for (MeasurementOrFact measurementOrFact : tableRecord.getMeasurementOrFacts()) {
-            if (measurementOrFact.getAssociationId() != null) {
-                associations.add(associationHashMap.get(measurementOrFact.getAssociationId()));
-            }
+        for (Record record : rec.extension(CommonTerms.occurrenceTerm)) {
+            ArrayList<Association> associationOfOcc = occurrencesAssociationsHashMap.get(record.value(DwcTerm.occurrenceID));
+            if (associationOfOcc != null)
+                associations.addAll(associationOfOcc);
         }
         return associations;
     }
@@ -947,17 +966,23 @@ public class DwcaParser {
 ////        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
 ////        String paths = dwcaP.getMediaPath(5, urls );
 ////        System.out.println(paths);
-        Archive dwca = ArchiveFactory.openArchive(new File("/home/ba/eol_resources/dynamic/EOL_dynamic_hierarchyV1Revised"));
+        Archive dwca = ArchiveFactory.openArchive(new File("/home/ba/test/asscoiations.out"));
         DwcaParser dwcaParser=new DwcaParser(dwca,false,null);
+        System.out.println("hena");
+//        for(StarRecord rec:dwca){
+//            System.out.println("here");
+//            String sn=rec.core().value(DwcTerm.scientificName);
+//            System.out.println(sn);
+//        }
 
-        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
-        ArrayList<Term> termsSorted = new ArrayList<Term>();
-        for (ArchiveField archiveField : fieldsSorted) {
-            termsSorted.add(archiveField.getTerm());
-        }
-//        dwcaParser.parseRecords(55555, null);
-
-        dwcaParser.runScripts(4444,termsSorted, true);
+//        List<ArchiveField> fieldsSorted = dwca.getCore().getFieldsSorted();
+//        ArrayList<Term> termsSorted = new ArrayList<Term>();
+//        for (ArchiveField archiveField : fieldsSorted) {
+//            termsSorted.add(archiveField.getTerm());
+//        }
+        dwcaParser.parseRecords(55555, null);
+//
+//        dwcaParser.runScripts(4444,termsSorted, true);
 
 //        String ranks=dwcaParser.getAncestorsInResource(termsSorted);
 //        System.out.println(ranks);

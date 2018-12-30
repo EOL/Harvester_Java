@@ -74,6 +74,10 @@ public class Media {
         this.storageLayerPath = storageLayerPath;
         this.storageLayerThumbnailPath = storageLayerThumbnailPath;
         this.deltaStatus = deltaStatus;
+        if(this.format != null && this.format.contains("/"))
+            this.format=this.format.replace("/","_");
+        if(this.subType != null && this.subType.contains("/"))
+            this.subType=this.subType.replace("/","_");
     }
 
     public String getMediaId() {

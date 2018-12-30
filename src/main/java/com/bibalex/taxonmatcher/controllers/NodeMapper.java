@@ -80,10 +80,11 @@ public class NodeMapper {
             mapNode(node, usedAncestorDepth, usedStrategy);
         }
 //        System.out.println("---------------- has children is ------------- " + node.hasChildren() + " size " + node.getChildren().size());
-        if(node.hasChildren()){
+        ArrayList<Node> children = node.getChildren();
+        if(children.size() > 0 ){
 
             logger.info("====================children=================");
-            mapNodes(nodeHandler.nodeMapper(node.getChildren()));
+            mapNodes(nodeHandler.nodeMapper(children));
         }
     }
 
