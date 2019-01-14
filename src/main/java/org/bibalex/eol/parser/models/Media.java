@@ -77,6 +77,8 @@ public class Media {
         if(this.format != null && this.format.contains("/")) {
             this.format = this.format.replace("/", "_");
             this.format = this.format.replace("+", "$");
+            this.format = this.format.replace("-", "_$");
+
         }
         if(this.subType != null && this.subType.contains("/"))
             this.subType=this.subType.replace("/","_");
