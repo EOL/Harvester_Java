@@ -74,7 +74,7 @@ public class Media {
         this.storageLayerPath = storageLayerPath;
         this.storageLayerThumbnailPath = storageLayerThumbnailPath;
         this.deltaStatus = deltaStatus;
-        if(this.format != null && this.format.contains("/")) {
+        if(this.format != null) {
             this.format = this.format.replace("/", "_");
             this.format = this.format.replace("+", "$");
             this.format = this.format.replace("-", "_$");

@@ -966,9 +966,8 @@ public class DwcaParser {
 ////        urls.add("https://www.bibalex.org/en/Attachments/Highlights/Cropped/1600x400/201802041000371225_1600x400.jpg");
 ////        String paths = dwcaP.getMediaPath(5, urls );
 ////        System.out.println(paths);
-        Archive dwca = ArchiveFactory.openArchive(new File("/home/ba/test/asscoiations.out"));
-        DwcaParser dwcaParser=new DwcaParser(dwca,false,null);
-        System.out.println("hena");
+//        Archive dwca = ArchiveFactory.openArchive(new File("/home/ba/test/asscoiations.out"));
+//        DwcaParser dwcaParser=new DwcaParser(dwca,false,null);
 //        for(StarRecord rec:dwca){
 //            System.out.println("here");
 //            String sn=rec.core().value(DwcTerm.scientificName);
@@ -980,11 +979,16 @@ public class DwcaParser {
 //        for (ArchiveField archiveField : fieldsSorted) {
 //            termsSorted.add(archiveField.getTerm());
 //        }
-        dwcaParser.parseRecords(55555, null);
+//        dwcaParser.parseRecords(55555, null);
 //
 //        dwcaParser.runScripts(4444,termsSorted, true);
 
 //        String ranks=dwcaParser.getAncestorsInResource(termsSorted);
 //        System.out.println(ranks);
+        Media media=new Media("","","","gf/dg+f","","","","","","","","","","",
+                "","","","","","","","","","","","",""
+                ,"","","","","","");
+        System.out.println("hena");
+
     }
 }
