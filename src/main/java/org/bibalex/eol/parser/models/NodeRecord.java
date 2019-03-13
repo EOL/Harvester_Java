@@ -1,6 +1,9 @@
 package org.bibalex.eol.parser.models;
 
+import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Str;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 /*
 This class will include the needed objects and attributes
@@ -13,6 +16,7 @@ public class NodeRecord {
     ArrayList<Association> associations;
     ArrayList<MeasurementOrFact> measurementOrFacts;
     ArrayList<Media> media;
+    Map<String, String> targetOccurrences;
     String generatedNodeId;
     Taxon taxon;
     String deltaStatus;
@@ -84,6 +88,14 @@ public class NodeRecord {
 
     public void setMedia(ArrayList<Media> media) {
         this.media = media;
+    }
+
+    public Map<String, String> getTargetOccurrences() {
+        return targetOccurrences;
+    }
+
+    public void setTargetOccurrences(Map<String, String> targetOccurrences) {
+        this.targetOccurrences = targetOccurrences;
     }
 
     public ArrayList<Occurrence> getOccurrences() {

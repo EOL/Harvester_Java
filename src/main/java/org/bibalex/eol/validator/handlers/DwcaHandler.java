@@ -61,9 +61,11 @@ public class DwcaHandler {
         Set<Term> afTerms = archiveFile.getTerms();
         Term term = null;
         for (Term t : afTerms) {
-            if (t.qualifiedName().equalsIgnoreCase(fieldURI)) {
-                term = t;
-                break;
+            if (t !=null) {
+                if (t.qualifiedName().equalsIgnoreCase(fieldURI)) {
+                    term = t;
+                    break;
+                }
             }
         }
         if (term == null) {

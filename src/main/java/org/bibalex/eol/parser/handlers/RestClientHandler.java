@@ -161,6 +161,30 @@ public class RestClientHandler {
         return false;
     }
 
+    public Object getPageIds(String uri, Object object) {
+        ResponseEntity response = null;
+        if (!uri.equalsIgnoreCase("")) {
+            RestTemplate restTemplate = handleRestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Accept", "application/json");
+            HttpEntity<Object> entity = new HttpEntity<Object>(object,headers);
+            response = restTemplate.exchange(uri, HttpMethod.POST, entity,Object.class);
+
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+//                    System.out.println(response.getBody());
+                return response.getBody();
+            } else {
+                System.out.println("returned code(" + response.getStatusCode() + ")");
+            }
+
+        } else {
+            System.out.println("Empty uri");
+        }
+        return "";
+    }
+
     private RestTemplate handleRestTemplate(){
         RestTemplate restTemplate;
         if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {

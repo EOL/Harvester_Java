@@ -229,9 +229,20 @@ public class Neo4jHandler {
         return response;
     }
 
+    public ArrayList<Integer> getPageIdsOfNodes(ArrayList<Integer> generated_node_ids){
+        Object response = restClientHandler.getPageIds(PropertiesHandler.getProperty("getPageIdsOfNodes"),generated_node_ids);
+        System.out.println("===============================");
+        System.out.println("returned nodes using ids "+ response);
+        System.out.println("===============================");
+        ArrayList<Integer>  page_ids = (ArrayList<Integer>)response;
+        return page_ids;
+//        return generated_node_ids;
+    }
+
     public int updateAcceptedNode(int resourceId, String taxonId, String scientificName, String rank,
                                   int parentGeneratedNodeId, int pageId) {
-        Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedNodeId, pageId);        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("updateAcceptedNode"), node);
+        Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedNodeId, pageId);
+        String response = restClientHandler.doConnection(PropertiesHandler.getProperty("updateAcceptedNode"), node);
         System.out.println("===============================");
         System.out.println("A node is updated with response " + response);
         System.out.println("===============================");

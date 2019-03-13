@@ -20,6 +20,7 @@ import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
 import org.apache.log4j.Logger;
+import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Has;
 
 import javax.persistence.EntityManager;
 import java.io.File;
@@ -39,6 +40,7 @@ public class DwcaParser {
 //    //this is used to save the associations without target occurrence
 //    HashMap<String, Association> oneSidedAccoiationsMap;
     HashMap<String, ArrayList<Association>> occurrencesAssociationsHashMap;
+    HashMap<String, Integer> occurrenceHashMap;
 //    HashMap<String, Association> associationHashMap;
     private static final Logger logger = Logger.getLogger(DwcaParser.class);
     private int resourceID;
@@ -57,6 +59,7 @@ public class DwcaParser {
 //        oneSidedAccoiationsMap = new HashMap<>();
         measurementOrFactHashMap = new HashMap<>();
         occurrencesAssociationsHashMap =new HashMap<>();
+        occurrenceHashMap = new HashMap<>();
 //        associationHashMap = new HashMap<>();
         loadAllReferences();
         loadAllAgents();
@@ -64,6 +67,7 @@ public class DwcaParser {
 //        loadAllAssociations();
 //        loadAllAssociationsINOneMap();
         loadAssociationsByOccurrences();
+//        loadAllOccurrences();
         actionFiles = ActionFiles.loadActionFiles(dwca);
         this.newResource = newResource;
         this.entityManager = entityManager;
@@ -148,6 +152,20 @@ public class DwcaParser {
         }
     }
 
+    private void loadAllOccurrences(){
+        logger.debug("Loading all occurrences with term: " + dwca.getExtension(CommonTerms.occurrenceTerm));
+        if (dwca.getExtension(CommonTerms.occurrenceTerm) != null) {
+            for (StarRecord starRecord : dwca) {
+                List<Record> occurrences = starRecord.extension(CommonTerms.occurrenceTerm);
+                for(Record record: occurrences) {
+                    String occurrence_id = record.value(DwcTerm.occurrenceID);
+                    logger.debug("Adding occurrence to the map with id: " + occurrence_id);
+                    occurrenceHashMap.put(occurrence_id,  Integer.valueOf(starRecord.core().value(CommonTerms.generatedAutoIdTerm)));
+                }
+            }
+        }
+    }
+
     public void prepareNodesRecord(int resourceId) {
         this.resourceID = resourceId;
         deletedTaxons.clear();
@@ -162,6 +180,7 @@ public class DwcaParser {
         boolean parent_format=checkParentFormat();
 
         runScripts(resourceId, termsSorted, parent_format);
+        loadAllOccurrences();
 
         parseRecords(resourceId, neo4jHandler);
 
@@ -299,6 +318,7 @@ public class DwcaParser {
                 tableRecord.setOccurrences(parseOccurrences(rec));
                 tableRecord.setMeasurementOrFacts(parseMeasurementOrFactOfTaxon(rec));
                 tableRecord.setAssociations(parseAssociationOfTaxon(rec));
+                tableRecord.setTargetOccurrences(parseTargetOccurrenceIdsOfTaxon(tableRecord));
             }
             if (rec.hasExtension(CommonTerms.mediaTerm)) {
                 System.out.println("==============>  parse media");
@@ -348,6 +368,30 @@ public class DwcaParser {
                 measurementOrFacts.addAll(measurementOrFactsOfOcc);
         }
         return measurementOrFacts;
+    }
+
+    private Map<String, String> parseTargetOccurrenceIdsOfTaxon(NodeRecord rec){
+        Map<String,String> targetOccurrenceIds = new HashMap<>();
+        ArrayList<Integer> generated_node_ids=new ArrayList<>();
+        ArrayList<Association> associations = rec.getAssociations();
+
+        for(int i=0; i<associations.size(); i++){
+            Association association =associations.get(i);
+            String targetOccurrence = association.getTargetOccurrenceId();
+            String generated_node_id = String.valueOf(occurrenceHashMap.get(targetOccurrence));
+            generated_node_ids.add(Integer.valueOf(generated_node_id));
+        }
+
+        Neo4jHandler neo4jHandler = new Neo4jHandler();
+        ArrayList<Integer> page_ids = neo4jHandler.getPageIdsOfNodes(generated_node_ids);
+
+        for(int i=0; i<associations.size(); i++){
+            Association association =associations.get(i);
+            String targetOccurrence = association.getTargetOccurrenceId();
+            if(page_ids.get(i)!=-1)
+                targetOccurrenceIds.put(targetOccurrence,String.valueOf(page_ids.get(i)));
+        }
+        return targetOccurrenceIds;
     }
 
     private void checkActionFiles(StarRecord rec, Map<String, String> actions, NodeRecord tableRecord) {
