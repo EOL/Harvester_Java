@@ -7,10 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 /**
  * Created by Amr.Morad
@@ -28,7 +25,7 @@ public class NodeMapper {
     private Neo4jHandler neo4jHandler;
     private SolrHandler solrHandler;
     int resourceId;
-
+    private HashMap<Integer, Integer> nodePages;
 
     public NodeMapper(int resourceId){
         strategyHandler = new StrategyHandler();
@@ -42,6 +39,7 @@ public class NodeMapper {
         neo4jHandler = new Neo4jHandler();
         this.resourceId = resourceId;
         this.solrHandler = new SolrHandler();
+        this.nodePages = new HashMap<>();
     }
 
     public void mapAllNodesToPages(ArrayList<Node> rootNodes){
@@ -49,6 +47,7 @@ public class NodeMapper {
         ArrayList<Node> mappedRootNodes= nodeHandler.nodeMapper(rootNodes);
         logger.info("after getting root nodes");
         mapNodes(mappedRootNodes);
+        neo4jHandler.assignPageToNodes(nodePages);
     }
 
     public void mapNodes(ArrayList<Node> rootNodes){
@@ -103,13 +102,13 @@ public class NodeMapper {
                 // we don't know the root node of virus
 //                ancestor = nodeHandler.nodeMapper(nodeHandler.nativeVirus()).get(0);
 //                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
-                ancestor = nodeHandler.matchedAncestor(ancestors, depth);
+                ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages);
             }else{
                 System.out.println("map Node : not virus neither surrogate");
                 logger.info("map Node : not virus neither surrogate");
                 logger.info("before matched ancestors");
 //            ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
-                ancestor = nodeHandler.matchedAncestor(ancestors, depth);
+                ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages);
                 logger.info("after matched ancestors");
             }
             mapUnflaggedNode(node, ancestor, depth, strategy,ancestors);
@@ -149,7 +148,7 @@ public class NodeMapper {
                 depth++;
                 Node prev_ancestor = ancestor;
 //                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
-                ancestor = nodeHandler.matchedAncestor(ancestors, depth);
+                ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages);
                 logger.info("depth is: " + depth);
                 if(ancestor!=null)System.out.println("ancestor "+ancestor.getGeneratedNodeId());
                 if(prev_ancestor!=null)System.out.println("prev_ancestor "+prev_ancestor.getGeneratedNodeId());
@@ -178,7 +177,7 @@ public class NodeMapper {
             logger.info("after getting matched children count");
             logger.info("matched children count " + matchedChildrenCount);
             logger.info("before getting matched ancestors count");
-            int matchedAncestorsCount = matchingScoreHandler.countAncestors(nodeHandler.nodeMapper(neo4jHandler.getNodesFromIds(result.getAncestors())));
+            int matchedAncestorsCount = matchingScoreHandler.countAncestors(nodeHandler.nodeMapper(neo4jHandler.getNodesFromIds(result.getAncestors())), nodePages);
 //            int matchedAncestorsCount = matchingScoreHandler.countAncestors(node);
             logger.info("after getting matched ancestors count");
             logger.info("matched Ancestors count " + matchedAncestorsCount);
@@ -227,8 +226,11 @@ public class NodeMapper {
         } catch (SolrServerException e) {
             e.printStackTrace();
         }
-        boolean response =neo4jHandler.assignPageToNode(node.getGeneratedNodeId(), pageId);
-        if (response ==true){node.setPageId(pageId);}
+//        boolean response =neo4jHandler.assignPageToNode(node.getGeneratedNodeId(), pageId);
+//        if (response ==true){
+        nodePages.put(node.getGeneratedNodeId(),pageId);
+        node.setPageId(pageId);
+//        }
         System.out.println("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
         logger.info("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
 //        fileHandler.writeToFile("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
@@ -241,6 +243,7 @@ public class NodeMapper {
 //        fileHandler.writeToFile("New page is created for node named: "+node.getScientificName());
         logger.info("before calling neo4j function to create and assign page to node");
         int page_id = neo4jHandler.assignPageToNode(node.getGeneratedNodeId());
+        nodePages.put(node.getGeneratedNodeId(),page_id);
         logger.info("after calling neo4j function to create and assign page to node");
         logger.info("map Node : not virus neither surrogate");
         try {

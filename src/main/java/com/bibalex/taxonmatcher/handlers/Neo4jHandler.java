@@ -4,6 +4,8 @@ import com.bibalex.taxonmatcher.models.Node;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Amr Morad
@@ -69,6 +71,21 @@ public class Neo4jHandler {
         return flag;
     }
 
+    public boolean assignPageToNodes(HashMap<Integer, Integer> nodesPages){
+        if (nodesPages.size()>0){
+//            long startTime = System.nanoTime();
+            Object response = RestClientHandler.doConnectionPost(ResourceHandler.getPropertyValue("addPagesToNodes"), nodesPages);
+//            long endTime = System.nanoTime();
+//            long duration = (endTime - startTime);
+            System.out.println("===============================");
+            System.out.println("assigned pages to nodes: "+ response);
+            System.out.println("===============================");
+            boolean flag = ((Boolean) response).booleanValue();
+            return flag;
+        }
+        else return false;
+    }
+
     public ArrayList<Node> getNativeVirusNode(){
         //TODO implement
 //        return new Node(5006, "Viruses");
@@ -94,7 +111,7 @@ public class Neo4jHandler {
             System.out.println("===============================");
             ArrayList<Node>  Nodes = (ArrayList<Node>)response;
             return  Nodes ;
-    }
+        }
         else return new ArrayList<Node>();
     }
 

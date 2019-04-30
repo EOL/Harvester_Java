@@ -3,9 +3,12 @@ package com.bibalex.taxonmatcher.handlers;
 import com.bibalex.taxonmatcher.models.Node;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONArray;
+import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Has;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import static apoc.coll.Coll.compare;
 
@@ -65,12 +68,12 @@ public class MatchingScoreHandler {
 //        return 0;
 //    }
 
-    public int countAncestors(ArrayList<Node> ancestors){
+    public int countAncestors(ArrayList<Node> ancestors, HashMap<Integer, Integer> nodesPages){
         System.out.println("size "+ancestors.size());
         int count = 0;
         if(ancestors.size()>0) {
             for (Node n : ancestors) {
-                if (n.getPageId() != 0)
+                if (n.getPageId() != 0 || nodesPages.get(n.getGeneratedNodeId()) != null)
                     count++;
 
             }

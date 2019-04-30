@@ -3,22 +3,20 @@ package com.bibalex.taxonmatcher.handlers;
 import com.bibalex.taxonmatcher.models.Node;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 /**
  * Created by Amr.Morad on 3/9/2017.
  */
 public class NodeHandler {
 
-    public Node matchedAncestor(ArrayList<Node> ancestors, int depth){
+    public Node matchedAncestor(ArrayList<Node> ancestors, int depth, HashMap<Integer,Integer> nodesPages){
         System.out.println("matched ancestor");
         System.out.println(depth);
         int i = 0;
         if (ancestors != null) {
             for (Node ancestor : ancestors) {
-                if (ancestor.getPageId() != 0 && i >= depth)
+                if ((ancestor.getPageId() != 0 || nodesPages.get(ancestor.getGeneratedNodeId()) != null)&& i >= depth )
                     return ancestor;
                 i++;
             }
