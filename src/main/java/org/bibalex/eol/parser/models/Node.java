@@ -1,9 +1,11 @@
 package org.bibalex.eol.parser.models;
 
+import java.io.Serializable;
+
 /**
  * Created by Amr.Morad
  */
-public class Node {
+public class Node implements Serializable {
 
     String nodeId;
     int resourceId;
@@ -15,7 +17,11 @@ public class Node {
     String acceptedNodeId;
     int acceptedNodeGeneratedId;
     int pageId;
+    long created_at;
+    long updated_at;
+    String canonicalName;
 
+    public Node(){}
     public Node(String nodeId, int resourceId, String scientificName, int generatedNodeId, String rank, int parentGeneratedNodeId,
                 String parentNodeId, String acceptedNodeId, int acceptedNodeGeneratedId) {
         this.nodeId = nodeId;
@@ -160,5 +166,29 @@ public class Node {
 
     public void setPageId(int pageId) {
         this.pageId = pageId;
+    }
+
+    public long getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(long created_at) {
+        this.created_at = created_at;
+    }
+
+    public long getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(long updated_at) {
+        this.updated_at = updated_at;
+    }
+
+    public String getCanonicalName() {
+        return canonicalName;
+    }
+
+    public void setCanonicalName(String canonicalName) {
+        this.canonicalName = canonicalName;
     }
 }

@@ -14,16 +14,13 @@ import org.gbif.dwc.terms.GbifTerm;
 import org.gbif.dwc.terms.Term;
 import org.gbif.dwc.terms.TermFactory;
 import org.gbif.dwca.io.Archive;
-import org.gbif.dwca.io.ArchiveFactory;
 import org.gbif.dwca.io.ArchiveField;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
 import org.apache.log4j.Logger;
-import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Has;
 
 import javax.persistence.EntityManager;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -294,7 +291,7 @@ public class DwcaParser {
         ArrayList<NodeRecord> records = new ArrayList<>();
         for (StarRecord rec : dwca) {
             if(count %10000 ==0 && count!=0){
-                InsertNodeRecordsToMysql(records);
+                insertNodeRecordsToMysql(records);
                 records.clear();
                 count =0;
             }
@@ -330,10 +327,11 @@ public class DwcaParser {
 //            checkActionFiles(rec, actions, tableRecord);
             records.add(tableRecord);
         }
-        InsertNodeRecordsToMysql(records);
+        insertNodeRecordsToMysql(records);
+        insertPlaceholderNodesToMysql();
     }
 
-    private void InsertNodeRecordsToMysql(ArrayList<NodeRecord> records) {
+    private void insertNodeRecordsToMysql(ArrayList<NodeRecord> records) {
         int media_count=0;
         int vernaculars_count=0;
         for(NodeRecord record : records){
@@ -348,6 +346,23 @@ public class DwcaParser {
         restClientHandler.insertNodeRecordsToMysql(PropertiesHandler.getProperty("addEntriesMysql"), records);
 //        printRecord(tableRecord);
         System.out.println();
+    }
+
+    private void insertPlaceholderNodesToMysql(){
+        Neo4jHandler neo4jHandler = new Neo4jHandler();
+        ArrayList<Node> placeholderNodes = neo4jHandler.getPlaceholderNodes(this.resourceID);
+        if(placeholderNodes.size() !=0) {
+            ArrayList<NodeRecord> records = new ArrayList<>();
+            for (int i=0; i<placeholderNodes.size(); i++) {
+                NodeRecord tableRecord = new NodeRecord(
+                        placeholderNodes.get(i).getGeneratedNodeId() + "", this.resourceID);
+
+                Taxon taxon = new Taxon(placeholderNodes.get(i).getNodeId(), placeholderNodes.get(i).getScientificName(), placeholderNodes.get(i).getRank(), String.valueOf(placeholderNodes.get(i).getPageId()));
+                tableRecord.setTaxon(taxon);
+                records.add(tableRecord);
+            }
+            insertNodeRecordsToMysql(records);
+        }
     }
 
     private ArrayList<Association> parseAssociationOfTaxon(StarRecord rec) {
@@ -586,8 +601,10 @@ public class DwcaParser {
 
     private void addReference(NodeRecord nodeRecord, Reference ref) {
         ArrayList<Reference> refs = nodeRecord.getReferences();
-        if (nodeRecord.getReferences() != null)
-            refs.add(ref);
+        if (nodeRecord.getReferences() != null) {
+            if (!refs.contains(ref))
+                refs.add(ref);
+        }
         else {
             refs = new ArrayList<Reference>();
             refs.add(ref);

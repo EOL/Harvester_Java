@@ -64,6 +64,14 @@ public class Taxon {
         this.landmark = landmark;
     }
 
+    public Taxon(String identifier, String scientificName,String taxonRank,String pageEolId){
+        this.identifier = identifier;
+        this.taxonId = identifier;
+        this.scientificName = scientificName;
+        this.taxonRank = taxonRank;
+        this.pageEolId = pageEolId;
+    }
+
     public ArrayList<String> getGuids() {
         return guids;
     }

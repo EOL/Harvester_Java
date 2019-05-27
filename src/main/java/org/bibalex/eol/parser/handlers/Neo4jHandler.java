@@ -1,8 +1,10 @@
 package org.bibalex.eol.parser.handlers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bibalex.eol.parser.models.Node;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by AmrMorad
@@ -248,4 +250,26 @@ public class Neo4jHandler {
         System.out.println("===============================");
         return Integer.valueOf(response);
     }
+
+    public ArrayList<Node> getPlaceholderNodes (int resource_id){
+
+        ArrayList<Node> placeholderNodes = (ArrayList<Node>) restClientHandler.getPlaceholderNodes(PropertiesHandler.getProperty("getPlaceholderNodes")+"/"+resource_id);
+        System.out.println("===============================");
+        System.out.println("get placeholder nodes with response ");
+        System.out.println("===============================");
+        return nodeMapper(placeholderNodes);
+    }
+
+    public ArrayList<Node> nodeMapper(ArrayList<Node> beforeMapping)
+    {
+        ArrayList<Node> afterMapping = new ArrayList<Node>();
+        ObjectMapper mapper = new ObjectMapper();
+        for(int i = 0 ; i < beforeMapping.size(); i++)
+        {
+            Node n = mapper.convertValue(beforeMapping.get(i), Node.class);
+            afterMapping.add(n);
+        }
+        return afterMapping;
+    }
+
 }

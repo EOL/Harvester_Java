@@ -1108,3 +1108,11 @@
 2018-10-28 11:40:22,043 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [scientific_name=Lepidocyrtus barbulus, canonical_name=Lepidocyrtus barbulus, canonical_synonyms=[], synonyms=[], children_ids=[], ancestors_ids=[513720, 493397, 493394, 1499019, 487421, 1474254, 1992944, 487261, 2007063, 1966479, 1991897, 1527888, 487123, 1519250, 1518347, 487122, 1772868], other_canonical_synonyms=[], other_synonyms=[], id=485, page_id=5, rank=species, is_hybrid=false])
 2018-10-28 12:35:59,953 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [scientific_name=Lepidocyrtus barbulus, canonical_name=Lepidocyrtus barbulus, canonical_synonyms=[], synonyms=[], children_ids=[], ancestors_ids=[513720, 493397, 493394, 1499019, 487421, 1474254, 1992944, 487261, 2007063, 1966479, 1991897, 1527888, 487123, 1519250, 1518347, 487122, 1772868], other_canonical_synonyms=[], other_synonyms=[], id=485, page_id=5, rank=species, is_hybrid=false])
 2018-10-28 14:22:08,783 INFO c.b.t.c.NodeMapper [main] new added doc: SolrInputDocument(fields: [scientific_name=Lepidocyrtus barbulus, canonical_name=Lepidocyrtus barbulus, canonical_synonyms=[], synonyms=[], children_ids=[], ancestors_ids=[513720, 493397, 493394, 1499019, 487421, 1474254, 1992944, 487261, 2007063, 1966479, 1991897, 1527888, 487123, 1519250, 1518347, 487122, 1772868], other_canonical_synonyms=[], other_synonyms=[], id=485, page_id=5, rank=species, is_hybrid=false])
+2019-05-21 12:50:39,396 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] before getting root nodes
+2019-05-21 13:01:39,987 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] before getting root nodes
+2019-05-22 10:56:50,858 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] before getting root nodes
+2019-05-22 10:57:42,361 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] after getting root nodes
+2019-05-22 10:57:42,366 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2019-05-22 10:57:42,366 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] Inside Map Node method
+2019-05-22 10:57:42,366 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapNodes: mapping node: Animalia
+2019-05-22 10:57:42,367 INFO c.b.t.c.NodeMapper [http-nio-8090-exec-1] mapIfNeeded: used strategy is: scientific_name

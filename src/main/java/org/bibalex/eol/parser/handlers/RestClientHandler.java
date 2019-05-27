@@ -135,6 +135,27 @@ public class RestClientHandler {
         return 0;
     }
 
+    public Object getPlaceholderNodes(String uri){
+        if (!uri.equalsIgnoreCase("")) {
+
+            RestTemplate restTemplate = handleRestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Accept", "application/json");
+            ResponseEntity response = null;
+            HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+            response = restTemplate.exchange(uri, HttpMethod.GET, entity, Object.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return response.getBody();
+            } else {
+                System.out.println("returned code(" + response.getStatusCode() + ")");
+            }
+
+        }
+        return 0;
+    }
+
     public boolean insertNodeRecordsToMysql(String uri, ArrayList<NodeRecord> records){
         if (!uri.equalsIgnoreCase("")) {
 
