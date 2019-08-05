@@ -32,7 +32,7 @@ public class Harvester {
             System.out.println("henaaaaaaaaaaaaaa "+ path);
 
 //            return true;
-            harvesterAPI.callValidation(path, 179, true);
+//            harvesterAPI.callValidation(path, 179, true);
         } catch (IOException e) {
             e.printStackTrace();
         }

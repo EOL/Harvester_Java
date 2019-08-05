@@ -39,13 +39,13 @@ public class HarvesterController {
                 System.out.println(checkFilePath);
                 if(!checkFilePath.equals(null)) {
                     String deltaPath = StorageLayerClient.callDeltaCalculator(oldPath, updatedPath);
-                    return harvesterAPI.callValidation(deltaPath, Integer.parseInt(resourceID), newResource);
+                    return harvesterAPI.preProcessing(deltaPath, Integer.parseInt(resourceID), newResource);
                 }
             } catch (NoSuchFileException exception) {
                 newResource = true;
                 logger.info(exception+": No Older Versions of the resource found, calling Validator");
             }
-            return harvesterAPI.callValidation(updatedPath, Integer.parseInt(resourceID), newResource);
+            return harvesterAPI.preProcessing(updatedPath, Integer.parseInt(resourceID), newResource);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
