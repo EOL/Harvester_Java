@@ -3,6 +3,7 @@ package com.deltacalculator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.bibalex.eol.utils.CommonTerms;
+import org.bibalex.eol.utils.Constants;
 import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwc.terms.GbifTerm;
 import org.gbif.dwc.terms.Term;
@@ -11,6 +12,8 @@ import org.gbif.dwca.io.ArchiveField;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
+import scala.collection.immutable.Stream;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -19,12 +22,17 @@ import java.util.*;
 import static com.deltacalculator.DeltaCalculator.DWCADiff;
 
 
-
 public class ArchiveFileHandler {
+    private ArchiveFile archiveFile;
     Map<Term, Term> rowTypeId = setRowTypeId();
 
     public ArchiveFileHandler() {
     }
+
+    public ArchiveFileHandler(ArchiveFile archiveFile) {
+        this.archiveFile = archiveFile;
+    }
+
     private static final Logger logger = Logger.getLogger(ArchiveFileHandler.class);
 
     void copyMetaFile(File metaFile, String archivePathName) {
@@ -93,7 +101,7 @@ public class ArchiveFileHandler {
 
     }
 
-    public void readFromFileWriteToFile(File inputFile, boolean mode, String targetArchive, ArchiveFile archiveFile) {
+    public void readFromFileWriteToFile(File inputFile, boolean InsertNewFile, String targetArchive, ArchiveFile archiveFile) {
         BufferedReader readInput = null;
         try {
             readInput = new BufferedReader(new FileReader(inputFile));
@@ -102,18 +110,14 @@ public class ArchiveFileHandler {
             logger.error(e);
         }
         File outputFile = new File(targetArchive + "/" + inputFile.getName());
-        String actionIndicator = "";
-        if (!outputFile.exists())
+        if (!outputFile.exists()) {
             try {
                 outputFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
                 logger.error(e);
             }
-
-        ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();
-
-        ActionFile actionFile = new ActionFile();
+        }
 
         BufferedWriter writeOutput = null;
         try {
@@ -122,20 +126,16 @@ public class ArchiveFileHandler {
             e.printStackTrace();
             logger.debug(e);
         }
-        String inputLine = "",
-                delimiter = archiveFile.getFieldsTerminatedBy();
+        String inputLine = "";
         try {
             while ((inputLine = readInput.readLine()) != null) {
-                if (mode) {
+                if (InsertNewFile) {
+                    inputLine = inputLine + archiveFile.getFieldsTerminatedBy() + Constants.INSERT;
                     writeOutput.write(lineInsert(inputLine));
-                    actionIndicator = actionFile.getActionIndicator(ActionFile.Action.Insert);
                 } else {
+                    inputLine = inputLine + archiveFile.getFieldsTerminatedBy() + Constants.DELETE;
                     writeOutput.write(lineDelete(inputLine));
-                    actionIndicator = actionFile.getActionIndicator(ActionFile.Action.Delete);
                 }
-                String recordId = actionFile.getRecordId(inputLine, delimiter, archiveFileHandler.getSortingColumnIndex(archiveFile));
-                actionFile.writeLineToActionFile(archiveFile, recordId, delimiter, actionIndicator);
-
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -148,76 +148,57 @@ public class ArchiveFileHandler {
         inputLine = inputLine.substring(1, inputLine.length());
         inputLine = inputLine.trim();
         if (!StringUtils.isBlank(inputLine)) {
-            String insertedLine = inputLine + "\n";
+            String insertedLine = inputLine + archiveFile.getFieldsTerminatedBy() + Constants.INSERT + "\n";
             return insertedLine;
         } else
             return ("");
     }
 
     public String lineDelete(String inputLine) {
-        String deletedLine = inputLine.trim().substring(0, inputLine.length() - 2) + "\n";
+        String deletedLine = inputLine.trim().substring(0, inputLine.length() - 2) + archiveFile.getFieldsTerminatedBy() + Constants.DELETE + "\n";
         return deletedLine;
     }
 
     public String lineUpdate(String inputLine) {
-        String updatedLine = inputLine.substring(inputLine.indexOf('|') + 1, inputLine.length()).trim() + "\n";
+        String updatedLine = inputLine.substring(inputLine.indexOf('|') + 1, inputLine.length()).trim() + archiveFile.getFieldsTerminatedBy() + Constants.UPDATE + "\n";
         return updatedLine;
     }
 
     void compareContent(Archive version1, Archive version2, ArrayList<Term> archiveRowTypesArrayList) {
 
-        ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();
         CommandExecutor commandExecutor = new CommandExecutor();
-
 
         for (int i = 0; i < archiveRowTypesArrayList.size(); i++) {
             try {
+                ArchiveFile archiveFile1, archiveFile2;
                 if (archiveRowTypesArrayList.get(i) != DwcTerm.Taxon) {
-                    ArchiveFile archiveFile1 = version1.getExtension(archiveRowTypesArrayList.get(i)),
-                            archiveFile2 = version2.getExtension(archiveRowTypesArrayList.get(i));
-//                    File file1 = new File(version1.getLocation().getPath() + "/" + (archiveFile1.getTitle())),
-//                            file2 = new File(version2.getLocation().getPath() + "/" + (archiveFile2.getTitle()));
-                    File file1 = new File(archiveFile1.getLocationFile().getPath()),
-                            file2 = new File(archiveFile2.getLocationFile().getPath());
-                    String fileHeader = "";
-                    fileHeader = archiveFileHandler.getHeader(file2);
 
-                    try {
-                        boolean isVernacular = archiveFile1.getRowType().equals(GbifTerm.VernacularName);
-                        File sortedFile1 = commandExecutor.executeSort(file1, (archiveFile1.getFieldsTerminatedBy()), getSortingColumnIndex(archiveFile1)),
-                                sortedFile2 = commandExecutor.executeSort(file2, (archiveFile2.getFieldsTerminatedBy()), getSortingColumnIndex(archiveFile2)),
-                                differenceFile = commandExecutor.executeDiff(sortedFile1.getPath(), sortedFile2.getPath(), sortedFile2.getName(), archiveFile2, isVernacular);
-
-                        if ((version2.getExtension(archiveRowTypesArrayList.get(i)).getIgnoreHeaderLines()) == 1 && !archiveFile2.getRowType().equals(CommonTerms.occurrenceTerm)
-                        && archiveFile2.getRowType().equals(CommonTerms.associationTerm) && archiveFile2.getRowType().equals(DwcTerm.MeasurementOrFact))
-                            archiveFileHandler.addHeader(differenceFile, fileHeader);
-                    } catch (Exception e) {
-                        logger.error(e);
-                        e.printStackTrace();
-                    }
-
+                    archiveFile1 = version1.getExtension(archiveRowTypesArrayList.get(i));
+                    archiveFile2 = version2.getExtension(archiveRowTypesArrayList.get(i));
                 } else {
-                    ArchiveFile archiveCoreFile1 = version1.getCore(),
-                            archiveCoreFile2 = version2.getCore();
-                    File coreFile1 = new File(archiveCoreFile1.getLocationFile().getPath()),
-                            coreFile2 = new File(archiveCoreFile2.getLocationFile().getPath());
-                    System.out.println("Core Files: " + coreFile1.getPath() + ", " + coreFile2.getPath());
-                    logger.info("Core Files: " + coreFile1.getPath() + ", " + coreFile2.getPath());
-                    String fileHeader = "";
-                    fileHeader = archiveFileHandler.getHeader(coreFile2);
-
-                    try {
-                        File sortedFile1 = commandExecutor.executeSort(coreFile1, (archiveCoreFile1.getFieldsTerminatedBy()), getSortingColumnIndex(archiveCoreFile1)),
-                                sortedFile2 = commandExecutor.executeSort(coreFile2, (archiveCoreFile2.getFieldsTerminatedBy()), getSortingColumnIndex(archiveCoreFile2)),
-                                differenceFile = commandExecutor.executeDiff(sortedFile1.getPath(), sortedFile2.getPath(), sortedFile2.getName(), (version2.getCore()), false);
-                        if ((archiveCoreFile2.getIgnoreHeaderLines()) == 1)
-                            archiveFileHandler.addHeader(differenceFile, fileHeader);
-                    } catch (Exception e) {
-                        logger.error(e);
-                        e.printStackTrace();
-                    }
+                    archiveFile1 = version1.getCore();
+                    archiveFile2 = version2.getCore();
                 }
 
+                File file1 = new File(archiveFile1.getLocationFile().getPath()),
+                        file2 = new File(archiveFile2.getLocationFile().getPath());
+
+                String fileHeader = "";
+                fileHeader = getHeader(file2)+archiveFile2.getFieldsTerminatedBy()+"Action";
+
+                try {
+                    boolean isVernacular = archiveFile1.getRowType().equals(GbifTerm.VernacularName);
+                    File sortedFile1 = commandExecutor.executeSort(file1, (archiveFile1.getFieldsTerminatedBy()), getSortingColumnIndex(archiveFile1)),
+                            sortedFile2 = commandExecutor.executeSort(file2, (archiveFile2.getFieldsTerminatedBy()), getSortingColumnIndex(archiveFile2)),
+                            differenceFile = commandExecutor.executeDiff(sortedFile1.getPath(), sortedFile2.getPath(), sortedFile2.getName(), archiveFile2, isVernacular);
+
+                    if ((archiveFile2.getIgnoreHeaderLines()) == 1 && !archiveFile2.getRowType().equals(CommonTerms.occurrenceTerm)
+                            && !archiveFile2.getRowType().equals(CommonTerms.associationTerm) && !archiveFile2.getRowType().equals(DwcTerm.MeasurementOrFact))
+                        addHeader(differenceFile, fileHeader);
+                } catch (Exception e) {
+                    logger.error(e);
+                    e.printStackTrace();
+                }
             } catch (Exception e) {
                 logger.error(e + ": Extension File Not Found");
                 System.out.println(e + ": Extension File Not Found");
@@ -237,20 +218,6 @@ public class ArchiveFileHandler {
         rowTypeId.put(DwcTerm.MeasurementOrFact, DwcTerm.measurementID);
         rowTypeId.put(GbifTerm.VernacularName, DwcTerm.vernacularName);
         return rowTypeId;
-    }
-
-    void setRowType(Archive archive) {
-        Map<Term, Term> rowTypeId = setRowTypeId();
-        for (ArchiveFile archiveFile : archive.getExtensions()) {
-            Term idTerm = rowTypeId.get(archiveFile.getRowType());
-            List<ArchiveField> fieldsSorted = archiveFile.getFieldsSorted();
-            ArrayList<Term> termsSorted = new ArrayList<Term>();
-            for (ArchiveField archiveField : fieldsSorted) {
-                termsSorted.add(archiveField.getTerm());
-            }
-            int index = termsSorted.indexOf(idTerm);
-            System.out.println("Archive File: " + archiveFile.getTitle() + " - " + index);
-        }
     }
 
     int[] getSortingColumnIndex(ArchiveFile archiveFile) {
@@ -297,7 +264,6 @@ public class ArchiveFileHandler {
 
         if (mediaFile != null) {
             HashSet<String> agentIds = ModelsIds.getModelsIds().getAgentIds();
-            ActionFile actionFile = new ActionFile();
 
             for (Record record : mediaFile) {
                 if (record.value(CommonTerms.agentIDTerm) != null) {
@@ -308,8 +274,7 @@ public class ArchiveFileHandler {
                             HashSet<String> mediumIds = ModelsIds.getModelsIds().getMediaIds();
                             if (!mediumIds.contains(record.value(CommonTerms.identifierTerm))) {
                                 ModelsIds.getModelsIds().addMediumId(record.value(CommonTerms.identifierTerm));
-                                actionFile.writeLineToActionFile(mediaFile, record.value(CommonTerms.identifierTerm), mediaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                                writeRecordToArchiveFile(record, mediaFile);
+                                writeRecordToArchiveFile(record, mediaFile, Constants.UNCHANGED);
                             }
                         }
                     }
@@ -323,7 +288,6 @@ public class ArchiveFileHandler {
 
         if (mediaFile != null) {
             HashSet<String> referenceIds = ModelsIds.getModelsIds().getReferenceIds();
-            ActionFile actionFile = new ActionFile();
 
             for (Record record : mediaFile) {
                 if (record.value(CommonTerms.referenceIDTerm) != null) {
@@ -333,8 +297,7 @@ public class ArchiveFileHandler {
                             HashSet<String> mediumIds = ModelsIds.getModelsIds().getMediaIds();
                             if (!mediumIds.contains(record.value(CommonTerms.identifierTerm))) {
                                 ModelsIds.getModelsIds().addMediumId(record.value(CommonTerms.identifierTerm));
-                                actionFile.writeLineToActionFile(mediaFile, record.value(CommonTerms.identifierTerm), mediaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                                writeRecordToArchiveFile(record, mediaFile);
+                                writeRecordToArchiveFile(record, mediaFile, Constants.UNCHANGED);
                             }
                         }
                     }
@@ -348,7 +311,6 @@ public class ArchiveFileHandler {
 
         if (measurementFile != null) {
             HashSet<String> referenceIds = ModelsIds.getModelsIds().getReferenceIds();
-            ActionFile actionFile = new ActionFile();
 
             for (Record record : measurementFile) {
                 if (record.value(CommonTerms.referenceIDTerm) != null) {
@@ -358,8 +320,7 @@ public class ArchiveFileHandler {
                             HashSet<String> measurementIds = ModelsIds.getModelsIds().getMeasurementIds();
                             if (!measurementIds.contains(record.value(DwcTerm.measurementID))) {
                                 ModelsIds.getModelsIds().addMeasurementId(record.value(DwcTerm.measurementID));
-                                actionFile.writeLineToActionFile(measurementFile, record.value(DwcTerm.measurementID), measurementFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                                writeRecordToArchiveFile(record, measurementFile);
+                                writeRecordToArchiveFile(record, measurementFile, Constants.UNCHANGED);
                             }
                         }
                     }
@@ -373,7 +334,6 @@ public class ArchiveFileHandler {
 
         if (associationFile != null) {
             HashSet<String> referenceIds = ModelsIds.getModelsIds().getReferenceIds();
-            ActionFile actionFile = new ActionFile();
 
             for (Record record : associationFile) {
                 if (record.value(CommonTerms.referenceIDTerm) != null) {
@@ -383,8 +343,7 @@ public class ArchiveFileHandler {
                             HashSet<String> associationIds = ModelsIds.getModelsIds().getAssociationIds();
                             if (!associationIds.contains(record.value(CommonTerms.associationIDTerm))) {
                                 ModelsIds.getModelsIds().addAssociationId(record.value(CommonTerms.associationIDTerm));
-                                actionFile.writeLineToActionFile(associationFile, record.value(DwcTerm.measurementID), associationFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                                writeRecordToArchiveFile(record, associationFile);
+                                writeRecordToArchiveFile(record, associationFile, Constants.UNCHANGED);
                             }
                         }
                     }
@@ -405,7 +364,6 @@ public class ArchiveFileHandler {
             HashSet<String> measurementIds = ModelsIds.getModelsIds().getMeasurementIds();
             HashSet<String> occurrenceIds = ModelsIds.getModelsIds().getOccurrenceIds();
             HashSet<String> notUpdatedOccurrenceIds = new HashSet<>(occurrenceIds);
-            ActionFile actionFile = new ActionFile();
 
             for (Record record : measurementFile) {
                 if (measurementIds.contains(record.value(DwcTerm.measurementID)) && !occurrenceIds.contains(record.value(CommonTerms.occurrenceID))) {
@@ -417,8 +375,7 @@ public class ArchiveFileHandler {
                 if (!notUpdatedOccurrenceIds.contains(record.value(CommonTerms.occurrenceID)) &&
                         occurrenceIds.contains(record.value(CommonTerms.occurrenceID))) {
 
-                    actionFile.writeLineToActionFile(occurrenceFile, record.value(CommonTerms.occurrenceID), occurrenceFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                    writeRecordToArchiveFile(record, occurrenceFile);
+                    writeRecordToArchiveFile(record, occurrenceFile, Constants.UNCHANGED);
                 }
             }
         }
@@ -433,7 +390,6 @@ public class ArchiveFileHandler {
             HashSet<String> associationIds = ModelsIds.getModelsIds().getAssociationIds();
             HashSet<String> occurrenceIds = ModelsIds.getModelsIds().getOccurrenceIds();
             HashSet<String> notUpdatedOccurrenceIds = new HashSet<>(occurrenceIds);
-            ActionFile actionFile = new ActionFile();
 
             for (Record record : associationFile) {
                 if (associationIds.contains(record.value(CommonTerms.associationIDTerm)) && !occurrenceIds.contains(record.value(CommonTerms.occurrenceID))) {
@@ -445,8 +401,7 @@ public class ArchiveFileHandler {
                 if (!notUpdatedOccurrenceIds.contains(record.value(CommonTerms.occurrenceID)) &&
                         occurrenceIds.contains(record.value(CommonTerms.occurrenceID))) {
 
-                    actionFile.writeLineToActionFile(occurrenceFile, record.value(CommonTerms.occurrenceID), occurrenceFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                    writeRecordToArchiveFile(record, occurrenceFile);
+                    writeRecordToArchiveFile(record, occurrenceFile, Constants.UNCHANGED);
                 }
             }
         }
@@ -458,50 +413,13 @@ public class ArchiveFileHandler {
         HashSet<String> vernacularIds = ModelsIds.getModelsIds().getVernacularIds();
         HashSet<String> taxaIds = ModelsIds.getModelsIds().getTaxaIds();
         ArchiveFile taxaFile = updatedArchive.getCore();
-        ActionFile actionFile = new ActionFile();
 
-//        try {
-            for (StarRecord starRecord : updatedArchive) {
-                if (starRecord.extension(CommonTerms.mediaTerm) != null) {
-                    for (Record record : starRecord.extension(CommonTerms.mediaTerm)) {
-                        if (mediaIds.contains(record.value(CommonTerms.identifierTerm)) && !taxaIds.contains(starRecord.core().id())) {
-                            ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
-                            actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                            writeRecordToArchiveFile(starRecord.core(), taxaFile);
-                        }
-                    }
-                }
-                if (starRecord.extension(CommonTerms.occurrenceTerm) != null) {
-                    for (Record record : starRecord.extension(CommonTerms.occurrenceTerm)) {
-                        if (occurrenceIds.contains(record.value(CommonTerms.occurrenceID)) && !taxaIds.contains(starRecord.core().id())) {
-                            ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
-                            actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                            writeRecordToArchiveFile(starRecord.core(), taxaFile);
-                        }
-                    }
-                }
-                if (starRecord.extension(GbifTerm.VernacularName) != null) {
-                    for (Record record : starRecord.extension(GbifTerm.VernacularName)) {
-//                    System.out.println(record.toString());
-                        String id = record.value(DwcTerm.vernacularName) + "+" + record.value(CommonTerms.languageTerm);
-                        if (vernacularIds.contains(id) && !taxaIds.contains(starRecord.core().id())) {
-                            ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
-                            actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                            writeRecordToArchiveFile(starRecord.core(), taxaFile);
-                        }
-                    }
-                }
-
-            }
-
-
-        for (StarRecord starRecord : oldArchive) {
+        for (StarRecord starRecord : updatedArchive) {
             if (starRecord.extension(CommonTerms.mediaTerm) != null) {
                 for (Record record : starRecord.extension(CommonTerms.mediaTerm)) {
                     if (mediaIds.contains(record.value(CommonTerms.identifierTerm)) && !taxaIds.contains(starRecord.core().id())) {
                         ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
-                        actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                        writeRecordToArchiveFile(starRecord.core(), taxaFile);
+                        writeRecordToArchiveFile(starRecord.core(), taxaFile, Constants.UNCHANGED);
                     }
                 }
             }
@@ -509,55 +427,54 @@ public class ArchiveFileHandler {
                 for (Record record : starRecord.extension(CommonTerms.occurrenceTerm)) {
                     if (occurrenceIds.contains(record.value(CommonTerms.occurrenceID)) && !taxaIds.contains(starRecord.core().id())) {
                         ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
-                        actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                        writeRecordToArchiveFile(starRecord.core(), taxaFile);
+                        writeRecordToArchiveFile(starRecord.core(), taxaFile, Constants.UNCHANGED);
                     }
                 }
             }
             if (starRecord.extension(GbifTerm.VernacularName) != null) {
                 for (Record record : starRecord.extension(GbifTerm.VernacularName)) {
-//                    System.out.println(record.toString());
                     String id = record.value(DwcTerm.vernacularName) + "+" + record.value(CommonTerms.languageTerm);
                     if (vernacularIds.contains(id) && !taxaIds.contains(starRecord.core().id())) {
                         ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
-                        actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                        writeRecordToArchiveFile(starRecord.core(), taxaFile);
+                        writeRecordToArchiveFile(starRecord.core(), taxaFile, Constants.UNCHANGED);
+                    }
+                }
+            }
+        }
+
+        for (StarRecord starRecord : oldArchive) {
+            if (starRecord.extension(CommonTerms.mediaTerm) != null) {
+                for (Record record : starRecord.extension(CommonTerms.mediaTerm)) {
+                    if (mediaIds.contains(record.value(CommonTerms.identifierTerm)) && !taxaIds.contains(starRecord.core().id())) {
+                        ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
+                        writeRecordToArchiveFile(starRecord.core(), taxaFile, Constants.UNCHANGED);
                     }
                 }
             }
 
+            if (starRecord.extension(CommonTerms.occurrenceTerm) != null) {
+                for (Record record : starRecord.extension(CommonTerms.occurrenceTerm)) {
+                    if (occurrenceIds.contains(record.value(CommonTerms.occurrenceID)) && !taxaIds.contains(starRecord.core().id())) {
+                        ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
+                        writeRecordToArchiveFile(starRecord.core(), taxaFile, Constants.UNCHANGED);
+                    }
+                }
+            }
+            if (starRecord.extension(GbifTerm.VernacularName) != null) {
+                for (Record record : starRecord.extension(GbifTerm.VernacularName)) {
+                    String id = record.value(DwcTerm.vernacularName) + "+" + record.value(CommonTerms.languageTerm);
+                    if (vernacularIds.contains(id) && !taxaIds.contains(starRecord.core().id())) {
+                        ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
+                        writeRecordToArchiveFile(starRecord.core(), taxaFile, Constants.UNCHANGED);
+                    }
+                }
+            }
         }
-//        } catch (NullPointerException e) {
-//            logger.info(e + ": No media file found");
-//        }
     }
-
-//    public void setTaxaOfChangedOccurrences(Archive updatedArchive) {
-//        HashSet<String> occurrenceIds = ModelsIds.getModelsIds().getOccurrenceIds();
-//        HashSet<String> taxaIds = ModelsIds.getModelsIds().getTaxaIds();
-//        ArchiveFile taxaFile = updatedArchive.getCore();
-//        ActionFile actionFile = new ActionFile();
-//        try {
-//            for (StarRecord starRecord : updatedArchive) {
-//                if (starRecord.extension(CommonTerms.occurrenceTerm) != null) {
-//                    for (Record record : starRecord.extension(CommonTerms.occurrenceTerm)) {
-//                        if (occurrenceIds.contains(record.value(CommonTerms.occurrenceID)) && !taxaIds.contains(starRecord.core().id())) {
-//                            ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
-//                            actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-//                            writeRecordToArchiveFile(starRecord.core(), taxaFile);
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (NullPointerException e) {
-//            logger.info(e + ": No Occurrence File Found");
-//        }
-//    }
 
     public void setTaxaOfChangedReference(Archive updatedArchive) {
         HashSet<String> referenceIds = ModelsIds.getModelsIds().getReferenceIds();
         ArchiveFile taxaFile = updatedArchive.getCore();
-        ActionFile actionFile = new ActionFile();
         try {
 
             for (Record record : taxaFile) {
@@ -568,8 +485,7 @@ public class ArchiveFileHandler {
                             HashSet<String> taxaIds = ModelsIds.getModelsIds().getTaxaIds();
                             if (!taxaIds.contains(record.value(DwcTerm.taxonID))) {
                                 ModelsIds.getModelsIds().addTaxaId(record.value(DwcTerm.taxonID));
-                                actionFile.writeLineToActionFile(taxaFile, record.value(DwcTerm.measurementID), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-                                writeRecordToArchiveFile(record, taxaFile);
+                                writeRecordToArchiveFile(record, taxaFile, Constants.UNCHANGED);
                             }
                         }
                     }
@@ -580,32 +496,7 @@ public class ArchiveFileHandler {
         }
     }
 
-//    public void setTaxaOfChangedVernacular(Archive updatedArchive) {
-//        HashSet<String> vernacularIds = ModelsIds.getModelsIds().getVernacularIds();
-//        HashSet<String> taxaIds = ModelsIds.getModelsIds().getTaxaIds();
-//        ArchiveFile taxaFile = updatedArchive.getCore();
-//        ActionFile actionFile = new ActionFile();
-//
-//        try {
-//            for (StarRecord starRecord : updatedArchive) {
-//                if (starRecord.extension(GbifTerm.VernacularName) != null) {
-//                    for (Record record : starRecord.extension(GbifTerm.VernacularName)) {
-////                    System.out.println(record.toString());
-//                        String id = record.value(DwcTerm.vernacularName) + "+" + record.value(CommonTerms.languageTerm);
-//                        if (vernacularIds.contains(id) && !taxaIds.contains(starRecord.core().id())) {
-//                            ModelsIds.getModelsIds().addTaxaId(starRecord.core().id());
-//                            actionFile.writeLineToActionFile(taxaFile, starRecord.core().id(), taxaFile.getFieldsTerminatedBy(), actionFile.getActionIndicator(ActionFile.Action.Unchanged));
-//                            writeRecordToArchiveFile(starRecord.core(), taxaFile);
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (NullPointerException e) {
-//            logger.info(e + ": No Vernacular File Found");
-//        }
-//    }
-
-    private void writeRecordToArchiveFile(Record record, ArchiveFile archiveFile) {
+    private void writeRecordToArchiveFile(Record record, ArchiveFile archiveFile, String action) {
         try {
             List<ArchiveField> fieldsSorted = archiveFile.getFieldsSorted();
             ArrayList<Term> termsSorted = new ArrayList<Term>();
@@ -613,8 +504,10 @@ public class ArchiveFileHandler {
                 termsSorted.add(archiveField.getTerm());
             }
 
+            termsSorted.add(CommonTerms.action);
             OwnDwcaWriter dwcaWriter = new OwnDwcaWriter(archiveFile.getArchive().getCore().getRowType(), DWCADiff);
             Map<Term, String> termStringMap = dwcaWriter.recordToMap(record, archiveFile);
+            termStringMap.put(CommonTerms.action, action);
 
             if (record.id() != null)
                 dwcaWriter.newRecord(record.id());

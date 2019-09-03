@@ -16,8 +16,8 @@ public class DeltaCalculator {
     private static final Logger logger = Logger.getLogger(DeltaCalculator.class);
 
     public static void main(String[] args) {
-      File file1 = new File ("/home/ba/eol_workspace/originals/421_org.out_valid.zip");
-      File file2 = new File ("/home/ba/eol_workspace/originals/421_org.out_valid.zip");
+      File file1 = new File ("/home/ba/eol_workspace/originals/valid_(copy).out.zip");
+      File file2 = new File ("/home/ba/eol_workspace/originals/valid.out.zip");
       DeltaCalculator deltaCalculator = new DeltaCalculator();
       deltaCalculator.deltaCalculatorMain(file1, file2);
     }

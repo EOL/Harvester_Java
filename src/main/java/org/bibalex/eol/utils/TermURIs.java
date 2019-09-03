@@ -113,7 +113,7 @@ public class TermURIs {
     public static final String mediaLatURI = "http://www.w3.org/2003/01/geo/wgs84_pos#long";
     public static final String mediaPosURI = "http://www.w3.org/2003/01/geo/wgs84_pos#alt";
     public static final String bibliographicCitationURI = "http://purl.org/dc/terms/bibliographicCitation";
-    public static final String contributorURI = "http://purl.org/dc/terms/contributor";
+    public static final String  contributorURI = "http://purl.org/dc/terms/contributor";
 
     //Measurement
     public static final String measurementOfTaxonURI = "http://eol.org/schema/measurementOfTaxon";
@@ -140,5 +140,7 @@ public class TermURIs {
     public static final String landmark = "http://eol.org/schema/Landmark";
 
     public static final String generated_auto_id = "http://eol.org/schema/generated_auto_id";
+    public static final String action = "http://eol.org/schema/action";
+
 }
 

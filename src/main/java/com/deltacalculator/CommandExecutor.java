@@ -2,6 +2,7 @@ package com.deltacalculator;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.bibalex.eol.utils.Constants;
 import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwca.io.ArchiveFile;
 import java.io.*;
@@ -50,7 +51,7 @@ public class CommandExecutor {
     }
 
     public File executeDiff(String file1, String file2,String diffFileName, ArchiveFile archiveFile, boolean isVernacular) {
-        ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();
+        ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler(archiveFile);
         String file1SDIFF = file1,
                 file2SDIFF = file2;
         System.out.println("Comparing Files: " + file1 + ", " + file2);
@@ -70,7 +71,7 @@ public class CommandExecutor {
                 FileUtils.copyFile(archiveFile.getLocationFile(), diffFile);
             }
             else {
-                String command = "sdiff " + file1SDIFF + " " + file2SDIFF + " -s" + " -H" + " -w" + "6144";
+                String command = "sdiff " + file1SDIFF + " " + file2SDIFF + " -s" + " -H" + " -w " + "6144";
                 System.out.println("Executing Command: " + command);
                 logger.info("Executing Command: " + command);
                 Process sDiff = Runtime.getRuntime().exec(command);
@@ -78,22 +79,16 @@ public class CommandExecutor {
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(diffFile));
                 ActionFile actionFile = new ActionFile();
                 int i = 0;
-                String line = "",
-                        actionIndicator = "",
-                        delimiter = archiveFile.getFieldsTerminatedBy();
-//        String [] outputLine={};
+                String line = "", delimiter = archiveFile.getFieldsTerminatedBy();
                 ArrayList outputLine = new ArrayList<String>();
                 while ((line = bufferedReader.readLine()) != null) {
                     line = line.trim();
                     if (line.startsWith(">")) {
                         outputLine.add(0, archiveFileHandler.lineInsert(line));
-                        actionIndicator = actionFile.getActionIndicator(ActionFile.Action.Insert);
                     } else if (line.endsWith("<")) {
                         outputLine.add(0, archiveFileHandler.lineDelete(line));
-                        actionIndicator = actionFile.getActionIndicator(ActionFile.Action.Delete);
                     } else if (!isVernacular) {
                         outputLine.add(0, archiveFileHandler.lineUpdate(line));
-                        actionIndicator = actionFile.getActionIndicator(ActionFile.Action.Update);
                     } else {
                         String part1 = line.substring(0, line.indexOf("|") + 1).trim(),
                                 part2 = line.substring(line.indexOf("|") + 1).trim();
@@ -104,29 +99,20 @@ public class CommandExecutor {
                                 String.valueOf(part1.split(delimiter)[sortingColumnIndex[0]] + part1.split(delimiter)[sortingColumnIndex[1]]).equalsIgnoreCase(String.valueOf(part2.split(delimiter)[sortingColumnIndex[0]] + part2.split(delimiter)[sortingColumnIndex[1]]));
                         if (updatedRecord) {
                             outputLine.add(0, archiveFileHandler.lineUpdate(line));
-                            actionIndicator = actionFile.getActionIndicator(ActionFile.Action.Update);
                         } else {
                             outputLine.add(0, archiveFileHandler.lineInsert(">" + part2));
-                            actionIndicator = actionFile.getActionIndicator(ActionFile.Action.Insert);
                             outputLine.add(1, archiveFileHandler.lineDelete(part1 + "<"));
                         }
 
                     }
-//            for(int j=0; j<outputLine.size();j++)
-//            {
-//            bufferedWriter.write(String.valueOf(outputLine.get(j)));
-//            String recordId = actionFile.getRecordId(String.valueOf(outputLine.get(j)), delimiter, archiveFileHandler.getSortingColumnIndex(archiveFile));
-//            actionFile.writeLineToActionFile(archiveFile, recordId, delimiter, actionIndicator);
-//            archiveFileHandler.addIdToArrayList(archiveFile, recordId);
-//            }
+
                     bufferedWriter.write(String.valueOf(outputLine.get(0)));
                     String recordId = actionFile.getRecordId(String.valueOf(outputLine.get(0)), delimiter, archiveFileHandler.getSortingColumnIndex(archiveFile));
-                    actionFile.writeLineToActionFile(archiveFile, recordId, delimiter, actionIndicator);
                     archiveFileHandler.addIdToArrayList(archiveFile, recordId);
                     if (outputLine.size() > 1) {
+                        outputLine.add(1, outputLine.get(1)+archiveFile.getFieldsTerminatedBy()+Constants.DELETE);
                         bufferedWriter.write(String.valueOf(outputLine.get(1)));
                         recordId = actionFile.getRecordId(String.valueOf(outputLine.get(1)), delimiter, archiveFileHandler.getSortingColumnIndex(archiveFile));
-                        actionFile.writeLineToActionFile(archiveFile, recordId, delimiter, actionFile.getActionIndicator(ActionFile.Action.Delete));
                         archiveFileHandler.addIdToArrayList(archiveFile, recordId);
                     }
                     outputLine.clear();

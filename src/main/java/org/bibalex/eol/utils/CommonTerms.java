@@ -41,4 +41,6 @@ public class CommonTerms {
     public static final Term varietyTerm  = TermFactory.instance().findTerm(TermURIs.varietyURI);
     public static final Term formTerm  = TermFactory.instance().findTerm(TermURIs.formURI);
     public static final Term generatedAutoIdTerm = TermFactory.instance().findTerm(TermURIs.generated_auto_id);
+    public static final Term action = TermFactory.instance().findTerm(TermURIs.action);
+
 }

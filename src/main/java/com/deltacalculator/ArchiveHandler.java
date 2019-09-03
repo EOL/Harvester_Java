@@ -51,8 +51,6 @@ public class ArchiveHandler {
         }
     }
 
-
-
     void filterContent(Archive version1, Archive version2) {
 
         ArrayList<Term>
@@ -61,13 +59,9 @@ public class ArchiveHandler {
                 archive1ContentTemp = setArchiveContentArrayList(version1),
                 archive2ContentTemp = setArchiveContentArrayList(version2);
 
-
-        int i;
-        ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();
-
-
         boolean isAddedContent = archive2ContentTemp.removeAll(archive1Content),
                 isDeletedContent = archive1ContentTemp.removeAll(archive2Content);
+
         if(archive2ContentTemp.size()==0)
             isAddedContent = false;
         if(archive1ContentTemp.size()==0)
@@ -80,8 +74,10 @@ public class ArchiveHandler {
 
         if (isAddedContent == true) {
             //mark new file as inserted
-            for (i = 0; i < archive2ContentTemp.size(); i++) {
+
+            for (int i = 0; i < archive2ContentTemp.size(); i++) {
                 ArchiveFile addedArchiveFile = version2.getExtension(archive2ContentTemp.get(i));
+                ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler(addedArchiveFile);
                 File addedFile = new File(version2.getLocation().getPath() + "/" + addedArchiveFile.getTitle());
                 System.out.println("Added File Found: " + addedArchiveFile.getTitle());
                 logger.info("Added File Found: " + addedArchiveFile.getTitle());
@@ -91,8 +87,9 @@ public class ArchiveHandler {
         }
 
         if (isDeletedContent == true) {
-            for (i = 0; i < archive1ContentTemp.size(); i++) {
+            for (int i = 0; i < archive1ContentTemp.size(); i++) {
                 ArchiveFile deletedArchiveFile = version1.getExtension(archive1ContentTemp.get(i));
+                ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler(deletedArchiveFile);
                 File deletedFile = new File(version1.getLocation().getPath() + "/" + deletedArchiveFile.getTitle());
                 System.out.println("Deleted File Found: " + deletedArchiveFile.getTitle());
                 logger.info("Deleted File Found: " + deletedArchiveFile.getTitle());
@@ -100,7 +97,8 @@ public class ArchiveHandler {
                 archive1Content.remove(archive1ContentTemp.get(i));
             }
         }
-        // if the two lists are identical, or reharvesting the rest of the two archives files
+        // if the two lists are identical, or comparing the rest of the two archives files
+        ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();
         archiveFileHandler.compareContent(version1, version2, archive2Content);
     }
 
