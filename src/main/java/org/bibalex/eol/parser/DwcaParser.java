@@ -284,7 +284,7 @@ public class DwcaParser {
             RunTaxonMatching runTaxonMatching = new RunTaxonMatching();
             runTaxonMatching.RunTaxonMatching(resourceID);
         }
-
+        addTimeOfHarvestingToMysql(true);
         //Mysql
         Map<String, String> actions = actionFiles.get(getNameOfActionFile(dwca.getCore().getLocation()));
         int i = 0, count = 0;
@@ -329,6 +329,16 @@ public class DwcaParser {
         }
         insertNodeRecordsToMysql(records);
         insertPlaceholderNodesToMysql();
+        addTimeOfHarvestingToMysql(false);
+    }
+
+    private void addTimeOfHarvestingToMysql(boolean start){
+        RestClientHandler restClientHandler = new RestClientHandler();
+        if (start)
+            restClientHandler.addTimeOfResourceMysql(PropertiesHandler.getProperty("addStartTimeOfResourceMysql"));
+        else
+            restClientHandler.addTimeOfResourceMysql(PropertiesHandler.getProperty("addEndTimeOfResourceMysql"));
+
     }
 
     private void insertNodeRecordsToMysql(ArrayList<NodeRecord> records) {

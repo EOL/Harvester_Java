@@ -18,6 +18,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 import scala.Int;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -206,6 +207,28 @@ public class RestClientHandler {
         return "";
     }
 
+    public boolean addTimeOfResourceMysql(String uri){
+        if (!uri.equalsIgnoreCase("")) {
+
+            RestTemplate restTemplate = handleRestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Accept", "application/json");
+            ResponseEntity response = null;
+            HttpEntity<NodeRecord> entity = new HttpEntity<NodeRecord>(headers);
+            response = restTemplate.exchange(uri, HttpMethod.POST, entity, Boolean.class);
+
+            if (response.getStatusCode() == HttpStatus.OK) {
+                System.out.println(response.getBody());
+                return ((Boolean) response.getBody());
+            } else {
+                System.out.println("returned code(" + response.getStatusCode() + ")");
+            }
+        }
+        return true;
+    }
+
+
     private RestTemplate handleRestTemplate(){
         RestTemplate restTemplate;
         if (PropertiesHandler.getProperty("proxyExists").equalsIgnoreCase("true")) {
@@ -241,5 +264,15 @@ public class RestClientHandler {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
         factory.setHttpClient(client);
         return new RestTemplate(factory);
+    }
+
+    public static void main(String[] args) {
+        try {
+            PropertiesHandler.initializeProperties();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        RestClientHandler restClientHandler = new RestClientHandler();
+        restClientHandler.addTimeOfResourceMysql("http://localhost:8020/mysql/addEndTimeOfResource");
     }
 }
