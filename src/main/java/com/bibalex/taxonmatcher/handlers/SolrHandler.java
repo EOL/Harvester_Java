@@ -1,5 +1,6 @@
 package com.bibalex.taxonmatcher.handlers;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.bibalex.taxonmatcher.controllers.NodeMapper;
 import com.bibalex.taxonmatcher.models.Node;
 import com.bibalex.taxonmatcher.util.Neo4jSolr;
@@ -37,6 +38,7 @@ public class SolrHandler {
         solr.setDefaultCollection(defaultCollection);
         globalNameHandler = new GlobalNamesHandler();
         logger = LogHandler.getLogger(NodeMapper.class.getName());
+        openConnection("indexer");
     }
 
     public SolrDocumentList performQuery(String queryString) {
@@ -90,7 +92,7 @@ public class SolrHandler {
         ArrayList<String> childrenIds = neo4jSolr.getStringArray(obj, "children IDS");
         ArrayList<Integer> ancestorsIds = neo4jSolr.getIntegerArray(obj, "ancestors IDS");
 
-        openConnection("indexer");
+//        openConnection("indexer");
         SolrInputDocument doc = new SolrInputDocument();
 
         if (resource_id == Integer.valueOf(ResourceHandler.getPropertyValue("DWHId"))) {
@@ -128,7 +130,8 @@ public class SolrHandler {
 
         logger.info("new added doc: " + doc);
         client.add(doc);
-        client.close();
+        client.commit();
+//        client.close();
 
     }
 
@@ -149,7 +152,7 @@ public class SolrHandler {
         }
 
 
-        openConnection("indexer");
+//        openConnection("indexer");
         SolrInputDocument doc = new SolrInputDocument();
 
         SolrQuery q = new SolrQuery("id:" + generatedNodeId);
@@ -225,7 +228,8 @@ public class SolrHandler {
         }
 
         client.add(doc);
-        client.close();
+        client.commit();
+//        client.close();
 
     }
 
@@ -237,6 +241,7 @@ public class SolrHandler {
                 "5", "6", 6, -1, -1, -1);
         try {
             sh.addDocument(node, 5);
+            System.out.println("without close");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SolrServerException e) {
