@@ -1,5 +1,6 @@
 package com.bibalex.taxonmatcher.controllers;
 
+import apoc.coll.Coll;
 import com.bibalex.taxonmatcher.handlers.*;
 import com.bibalex.taxonmatcher.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +27,7 @@ public class NodeMapper {
     private SolrHandler solrHandler;
     int resourceId;
     private HashMap<Integer, Integer> nodePages;
+    private Stack ancestorsStack;
 
     public NodeMapper(int resourceId){
         strategyHandler = new StrategyHandler();
@@ -40,6 +42,7 @@ public class NodeMapper {
         this.resourceId = resourceId;
         this.solrHandler = new SolrHandler();
         this.nodePages = new HashMap<>();
+        this.ancestorsStack = new Stack();
     }
 
     public void mapAllNodesToPages(ArrayList<Node> rootNodes){
@@ -62,6 +65,7 @@ public class NodeMapper {
     }
 
     public void mapIfNeeded(Node node){
+        ancestorsStack.push(node);
         Strategy usedStrategy = strategyHandler.defaultStrategy();
         System.out.println("mapIfNeeded: used strategy is: " + usedStrategy.getAttribute());
         logger.info("mapIfNeeded: used strategy is: " + usedStrategy.getAttribute());
@@ -85,6 +89,7 @@ public class NodeMapper {
             logger.info("====================children=================");
             mapNodes(nodeHandler.nodeMapper(children));
         }
+        ancestorsStack.pop();
     }
 
     private void mapNode(Node node, int depth, Strategy strategy){
@@ -94,7 +99,10 @@ public class NodeMapper {
             logger.info("map node: surrogate");
             unmappedNode(node);
         }else{
-            ArrayList<Node> ancestors = nodeHandler.nodeMapper(node.getAncestors());
+//            ArrayList<Node> ancestors_neo4j = nodeHandler.nodeMapper(node.getAncestors());
+            ArrayList<Node> ancestors = new ArrayList<>(ancestorsStack);
+            ancestors.remove(ancestors.size()-1);
+            Collections.reverse(ancestors);
             if (globalNameHandler.isVirus(node.getScientificName())){
                 System.out.println("map node: virus");
                 logger.info("map node: virus");
