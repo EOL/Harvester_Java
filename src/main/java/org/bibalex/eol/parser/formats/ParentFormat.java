@@ -3,7 +3,8 @@ package org.bibalex.eol.parser.formats;
 import org.bibalex.eol.parser.handlers.Neo4jHandler;
 import org.bibalex.eol.parser.handlers.SynonymNodeHandler;
 import org.bibalex.eol.parser.models.Taxon;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,7 +17,7 @@ public class ParentFormat extends Format {
 
     private int resourceId;
     private Neo4jHandler neo4jHandler;
-    private static final Logger logger = Logger.getLogger(ParentFormat.class);
+    private static final Logger logger = LoggerFactory.getLogger(ParentFormat.class);
     private HashSet<String> missingParents;
 
     public ParentFormat(int resourceId) {
@@ -26,14 +27,14 @@ public class ParentFormat extends Format {
     }
 
     public void handleLines(ArrayList<Taxon> nodes, boolean normalResource) {
-        System.out.println("start handling");
+//        System.out.println("start handling");
         for (Taxon node : nodes) {
             if (handleLine(node, normalResource)) {
                 logger.debug("Handling line with taxon id: " + node.getIdentifier() + " is successful");
-                System.out.println("Handling line with taxon id: " + node.getIdentifier() + " is successful");
+//                System.out.println("Handling line with taxon id: " + node.getIdentifier() + " is successful");
             } else {
                 logger.debug("Error in handling line with taxon id: " + node.getIdentifier());
-                System.out.println("Error in handling line with taxon id: " + node.getIdentifier());
+//                System.out.println("Error in handling line with taxon id: " + node.getIdentifier());
             }
         }
     }
@@ -49,11 +50,11 @@ public class ParentFormat extends Format {
                     node.getTaxonRank(), node.getTaxonomicStatus(), node.getAcceptedNodeId(), normalResource, node.getParentTaxonId(), 0);
         if (originalGeneratedNodeId > 0) {
             logger.debug("Successfully created the original node");
-            System.out.println("Successfully created the original node");
+//            System.out.println("Successfully created the original node");
             return true;
         } else {
             logger.debug("failure in creation of original node");
-            System.out.println("failure in creation of original node");
+//            System.out.println("failure in creation of original node");
             return false;
         }
     }
@@ -126,7 +127,7 @@ public class ParentFormat extends Format {
 
     @Override
     public int deleteTaxon(String nodeID, int resourceId, String scientificName) {
-        System.out.println("deleteFromTaxonFile");
+//        System.out.println("deleteFromTaxonFile");
         int generatedNodeId= neo4jHandler.deleteNodeParentFormat(nodeID, scientificName, resourceId);
         return generatedNodeId;
     }

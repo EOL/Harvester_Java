@@ -2,6 +2,9 @@ package com.bibalex.taxonmatcher.handlers;
 
 import com.bibalex.taxonmatcher.models.Node;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.util.*;
 
@@ -9,10 +12,11 @@ import java.util.*;
  * Created by Amr.Morad on 3/9/2017.
  */
 public class NodeHandler {
+    private static final Logger logger = LoggerFactory.getLogger(NodeHandler.class);
 
     public Node matchedAncestor(ArrayList<Node> ancestors, int depth, HashMap<Integer,Integer> nodesPages){
-        System.out.println("matched ancestor");
-        System.out.println(depth);
+//        System.out.println("matched ancestor");
+//        System.out.println(depth);
         int i = 0;
         if (ancestors != null) {
             for (Node ancestor : ancestors) {
@@ -21,7 +25,8 @@ public class NodeHandler {
                 i++;
             }
         }
-        System.out.println("matched ancestor: will return null");
+//        System.out.println("matched ancestor: will return null");
+        logger.info("Returning Null");
         return null;
     }
 

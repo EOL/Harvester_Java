@@ -7,6 +7,8 @@ import org.bibalex.eol.utils.TermURIs;
 import org.gbif.dwc.terms.Term;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,6 +27,7 @@ public class MediaValidationFunctions {
     public static final String ROW_TYPE = "http://eol.org/schema/media/Document";
 //    private static Logger logger = LogHandler.getLogger(MediaValidationFunctions.class.getName());
     public static ArrayList<String> failedMedia = new ArrayList<String>();
+    private static final Logger logger = LoggerFactory.getLogger(MediaValidationFunctions.class);
 
     //====================================================================//
 
@@ -42,6 +45,7 @@ public class MediaValidationFunctions {
         try {
             urlTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, fieldURI);
         } catch (Exception e) {
+            logger.error("Exception: ", e);
             records.clear();
             return new ArchiveFileState(true);
         }
@@ -94,6 +98,7 @@ public class MediaValidationFunctions {
             accessTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, TermURIs.accessURI);
         } catch (Exception e) {
 //            logger.error(e.getMessage());
+            logger.error("Exception: ", e);
             archiveFileHasAccessURI = false;
         }
         int failures = 0;
@@ -138,6 +143,7 @@ public class MediaValidationFunctions {
             descriptionTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, TermURIs.descriptionURI);
         } catch (Exception e) {
 //            logger.error(e.getMessage());
+            logger.error("Exception: ", e);
             archiveFileHasDescription = false;
         }
         int failures = 0;
@@ -179,6 +185,7 @@ public class MediaValidationFunctions {
             descriptionTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, TermURIs.descriptionURI);
         } catch (Exception e) {
 //            logger.error(e.getMessage());
+            logger.error("Exception: ", e);
             archiveFileHasCVTerm = false;
         }
         int failures = 0;
@@ -315,6 +322,7 @@ public class MediaValidationFunctions {
         } catch (Exception e) {
 //            logger.error(e.getMessage() + " - " + e);
 //            logger.error("All lines do not have Term " + fieldURI + " so all lines is violating the rule");
+            logger.error("Exception: ", e);
             return new ArchiveFileState(true);
         }
         int violatingLines = 0;
@@ -369,6 +377,7 @@ public class MediaValidationFunctions {
             licenseTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, fieldURI);
         } catch (Exception e) {
 //            logger.error("Error while getting " + fieldURI + " from archive file. error message : " + e.getMessage());
+            logger.error("Exception: ", e);
             ArchiveFileState state = new ArchiveFileState();
             state.setAllLinesComplying(true);
             return state;

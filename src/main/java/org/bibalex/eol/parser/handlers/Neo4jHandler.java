@@ -1,7 +1,10 @@
 package org.bibalex.eol.parser.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bibalex.eol.harvester.HarvesterAPI;
 import org.bibalex.eol.parser.models.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,8 @@ import java.util.List;
 public class Neo4jHandler {
 
     RestClientHandler restClientHandler;
+    private static final Logger logger = LoggerFactory.getLogger(Neo4jHandler.class);
+
 
     public Neo4jHandler(){
         restClientHandler = new RestClientHandler();
@@ -26,9 +31,10 @@ public class Neo4jHandler {
         //TODO call the neo4j and return the id
         Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedId, pageId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createAncestor"), node);
-        System.out.println("===============================");
-        System.out.println("The node is " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("The node is " + response);
+//        System.out.println("===============================");
+        logger.info("Created Node: " + response);
         return Integer.parseInt(response);
     }
 
@@ -39,9 +45,11 @@ public class Neo4jHandler {
         //TODO call neo4j and create the parent with placeholder
         Node node = new Node(parentUsageId, resourceId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createParentPlaceholder"), node);
-        System.out.println("===============================");
-        System.out.println("The node is " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("The node is " + response);
+//        System.out.println("===============================");
+        logger.info("Created Node: " + response);
+
         return Integer.parseInt(response);
     }
 
@@ -52,21 +60,25 @@ public class Neo4jHandler {
         //TODO call neo4j to adjust the relations between the accepted node and its synonyms
         Node node = new Node(synonymNodeId, acceptedNodeGeneratedId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createRelationBetweenNodeAndSynonym"), node);
-        System.out.println("===============================");
-        System.out.println("The node is " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("The node is " + response);
+//        System.out.println("===============================");
+        logger.info("Created Node: " + response);
+
         return Boolean.valueOf(response);
     }
 
     public int getNodeIfExist(String nodeId, int resourceId){
         //TODO call Neo4j to get the node using nodeId and resourceId
-        System.out.println("getNodeIfExist");
+//        System.out.println("getNodeIfExist");
         Node node = new Node(resourceId, nodeId);
         System.out.println(resourceId+ " "+ nodeId);
+        logger.info("Getting Node: " + resourceId + " " + nodeId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("getNeo4jNode"), node);
-        System.out.println("===============================");
-        System.out.println("The node is " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("The node is " + response);
+//        System.out.println("===============================");
+        logger.info("Created Node: " + response);
         return Integer.parseInt(response);
     }
 
@@ -74,9 +86,10 @@ public class Neo4jHandler {
         //TODO call neo4j and return true if it exists; false otherwise
         Node node = new Node(nodeId, scientificName, resourceId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("getAcceptedNode"), node);
-        System.out.println("===============================");
-        System.out.println("The accepted node is: " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("The accepted node is: " + response);
+//        System.out.println("===============================");
+        logger.info("Accepted Node: " + response);
         return Integer.parseInt(response);
     }
 
@@ -85,9 +98,11 @@ public class Neo4jHandler {
         //TODO call the neo4j and return the id
         Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedNodeId, pageId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNeo4jNode"), node);
-        System.out.println("===============================");
-        System.out.println("A node is created with id " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("A node is created with id " + response);
+//        System.out.println("===============================");
+        logger.info("Created Node with ID: " + response);
+
         return Integer.parseInt(response);
     }
 
@@ -96,9 +111,10 @@ public class Neo4jHandler {
         //TODO call neo4j and return the id of the generated node
         Node node = new Node(resourceId, nodeId, scientificName, rank, acceptedNodeId, acceptedNodeGeneratedId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createSynonymNode"), node);
-        System.out.println("===============================");
-        System.out.println("A node is created with id " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("A node is created with id " + response);
+//        System.out.println("===============================");
+        logger.info("Created Node with ID: " + response);
         return Integer.parseInt(response);
     }
 
@@ -107,9 +123,11 @@ public class Neo4jHandler {
         //TODO call neo4j and return the id of the generated node
         Node node = new Node(resourceId, nodeId, scientificName, acceptedGeneratedId, acceptedNodeId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("getSynonymNode"), node);
-        System.out.println("===============================");
-        System.out.println("A node is created with id " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("A node is created with id " + response);
+//        System.out.println("===============================");
+        logger.info("Created Node with ID: " + response);
+
         return Integer.parseInt(response);
     }
 
@@ -132,9 +150,11 @@ public class Neo4jHandler {
         //TODO delete node and return its parent id not generated parent id
         Node node = new Node(nodeID, scientificName, resourceId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("deleteNodeParentFormat"), node);
-        System.out.println("===============================");
-        System.out.println("A node is deleted that has id " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("A node is deleted that has id " + response);
+//        System.out.println("===============================");
+        logger.info("Deleted Node with ID: " + response);
+
         return Integer.valueOf(response);
     }
 
@@ -142,9 +162,11 @@ public class Neo4jHandler {
         //TODO delete node and return its parent id not generated parent id
         Node node = new Node(nodeID, scientificName, resourceId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("deleteNodeAncestryFormat"), node);
-        System.out.println("===============================");
-        System.out.println("A node is deleted that has id " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("A node is deleted that has id " + response);
+//        System.out.println("===============================");
+        logger.info("Deleted Node with ID: " + response);
+
         return Integer.valueOf(response);
     }
 
@@ -194,9 +216,10 @@ public class Neo4jHandler {
     public int updateParent(int resourceId, String nodeId, String scientificName, String rank, int parentGeneratedNodeId, int pageId) {
         Node node = new Node(resourceId, nodeId, scientificName, rank, parentGeneratedNodeId, pageId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("createNodeWithFulldata"), node);
-        System.out.println("===============================");
-        System.out.println("A node is created with id " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("A node is created with id " + response);
+//        System.out.println("===============================");
+        logger.info("Updated Node with ID: " + response);
         return Integer.valueOf(response);
     }
 
@@ -205,9 +228,10 @@ public class Neo4jHandler {
         if(rank == null)
             node.setRank("null");
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("updateParentFormat")+"/"+parentUsageId, node);
-        System.out.println("===============================");
-        System.out.println("A node is updated with response " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("A node is updated with response " + response);
+//        System.out.println("===============================");
+        logger.info("Updated Node with Response: " + response);
         return Integer.valueOf(response);
     }
 
@@ -217,25 +241,29 @@ public class Neo4jHandler {
             node.setRank("null");
         nodes.add(node);
         Boolean response = restClientHandler.updateTaxonInNeo4jAncestoryFormat(PropertiesHandler.getProperty("updateAncestoryFormat"), nodes);
-        System.out.println("===============================");
-        System.out.println("A node is updated " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("A node is updated " + response);
+//        System.out.println("===============================");
+        logger.info("Updated Node: " + response);
         return response;
     }
 
     public int getPageIdOfNode(int generatedNodeId){
         int response = restClientHandler.getPageId(PropertiesHandler.getProperty("getNodePageId"), generatedNodeId);
-        System.out.println("===============================");
-        System.out.println("A node has Page id = " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("A node has Page id = " + response);
+//        System.out.println("===============================");
+        logger.info("Node: " + generatedNodeId + " Has Page ID: " + response);
+
         return response;
     }
 
     public ArrayList<Integer> getPageIdsOfNodes(ArrayList<Integer> generated_node_ids){
         Object response = restClientHandler.getPageIds(PropertiesHandler.getProperty("getPageIdsOfNodes"),generated_node_ids);
-        System.out.println("===============================");
-        System.out.println("returned nodes using ids "+ response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("returned nodes using ids "+ response);
+//        System.out.println("===============================");
+        logger.info("Returned Nodes Using IDs: " + response);
         ArrayList<Integer>  page_ids = (ArrayList<Integer>)response;
         return page_ids;
 //        return generated_node_ids;
@@ -245,18 +273,20 @@ public class Neo4jHandler {
                                   int parentGeneratedNodeId, int pageId) {
         Node node = new Node(resourceId, taxonId, scientificName, rank, parentGeneratedNodeId, pageId);
         String response = restClientHandler.doConnection(PropertiesHandler.getProperty("updateAcceptedNode"), node);
-        System.out.println("===============================");
-        System.out.println("A node is updated with response " + response);
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("A node is updated with response " + response);
+//        System.out.println("===============================");
+        logger.info("Updated Node with Response: " + response);
         return Integer.valueOf(response);
     }
 
     public ArrayList<Node> getPlaceholderNodes (int resource_id){
 
         ArrayList<Node> placeholderNodes = (ArrayList<Node>) restClientHandler.getPlaceholderNodes(PropertiesHandler.getProperty("getPlaceholderNodes")+"/"+resource_id);
-        System.out.println("===============================");
-        System.out.println("get placeholder nodes with response ");
-        System.out.println("===============================");
+//        System.out.println("===============================");
+//        System.out.println("get placeholder nodes with response ");
+//        System.out.println("===============================");
+        logger.info("Called getPlaceholderNodes for Resource: " + resource_id + " Successfully");
         return nodeMapper(placeholderNodes);
     }
 

@@ -69,7 +69,7 @@ public class MatchingScoreHandler {
 //    }
 
     public int countAncestors(ArrayList<Node> ancestors, HashMap<Integer, Integer> nodesPages){
-        System.out.println("size "+ancestors.size());
+//        System.out.println("size "+ancestors.size());
         int count = 0;
         if(ancestors.size()>0) {
             for (Node n : ancestors) {

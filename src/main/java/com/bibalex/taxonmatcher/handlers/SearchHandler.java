@@ -4,9 +4,11 @@ import com.bibalex.taxonmatcher.controllers.NodeMapper;
 import com.bibalex.taxonmatcher.models.Node;
 import com.bibalex.taxonmatcher.models.SearchResult;
 import com.bibalex.taxonmatcher.models.Strategy;
-import org.apache.logging.log4j.Logger;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,15 +20,15 @@ public class SearchHandler {
 
     private GlobalNamesHandler globalNameHandler;
     private SolrHandler solrHandler;
-    private static Logger logger;
+//    private static Logger logger;
     private Neo4jHandler neo4jHandler;
     private NodeHandler nodeHandler;
+    private static final Logger logger = LoggerFactory.getLogger(SearchHandler.class);
 
     public SearchHandler()
     {
         globalNameHandler = new GlobalNamesHandler();
         solrHandler = new SolrHandler();
-        logger = LogHandler.getLogger(NodeMapper.class.getName());
         neo4jHandler = new Neo4jHandler();
         nodeHandler = new NodeHandler();
     }
@@ -107,9 +109,9 @@ public class SearchHandler {
                 searchQuery += " AND is_hybrid : True";
             }
         }
-        System.out.println("=======================================");
-        logger.info("Search query is: " + searchQuery);
-        System.out.println("========================================");
+//        System.out.println("=======================================");
+        logger.info("Search Query: " + searchQuery);
+//        System.out.println("========================================");
         return searchQuery;
     }
 
@@ -120,11 +122,11 @@ public class SearchHandler {
     public ArrayList<SearchResult> getResults(Node node, Strategy strategy, Node ancestor){
         ArrayList<Integer> children = new ArrayList<Integer>();
         ArrayList<Integer> ancestors = new ArrayList<Integer>();
-        logger.info("before build search query");
+        logger.info("Building Search Query");
         String searchQuery = buildSearchQuery(node, strategy, ancestor);
-        logger.info(" after build search query");
-        logger.info(" before performing query");
-        logger.info("before adding document in solr");
+        logger.info("Search Query Built");
+        logger.info("Performing Query");
+        logger.info("Adding Document in Solr");
 //        long startTime = System.nanoTime();
         SolrDocumentList solrResultDocuments = solrHandler.performQuery(searchQuery);
 //        long endTime = System.nanoTime();
@@ -132,8 +134,9 @@ public class SearchHandler {
 //        long duration = (endTime - startTime);
 //        System.out.println("duration of performing query in solr: "+ duration);
 
-        logger.info(" after performing query");
-        System.out.println("tttttttttt"+ solrResultDocuments.toString());
+        logger.info("Query Performed");
+        logger.info("Solr Query Result: " +  solrResultDocuments.toString());
+//        System.out.println("tttttttttt"+ solrResultDocuments.toString());
         ArrayList<SearchResult> results = new ArrayList<SearchResult>();
         for(SolrDocument document : solrResultDocuments){
             if(document.getFieldValues("children_ids")!=null) {

@@ -5,6 +5,8 @@ import org.bibalex.eol.validator.ValidationResult;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ public abstract class ValidationRule {
     protected FailureTypes failureType;
     protected String failureMessage;
 //    protected Logger logger;
+private static final Logger logger = LoggerFactory.getLogger(ValidationRule.class);
+
 
     /**
      * Create a logger instance with the name of the class
@@ -118,16 +122,16 @@ public abstract class ValidationRule {
         try {
             method = dynamicallyLoadMethod();
         } catch (ClassNotFoundException e) {
-//            logger.fatal("ClassNotFoundException while trying to dynamically load class of method : " + this.validationFunction);
-//            logger.fatal(e);
+            logger.error("ClassNotFoundException while trying to dynamically load class of method : " + this.validationFunction);
+            logger.error("Stack Trace: ", e);
             return false;
         } catch (SecurityException e) {
-//            logger.fatal("SecurityException while trying to dynamically load method  : " + this.validationFunction);
-//            logger.fatal(e);
+            logger.error("SecurityException while trying to dynamically load method  : " + this.validationFunction);
+            logger.error("Stack Trace: ", e);
             return false;
         } catch (NoSuchMethodException e) {
-//            logger.fatal("NoSuchMethodException while trying to dynamically load method  : " + this.validationFunction);
-//            logger.fatal(e);
+            logger.error("NoSuchMethodException while trying to dynamically load method  : " + this.validationFunction);
+            logger.error("Stack Trace: ", e);
             return false;
         }
         return callValidationFunction(method, archiveFile, validationResult, records);
@@ -148,16 +152,16 @@ public abstract class ValidationRule {
         try {
             method = dynamicallyLoadMethod();
         } catch (ClassNotFoundException e) {
-//            logger.fatal("ClassNotFoundException while trying to dynamically load class of method : " + this.validationFunction);
-//            logger.fatal(e);
+            logger.error("ClassNotFoundException while trying to dynamically load class of method : " + this.validationFunction);
+            logger.error("Stack Trace: ", e);
             return false;
         } catch (SecurityException e) {
-//            logger.fatal("SecurityException while trying to dynamically load method  : " + this.validationFunction);
-//            logger.fatal(e);
+            logger.error("SecurityException while trying to dynamically load method  : " + this.validationFunction);
+            logger.error("Stack Trace: ", e);
             return false;
         } catch (NoSuchMethodException e) {
-//            logger.fatal("NoSuchMethodException while trying to dynamically load method  : " + this.validationFunction);
-//            logger.fatal(e);
+            logger.error("NoSuchMethodException while trying to dynamically load method  : " + this.validationFunction);
+            logger.error("Stack Trace: ", e);
             return false;
         }
         return callValidationFunction(method, dwcArchive, validationResult);

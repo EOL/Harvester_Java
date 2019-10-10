@@ -3,9 +3,12 @@ package org.bibalex.eol.validator.rules;
 import org.bibalex.eol.validator.handlers.DwcaHandler;
 import org.bibalex.eol.validator.ArchiveFileState;
 import org.bibalex.eol.validator.ValidationResult;
+import org.bibalex.eol.validator.handlers.XMLHandler;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,6 +24,8 @@ public class FieldValidationRule extends ValidationRule {
 
     protected String fieldURI;
     protected String rowTypeURI;
+    private static final Logger logger = LoggerFactory.getLogger(FieldValidationRule.class);
+
 
     /**
      * FieldValidationRule constructor
@@ -96,20 +101,20 @@ public class FieldValidationRule extends ValidationRule {
 //            }
 
         } catch (IllegalArgumentException e) {
-//            logger.fatal("IllegalArgumentException while trying to dynamically call method method  : " + this.validationFunction);
-//            logger.fatal(e);
+            logger.error("IllegalArgumentException while trying to dynamically call method");
+            logger.error("Stack Trace: ", e);
             return false;
         } catch (IllegalAccessException e) {
-//            logger.fatal("IllegalAccessException while trying to dynamically call method method  : " + this.validationFunction);
-//            logger.fatal(e);
+            logger.error("IllegalAccessException while trying to dynamically call method");
+            logger.error("Stack Trace: ", e);
             return false;
         } catch (InvocationTargetException e) {
-//            logger.fatal("InvocationTargetException while trying to dynamically call method method  : " + this.validationFunction);
-//            logger.fatal(e);
+            logger.error("InvocationTargetException while trying to dynamically call method");
+            logger.error("Stack Trace: ", e);
             return false;
         } catch (Exception e) {
-//            logger.fatal("Exception while trying to dynamically call method method  : " + this.validationFunction);
-//            logger.fatal(e);
+            logger.error("Exception while trying to dynamically call method method");
+            logger.error("Stack Trace: ", e);
             return false;
         }
         return true;

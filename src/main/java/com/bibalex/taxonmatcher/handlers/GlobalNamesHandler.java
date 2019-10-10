@@ -1,11 +1,13 @@
 package com.bibalex.taxonmatcher.handlers;
 
-import org.apache.logging.log4j.Logger;
+import org.bibalex.eol.handler.MetaHandler;
 import org.globalnames.parser.ScientificNameParser;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Amr.Morad on 4/16/2017.
@@ -13,11 +15,12 @@ import org.json.simple.parser.ParseException;
 public class GlobalNamesHandler {
 
     private JSONParser parser;
-    private static Logger logger;
+//    private static Logger logger;
+    private static final Logger logger = LoggerFactory.getLogger(GlobalNamesHandler.class);
 
     public GlobalNamesHandler(){
         parser = new JSONParser();
-        logger = LogHandler.getLogger(GlobalNamesHandler.class.getName());
+//        logger = LogHandler.getLogger(GlobalNamesHandler.class.getName());
     }
 
     private JSONObject getParsedJson(String name){
@@ -27,7 +30,8 @@ public class GlobalNamesHandler {
         try {
             return (JSONObject)parser.parse(jsonStr);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("ParseException: ", e);
+//            e.printStackTrace();
         }
         return null;
     }
@@ -106,14 +110,14 @@ public class GlobalNamesHandler {
             for (int i = 0; i < nameParts.size(); i++) {
                 JSONArray partArray = (JSONArray) nameParts.get(i);
                 if (partArray.get(0).toString().contains("author")) {
-                    System.out.println("has authority");
-                    logger.info("name: " + name + " has authorship");
+//                    System.out.println("has authority");
+                    logger.info("Name: " + name + " has authority.");
                     return true;
                 }
             }
         }
-        logger.info("name: " + name + " doesnot have authority");
-        System.out.println("will return false");
+        logger.info("Name: " + name + " has no authority.");
+        logger.info("Returned False");
         return false;
     }
 

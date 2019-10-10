@@ -8,7 +8,8 @@ import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwc.terms.Term;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
@@ -17,7 +18,7 @@ import java.util.*;
 
 public class ValidationFunctions {
     private static int chunkSize = Constants.ChunkSize;
-    private static Logger logger = Logger.getLogger(ValidationFunctions.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(ValidationFunctions.class.getName());
 
     /**
      * Check whether ArchiveFile have field or not and remove record as it is error
@@ -30,7 +31,9 @@ public class ValidationFunctions {
         try {
             fieldTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, fieldURI);
         } catch (Exception e) {
-            System.out.println("all lines violating");
+//            System.out.println("all lines violating");
+            logger.error("Exception: All lines violating the validation rules");
+            logger.error("Exception Stack Trace: ", e);
             ArchiveFileState archiveFileState = new ArchiveFileState();
             archiveFileState.setAllLinesViolating(true);
             records.clear();
@@ -46,7 +49,7 @@ public class ValidationFunctions {
 //                logger.debug("line violating a rule \"Does not have the field : " + fieldURI + " \"");
 
                 //add the check
-                System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+//                System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
                 countFailedLines(record);
                 i.remove();
                 failures++;
@@ -67,7 +70,9 @@ public class ValidationFunctions {
         try {
             fieldTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, fieldURI);
         } catch (Exception e) {
-            System.out.println("all lines violating");
+//            System.out.println("all lines violating");
+            logger.error("Exception: All lines violating the validation rules");
+            logger.error("Exception Stack Trace: ", e);
             ArchiveFileState archiveFileState = new ArchiveFileState();
             archiveFileState.setAllLinesViolating(true);
             return archiveFileState;
@@ -81,7 +86,7 @@ public class ValidationFunctions {
 //                logger.debug("line violating a rule \"Does not have the field : " + fieldURI + " \"");
 
                 //add the check
-                System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+//                System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
                 countFailedLines(record);
                 failures++;
             }
@@ -91,10 +96,10 @@ public class ValidationFunctions {
     }
 
     private static void countFailedLines(Record record){
-        System.out.println("COUNTTTTTTTTTTTTTTTTTTTT");
+//        System.out.println("COUNTTTTTTTTTTTTTTTTTTTT");
         System.out.println(record.rowType().qualifiedName());
         if(record.rowType() == CommonTerms.mediaTerm){
-            System.out.println("WE ARE HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+//            System.out.println("WE ARE HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             MediaValidationFunctions.failedMedia.add(record.value(CommonTerms.identifierTerm));
         }else if(record.rowType() == CommonTerms.referenceTerm){
             ReferenceValidationFunctions.failedReferences.add(record.value(CommonTerms.referenceIDTerm));
@@ -203,7 +208,8 @@ public class ValidationFunctions {
         try {
             byte[] bytes = string.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            logger.error("UnsupportedEncodingException: ", e);
             return false;
         }
         return true;

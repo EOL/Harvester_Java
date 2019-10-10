@@ -5,7 +5,8 @@ import org.bibalex.eol.parser.handlers.SynonymNodeHandler;
 import org.bibalex.eol.parser.models.AncestorNode;
 import org.bibalex.eol.parser.models.Node;
 import org.bibalex.eol.parser.models.Taxon;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class AncestryFormat extends Format{
     private int resourceId;
     private Neo4jHandler neo4jHandler;
     private static final String ancestorTaxonId = "placeholder";
-    private static final Logger logger = Logger.getLogger(AncestryFormat.class);
+    private static final Logger logger = LoggerFactory.getLogger(AncestryFormat.class);
 
 
     public AncestryFormat(int resourceId){

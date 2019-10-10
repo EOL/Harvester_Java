@@ -1,7 +1,9 @@
 package org.bibalex.eol.validator.handlers;
 
 import org.bibalex.eol.validator.DwcaValidator;
-import org.apache.log4j.Logger;
+import org.codehaus.stax2.validation.XMLValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -21,7 +23,7 @@ import java.util.Properties;
 public class XMLHandler {
     private static boolean initialized = false;
 //    protected static Logger logger;
-private static final Logger logger = Logger.getLogger(DwcaValidator.class);
+private static final Logger logger = LoggerFactory.getLogger(XMLHandler.class);
     private static String xmlFilePath;
     private static DocumentBuilderFactory factory;
     private static DocumentBuilder builder;
@@ -36,13 +38,18 @@ private static final Logger logger = Logger.getLogger(DwcaValidator.class);
             xmlFilePath = prop.getProperty("validationRulesFile");
             initialized = true;
         } catch (IOException ex) {
-            System.err.println("Failed to load the validationRulesFilePath from the properties file");
+//            System.err.println("Failed to load the validationRulesFilePath from the properties file");
+            logger.error("IOException: Failed to load the validationRulesFilePath from the properties file");
+            logger.error("Stack Trace: ", ex);
         } finally {
             if (input != null) {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    System.err.println("Failed to close the properties file after trying to read the validationRulesFilePath");
+//                    System.err.println("Failed to close the properties file after trying to read the validationRulesFilePath");
+                    logger.error("IOException: Failed to close the properties file after trying to read the validationRulesFilePath");
+                    logger.error("Stack Trace: ", e);
+
                 }
             }
         }
@@ -57,12 +64,14 @@ private static final Logger logger = Logger.getLogger(DwcaValidator.class);
             document.getDocumentElement().normalize();
         } catch (ParserConfigurationException e) {
             logger.error("ParserConfigurationException while trying to create to DocumentBuilder in XMLHandler");
-//            logger.error(e);
+            logger.error("Stack Trace: ", e);
         } catch (SAXException e) {
             logger.error("SAXException while trying to parse document in XMLHandler");
+            logger.error("Stack Trace: ", e);
 //            logger.error(e);
         } catch (IOException e) {
             logger.error("IOException while trying to parse document in XMLHandler");
+            logger.error("Stack Trace: ", e);
 //            logger.error(e);
         }
     }

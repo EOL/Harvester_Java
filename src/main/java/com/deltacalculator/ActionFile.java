@@ -1,8 +1,9 @@
 package com.deltacalculator;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.gbif.dwca.io.ArchiveFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sun.rmi.runtime.Log;
 
 import java.io.*;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class ActionFile {
 
 
     Map<Action, String> actionMap = loadActionMap();
-    private static final Logger logger = Logger.getLogger(ActionFile.class);
+    private static final Logger logger = LoggerFactory.getLogger(ActionFile.class);
 
     File writeLineToActionFile(ArchiveFile diffFile, String recordId, String delimiter, String actionIndicator) {
         ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();
@@ -29,7 +30,7 @@ public class ActionFile {
         try {
             if (!actionFile.exists()) {
                 actionFile.createNewFile();
-                System.out.println("Action File Name: " + actionFile.getPath());
+//                System.out.println("Action File Name: " + actionFile.getPath());
                 logger.info("Action File Name: " + actionFile.getPath());
             }
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(actionFile, true));
@@ -39,7 +40,7 @@ public class ActionFile {
 
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error(e);
+            logger.error("IOException: ", e);
         }
         return actionFile;
     }

@@ -3,7 +3,7 @@ package com.bibalex.taxonmatcher.handlers;
 import com.bibalex.taxonmatcher.controllers.NodeMapper;
 import com.bibalex.taxonmatcher.models.Node;
 import com.bibalex.taxonmatcher.util.Neo4jSolr;
-import org.apache.logging.log4j.Logger;
+
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -12,6 +12,8 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrDocumentList;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,9 +26,10 @@ public class SolrHandler {
     private String zkHostString;
     private String defaultCollection;
     private CloudSolrClient solr;
-    private static Logger logger;
+//    private static Logger logger;
     CloudSolrClient client = null;
     private GlobalNamesHandler globalNameHandler;
+    private static final Logger logger = LoggerFactory.getLogger(SolrHandler.class);
 
 
     public SolrHandler() {
@@ -36,7 +39,7 @@ public class SolrHandler {
 //        solr= new CloudSolrClient.Builder().withZkHost(zkHostString).build();
         solr.setDefaultCollection(defaultCollection);
         globalNameHandler = new GlobalNamesHandler();
-        logger = LogHandler.getLogger(NodeMapper.class.getName());
+//        logger = LogHandler.getLogger(NodeMapper.class.getName());
     }
 
     public SolrDocumentList performQuery(String queryString) {
@@ -45,9 +48,9 @@ public class SolrHandler {
         try {
             return solr.query(query).getResults();
         } catch (SolrServerException e) {
-            logger.error("SolrServerException in performing query exception " + e.getStackTrace());
+            logger.error("SolrServerException: ", e);
         } catch (IOException e) {
-            logger.error("IOException in performing query " + e.getStackTrace());
+            logger.error("IOException: ", e);
         }
         return null;
     }
@@ -57,9 +60,9 @@ public class SolrHandler {
             solr.add(doc);
             solr.commit();
         } catch (SolrServerException e) {
-            logger.error("SolrServerException in commit document " + e.getStackTrace());
+            logger.error("SolrServerException: ", e);
         } catch (IOException e) {
-            logger.error("IOException in commit document " + e.getStackTrace());
+            logger.error("IOException: ", e);
         }
     }
 
@@ -124,9 +127,7 @@ public class SolrHandler {
             doc.addField("is_hybrid", is_hybrid);
         }
 
-
-
-        logger.info("new added doc: " + doc);
+        logger.info("Added New Document: " + doc);
         client.add(doc);
         client.close();
 

@@ -12,6 +12,8 @@ import org.gbif.dwc.terms.TermFactory;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ import java.util.Set;
  *         Handler for the Dwca common operations
  */
 public class DwcaHandler {
+    private static final Logger logger = LoggerFactory.getLogger(DwcaHandler.class);
+
     private DwcaHandler() {
 
     }
@@ -44,7 +48,10 @@ public class DwcaHandler {
             if (dwcArchive.getCore().getRowType().qualifiedName().equalsIgnoreCase(rowTypeURI))
                 archiveFiles.add(dwcArchive.getCore());
             else
+            {
+                logger.error("Exception: Could Not Find Archive file with row type: " + rowTypeURI);
                 throw new Exception("Archive file with row type " + rowTypeURI + " not found");
+        }
         }
         return archiveFiles;
     }
@@ -69,14 +76,16 @@ public class DwcaHandler {
             }
         }
         if (term == null) {
-            throw new Exception("Archive file with row type " + archiveFile.getRowType().qualifiedName() + " , has no field with the URI " + fieldURI);
+            logger.error("Exception: Archive file with row type " + archiveFile.getRowType().qualifiedName() + ", has no field with the URI " + fieldURI);
+            throw new Exception("Archive file with row type " + archiveFile.getRowType().qualifiedName() + " ,has no field with the URI " + fieldURI);
         }
         return term;
     }
 
     public static Term getTermFromArchiveFile2(ArchiveFile archiveFile, String fieldURI) throws Exception {
         if (!archiveFile.hasTerm(fieldURI)) {
-            throw new Exception("Archive file with row type " + archiveFile.getRowType().qualifiedName() + " , has no field with the URI " + fieldURI);
+            logger.error("Exception: Archive file with row type " + archiveFile.getRowType().qualifiedName() + ", has no field with the URI " + fieldURI);
+            throw new Exception("Archive file with row type " + archiveFile.getRowType().qualifiedName() + ", has no field with the URI " + fieldURI);
         }
         Term fieldTerm = TermFactory.instance().findTerm(fieldURI);
 //        archiveFile.get
@@ -89,7 +98,8 @@ public class DwcaHandler {
             }
         }
         if (term == null) {
-            throw new Exception("Archive file with row type " + archiveFile.getRowType().qualifiedName() + " , has no field with the URI " + fieldURI);
+            logger.error("Exception: Archive file with row type " + archiveFile.getRowType().qualifiedName() + ", has no field with the URI " + fieldURI);
+            throw new Exception("Archive file with row type " + archiveFile.getRowType().qualifiedName() + ", has no field with the URI " + fieldURI);
         }
         return term;
     }
@@ -107,11 +117,11 @@ public class DwcaHandler {
             try {
                 termsList.add(DwcaHandler.getTermFromArchiveFile(archiveFile, termName));
             } catch (Exception e) {
-//                logger.error("Error while getting " + termName + " from archive file. error message : " + e.getMessage());
+                logger.error("Error while getting " + termName + " from archive file. error message : " + e.getMessage());
             }
         }
         if (termsList.isEmpty()) {
-//            logger.error("Archive file does not have any of the term list");
+            logger.error("Archive file does not have any of the term list");
             records.clear();
             return new ArchiveFileState(true);
         }
@@ -142,7 +152,7 @@ public class DwcaHandler {
             try {
                 termsList.add(DwcaHandler.getTermFromArchiveFile(archiveFile, termName));
             } catch (Exception e) {
-//                logger.error("Error while getting " + termName + " from archive file. error message : " + e.getMessage());
+                logger.error("Error while getting " + termName + " from archive file. error message : " + e.getMessage());
             }
         }
         if (termsList.isEmpty()) {
@@ -207,6 +217,7 @@ public class DwcaHandler {
             fieldTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, fieldURI);
         } catch (Exception e) {
             if (emptyFieldAccepted) {
+                logger.error("Exception: ", e);
 //                logger.error(e.getMessage() + " - " + e);
 //                logger.error("All lines do not have Term " + fieldURI + " so all lines is complying the rule, because empty Field is Accepted");
                 ArchiveFileState archiveFileState = new ArchiveFileState();

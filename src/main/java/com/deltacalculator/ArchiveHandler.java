@@ -2,11 +2,12 @@ package com.deltacalculator;
 
 import org.apache.commons.io.FilenameUtils;
 
-import org.apache.log4j.Logger;
 import org.gbif.dwc.terms.Term;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFactory;
 import org.gbif.dwca.io.ArchiveFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,12 +17,12 @@ import static com.deltacalculator.DeltaCalculator.DWCADiff;
 
 
 public class ArchiveHandler {
-    private static final Logger logger = Logger.getLogger(ArchiveHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ArchiveHandler.class);
 
     Archive openDwcAFolder(String path) {
         try {
             Archive dwcArchive;
-            System.out.println("Extracting Archive: " + path);
+//            System.out.println("Extracting Archive: " + path);
             logger.info("Extracting Archive: " + path);
             File myArchiveFile = new File(path);
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
@@ -30,7 +31,7 @@ public class ArchiveHandler {
             int i;
             boolean metaFileExists = false;
             File metaFile = new File(dwcArchive.getLocation().getPath() + "/" + metaFiles[0]);
-            System.out.println("%%%%%%%%%%%"+extractToFolder.getPath()+"%%%%%%%%%%%%%%%%");
+//            System.out.println("%%%%%%%%%%%"+extractToFolder.getPath()+"%%%%%%%%%%%%%%%%");
 
             for (i = 0; i < metaFiles.length; i++) {
                 metaFile = new File(dwcArchive.getLocation().getPath() + "/" + metaFiles[i]);
@@ -40,13 +41,13 @@ public class ArchiveHandler {
                 }
             }
             if (metaFileExists == false) {
-                System.out.println(path+": Meta File not Found!");
-                logger.info(path + ": Meta File not Found!");
+//                System.out.println(path+": Meta File not Found!");
+                logger.error(path + ": Meta File not Found!");
             } else dwcArchive.setMetadataLocation(metaFile.getPath());
             return dwcArchive;
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error(e);
+            logger.error("IOException: ", e);
             return null;
         }
     }
@@ -72,18 +73,18 @@ public class ArchiveHandler {
             isAddedContent = false;
         if(archive1ContentTemp.size()==0)
             isDeletedContent = false;
-
-        System.out.println("Added Files: " + isAddedContent + ", Deleted Files: " + isDeletedContent);
-        System.out.println("Number of Added Files: " + archive2ContentTemp.size() + ", Number of Deleted Files: " + archive1ContentTemp.size());
-        logger.info("Added Files: " + isAddedContent + ", Deleted Files: " + isDeletedContent);
-        logger.info("Number of Added Files: " + archive2ContentTemp.size() + ", Number of Deleted Files: " + archive1ContentTemp.size());
+//
+//        System.out.println("Added Files: " + isAddedContent + ", Deleted Files: " + isDeletedContent);
+//        System.out.println("Number of Added Files: " + archive2ContentTemp.size() + ", Number of Deleted Files: " + archive1ContentTemp.size());
+        logger.info("Added Files: " + isAddedContent + ", Total Number: " + archive2ContentTemp.size());
+        logger.info("Deleted Files: " + isDeletedContent + ", Total Number: " + archive1ContentTemp.size());
 
         if (isAddedContent == true) {
             //mark new file as inserted
             for (i = 0; i < archive2ContentTemp.size(); i++) {
                 ArchiveFile addedArchiveFile = version2.getExtension(archive2ContentTemp.get(i));
                 File addedFile = new File(version2.getLocation().getPath() + "/" + addedArchiveFile.getTitle());
-                System.out.println("Added File Found: " + addedArchiveFile.getTitle());
+//                System.out.println("Added File Found: " + addedArchiveFile.getTitle());
                 logger.info("Added File Found: " + addedArchiveFile.getTitle());
                 archiveFileHandler.readFromFileWriteToFile(addedFile, true, DWCADiff.getPath(), addedArchiveFile);
                 archive2Content.remove(archive2ContentTemp.get(i));
@@ -94,7 +95,7 @@ public class ArchiveHandler {
             for (i = 0; i < archive1ContentTemp.size(); i++) {
                 ArchiveFile deletedArchiveFile = version1.getExtension(archive1ContentTemp.get(i));
                 File deletedFile = new File(version1.getLocation().getPath() + "/" + deletedArchiveFile.getTitle());
-                System.out.println("Deleted File Found: " + deletedArchiveFile.getTitle());
+//                System.out.println("Deleted File Found: " + deletedArchiveFile.getTitle());
                 logger.info("Deleted File Found: " + deletedArchiveFile.getTitle());
                 archiveFileHandler.readFromFileWriteToFile(deletedFile, false, DWCADiff.getPath(), deletedArchiveFile);
                 archive1Content.remove(archive1ContentTemp.get(i));

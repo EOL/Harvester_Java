@@ -7,6 +7,8 @@ import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwc.terms.Term;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +22,8 @@ import java.util.Arrays;
  */
 public class TaxonValidationFunctions {
     public static final String ROW_TYPE = "http://rs.tdwg.org/dwc/terms/Taxon";
-//    private static Logger logger = LogHandler.getLogger(TaxonValidationFunctions.class.getName());
+    //    private static Logger logger = LogHandler.getLogger(TaxonValidationFunctions.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(TaxonValidationFunctions.class);
     public static ArrayList<String> failedTaxa = new ArrayList<String>();
 
     /**
@@ -52,6 +55,7 @@ public class TaxonValidationFunctions {
         try {
             rankTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, fieldURI);
         } catch (Exception e) {
+            logger.error("Exception: ", e);
             return new ArchiveFileState(true);
         }
         int failures = 0;
@@ -70,7 +74,6 @@ public class TaxonValidationFunctions {
     }
 
     /**
-     *
      * Checks if the scientific name is following the "UTF-8" encoding
      */
     public static ArchiveFileState checkTaxonHasValidScientificName_FieldValidator(ArchiveFile archiveFile, String
@@ -80,13 +83,14 @@ public class TaxonValidationFunctions {
         try {
             scientificNameTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, fieldURI);
         } catch (Exception e) {
+            logger.error("Exception: ", e);
             return new ArchiveFileState(true);
         }
         int failures = 0;
         int totalLines = 0;
         for (Record record : archiveFile) {
             if (record.value(scientificNameTerm) == null || record.value(scientificNameTerm).length() <= 0 ||
-                   !ValidationFunctions.isUTF8(record.value(scientificNameTerm))) {
+                    !ValidationFunctions.isUTF8(record.value(scientificNameTerm))) {
 //                logger.debug(
 //                        "line : " + record.toString() + " is violating a rule \"" +
 //                                "Does not have a valid field : " + fieldURI + " = " + record.value(scientificNameTerm) + " \"");
@@ -130,8 +134,6 @@ public class TaxonValidationFunctions {
                 TermURIs.familyURI, TermURIs.genusURI};
         return DwcaHandler.checkRecordsHaveAtLeastOneOfTermsListWarning(archiveFile, termsString, TermURIs.taxonID_URI, records);
     }
-
-
 
 
 }

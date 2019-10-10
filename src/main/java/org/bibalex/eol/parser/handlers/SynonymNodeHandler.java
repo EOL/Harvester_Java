@@ -1,6 +1,7 @@
 package org.bibalex.eol.parser.handlers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ public class SynonymNodeHandler {
     private int resourceId;
     public HashMap<String, ArrayList<Integer>> orphanSynonyms;
     private static final String placeholder = "placeholder";
-    private static final Logger logger = Logger.getLogger(SynonymNodeHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(SynonymNodeHandler.class);
     private static SynonymNodeHandler synonymNodeHandler = null;
 
     public static SynonymNodeHandler getSynonymNodeHandler(int resourceId, Neo4jHandler neo4jHandler) {
@@ -55,7 +56,7 @@ public class SynonymNodeHandler {
             return synonymNodeGeneratedId;
         }
         else{
-            logger.error("there isn't accepted node id");
+            logger.error("No Accepted Node ID");
             return -1;
         }
     }

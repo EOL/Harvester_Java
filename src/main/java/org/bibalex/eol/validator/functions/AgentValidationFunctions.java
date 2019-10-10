@@ -1,5 +1,6 @@
 package org.bibalex.eol.validator.functions;
 
+import org.bibalex.eol.parser.DwcaParser;
 import org.bibalex.eol.validator.handlers.DwcaHandler;
 import org.bibalex.eol.utils.CommonTerms;
 import org.bibalex.eol.validator.ArchiveFileState;
@@ -7,19 +8,20 @@ import org.bibalex.eol.utils.TermURIs;
 import org.gbif.dwc.terms.Term;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- *
  * Functions populated in ValidationRules.xml using ValidationFunctions.java
  * 1.Check whether identifier exists or not
  */
 public class AgentValidationFunctions {
     public static final String ROW_TYPE = "http://eol.org/schema/agent/Agent";
-//    private static Logger logger = LogHandler.getLogger(AgentValidationFunctions.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(AgentValidationFunctions.class);
     public static ArrayList<String> failedAgents = new ArrayList<String>();
 
     /**
@@ -34,6 +36,7 @@ public class AgentValidationFunctions {
         try {
             urlTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, fieldURI);
         } catch (Exception e) {
+            logger.error("Exception: ", e);
             records.clear();
             return new ArchiveFileState(true);
         }
@@ -72,6 +75,7 @@ public class AgentValidationFunctions {
         try {
             roleTerm = DwcaHandler.getTermFromArchiveFile(archiveFile, fieldURI);
         } catch (Exception e) {
+            logger.error("Exception: ", e);
             return new ArchiveFileState(true);
         }
 

@@ -13,9 +13,8 @@ import org.gbif.dwc.terms.Term;
 import org.gbif.dwca.io.*;
 import org.gbif.dwca.record.Record;
 import org.gbif.io.TabWriter;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
@@ -27,7 +26,7 @@ import java.util.*;
  * For usage of this class please @see DwcaWriterTest.
  */
 public class OwnDwcaWriter {
-    private Logger log = Logger.getLogger(OwnDwcaWriter.class);
+    private Logger log = LoggerFactory.getLogger(OwnDwcaWriter.class);
     private final File dir;
     private final boolean useHeaders;
     private long recordNum;
@@ -177,6 +176,7 @@ public class OwnDwcaWriter {
         for (Term term : termsSorted) {
             if (!knownTerms.contains(term)) {
                 if (useHeaders && !isFirst){
+                    log.error("IllegalStateException: You cannot add new terms after the first row when headers are enabled");
                     throw new IllegalStateException("You cannot add new terms after the first row when headers are enabled");
                 }
                 knownTerms.add(term);

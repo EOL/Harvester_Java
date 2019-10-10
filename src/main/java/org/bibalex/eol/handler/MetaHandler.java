@@ -1,10 +1,13 @@
 package org.bibalex.eol.handler;
 
+import org.bibalex.eol.harvester.HarvesterController;
 import org.bibalex.eol.utils.CommonTerms;
 import org.bibalex.eol.utils.TermURIs;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFactory;
 import org.neo4j.cypher.internal.compiler.v2_3.No;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class MetaHandler {
+    private static final Logger logger = LoggerFactory.getLogger(MetaHandler.class);
 
     public void addGeneratedAutoId(String path) {
 
@@ -50,17 +54,17 @@ public class MetaHandler {
             StreamResult result = new StreamResult(new File(metaFilePath));
             transformer.transform(source, result);
 
-            System.out.println("Done");
+//            System.out.println("Done");
         } catch (SAXException e) {
-            e.printStackTrace();
+            logger.error("SAXException: ", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IOException: ", e);
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            logger.error("ParserConfigurationException: ", e);
         } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
+            logger.error("TransformerConfigurationException: ", e);
         } catch (TransformerException e) {
-            e.printStackTrace();
+            logger.error("TransformerException: ", e);
         }
     }
 
@@ -82,25 +86,26 @@ public class MetaHandler {
             StreamResult result = new StreamResult(new File(metaFilePath));
             transformer.transform(source, result);
 
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (SAXException e) {
-            e.printStackTrace();
+            logger.error("SAXException: ", e);
+        } catch (IOException e) {
+            logger.error("IOException: ", e);
+        } catch (ParserConfigurationException e) {
+            logger.error("ParserConfigurationException: ", e);
         } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
+            logger.error("TransformerConfigurationException: ", e);
         } catch (TransformerException e) {
-            e.printStackTrace();
+            logger.error("TransformerException: ", e);
         }
     }
 
     private void adjustXMLTags(Document doc) {
 
-        System.out.println("convert table to extension and core");
+//        System.out.println("convert table to extension and core");
         NodeList extensions = doc.getElementsByTagName("table");
         for (int i = 0; i < extensions.getLength(); i++) {
-            System.out.println("fount table tag");
+//            System.out.println("fount table tag");
+            logger.info("Found table tag for Node: "+extensions.item(i).getNodeName());
             Node extension = extensions.item(i);
 
             String rowtype = extension.getAttributes().getNamedItem("rowType").getNodeValue();
@@ -109,12 +114,12 @@ public class MetaHandler {
             else
                 doc.renameNode(extension, null, "extension");
         }
-        System.out.println("done conversion");
+//        System.out.println("done conversion");
     }
 
     private void addCoreIdToExtensions(Document doc) {
 
-        System.out.println("start adding coreID in extensions");
+//        System.out.println("start adding coreID in extensions");
         NodeList extensions = doc.getElementsByTagName("extension");
         for (int i = 0; i < extensions.getLength(); i++) {
             Element extension = (Element) extensions.item(i);
@@ -123,7 +128,8 @@ public class MetaHandler {
                 NodeList fields = extension.getElementsByTagName("field");
                 for (int j = 0; j < fields.getLength(); j++) {
                     if (fields.item(j).getAttributes().getNamedItem("term").getNodeValue().equals(TermURIs.taxonID_URI)) {
-                        System.out.println("found taxonID in extensions");
+//                        System.out.println("found taxonID in extensions");
+                        logger.info("Found Taxon ID for extensions");
                         String index = fields.item(j).getAttributes().getNamedItem("index").getNodeValue();
                         Element field = doc.createElement("coreid");
                         field.setAttribute("index", index);
@@ -137,14 +143,15 @@ public class MetaHandler {
 
     private void addCoreIdToCore(Document doc) {
 
-        System.out.println("start adding coreID in core");
+//        System.out.println("start adding coreID in core");
         Element core = (Element) doc.getElementsByTagName("core").item(0);
         NodeList coreId = core.getElementsByTagName("coreid");
         if(coreId.getLength()==0) {
             NodeList fields = core.getElementsByTagName("field");
             for (int j = 0; j < fields.getLength(); j++) {
                 if (fields.item(j).getAttributes().getNamedItem("term").getNodeValue().equals(TermURIs.taxonID_URI)) {
-                    System.out.println("found");
+//                    System.out.println("found");
+                    logger.info("Found Core ID for extensions");
                     String index = fields.item(j).getAttributes().getNamedItem("index").getNodeValue();
                     Element field = doc.createElement("coreid");
                     field.setAttribute("index", index);
@@ -162,11 +169,12 @@ public class MetaHandler {
             dwcArchive = ArchiveFactory.openArchive(new File(path));
             String metaFilePath = getMetaFilePath(dwcArchive.getLocation().getPath());
             if (metaFilePath == null) {
-                System.out.println(path + ": Meta File not Found!");
+//                System.out.println(path + ": Meta File not Found!");
+                logger.info(path + ": Meta File not Found");
             } else dwcArchive.setMetadataLocation(metaFilePath);
             return dwcArchive;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IOException: ", e);
             return null;
         }
     }
@@ -184,7 +192,8 @@ public class MetaHandler {
             }
         }
         if (metaFileExists == false) {
-            System.out.println(archivePath + ": Meta File not Found!");
+//            System.out.println(archivePath + ": Meta File not Found");
+            logger.info(archivePath + ": Meta File not Found");
             return null;
         }
         return metaFile.getPath();

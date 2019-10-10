@@ -1,15 +1,12 @@
 package com.bibalex.taxonmatcher.handlers;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * Created by Amr.Morad
- */
+//
+///**
+// * Created by Amr.Morad
+// */
 public class LogHandler {
 
     private static boolean initialized = false;
@@ -24,7 +21,7 @@ public class LogHandler {
         if (!initialized) {
             System.err.println("LogHandler not initialized !");
         }
-        return LogManager.getLogger(loggerName);
+        return LoggerFactory.getLogger(loggerName);
     }
 
     public static void main(String[] args) {

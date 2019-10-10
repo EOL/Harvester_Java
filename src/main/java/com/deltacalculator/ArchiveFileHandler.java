@@ -1,7 +1,7 @@
 package com.deltacalculator;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+
 import org.bibalex.eol.utils.CommonTerms;
 import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwc.terms.GbifTerm;
@@ -11,6 +11,9 @@ import org.gbif.dwca.io.ArchiveField;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -25,7 +28,7 @@ public class ArchiveFileHandler {
 
     public ArchiveFileHandler() {
     }
-    private static final Logger logger = Logger.getLogger(ArchiveFileHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ArchiveFileHandler.class);
 
     void copyMetaFile(File metaFile, String archivePathName) {
         File targetMetaFile = new File(archivePathName + "/" + metaFile.getName());
@@ -33,8 +36,8 @@ public class ArchiveFileHandler {
             try {
                 Files.copy(metaFile.toPath(), targetMetaFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
-                e.printStackTrace();
-                logger.error(e);
+//                e.printStackTrace();
+                logger.error("IOException: ", e);
             }
     }
 
@@ -45,12 +48,12 @@ public class ArchiveFileHandler {
             String fileHeader = bufferedReader.readLine();
             return (fileHeader);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            logger.error(e);
+//            e.printStackTrace();
+            logger.error("FileNotFoundException: ", e);
             return "";
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error(e);
+            logger.error("IOException: ", e);
             return "";
         }
     }
@@ -71,12 +74,12 @@ public class ArchiveFileHandler {
             temp.renameTo(file);
             return (temp);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            logger.debug(e);
+//            e.printStackTrace();
+            logger.error("FileNotfoundException: ", e);
             return null;
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.debug(e);
+//            e.printStackTrace();
+            logger.debug("IOException: ", e);
             return null;
         }
 
@@ -87,8 +90,8 @@ public class ArchiveFileHandler {
             bufferedWriter.flush();
             bufferedWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e);
+//            e.printStackTrace();
+            logger.error("IOException: ", e);
         }
 
     }
@@ -98,8 +101,8 @@ public class ArchiveFileHandler {
         try {
             readInput = new BufferedReader(new FileReader(inputFile));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            logger.error(e);
+//            e.printStackTrace();
+            logger.error("FileNotFoundException: " + e.getStackTrace());
         }
         File outputFile = new File(targetArchive + "/" + inputFile.getName());
         String actionIndicator = "";
@@ -107,8 +110,8 @@ public class ArchiveFileHandler {
             try {
                 outputFile.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
-                logger.error(e);
+//                e.printStackTrace();
+                logger.error("IOException: ", e);
             }
 
         ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();
@@ -119,8 +122,8 @@ public class ArchiveFileHandler {
         try {
             writeOutput = new BufferedWriter(new FileWriter(outputFile));
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.debug(e);
+//            e.printStackTrace();
+            logger.error("IOException: ", e);
         }
         String inputLine = "",
                 delimiter = archiveFile.getFieldsTerminatedBy();
@@ -138,8 +141,8 @@ public class ArchiveFileHandler {
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.debug(e);
+//            e.printStackTrace();
+            logger.error("IOException: ", e);
         }
         commit(writeOutput);
     }
@@ -192,8 +195,8 @@ public class ArchiveFileHandler {
                         && archiveFile2.getRowType().equals(CommonTerms.associationTerm) && archiveFile2.getRowType().equals(DwcTerm.MeasurementOrFact))
                             archiveFileHandler.addHeader(differenceFile, fileHeader);
                     } catch (Exception e) {
-                        logger.error(e);
-                        e.printStackTrace();
+                        logger.error("Exception: ", e);
+//                        e.printStackTrace();
                     }
 
                 } else {
@@ -201,7 +204,7 @@ public class ArchiveFileHandler {
                             archiveCoreFile2 = version2.getCore();
                     File coreFile1 = new File(archiveCoreFile1.getLocationFile().getPath()),
                             coreFile2 = new File(archiveCoreFile2.getLocationFile().getPath());
-                    System.out.println("Core Files: " + coreFile1.getPath() + ", " + coreFile2.getPath());
+//                    System.out.println("Core Files: " + coreFile1.getPath() + ", " + coreFile2.getPath());
                     logger.info("Core Files: " + coreFile1.getPath() + ", " + coreFile2.getPath());
                     String fileHeader = "";
                     fileHeader = archiveFileHandler.getHeader(coreFile2);
@@ -213,14 +216,14 @@ public class ArchiveFileHandler {
                         if ((archiveCoreFile2.getIgnoreHeaderLines()) == 1)
                             archiveFileHandler.addHeader(differenceFile, fileHeader);
                     } catch (Exception e) {
-                        logger.error(e);
-                        e.printStackTrace();
+                        logger.error("Exception: ", e);
+//                        e.printStackTrace();
                     }
                 }
 
             } catch (Exception e) {
-                logger.error(e + ": Extension File Not Found");
-                System.out.println(e + ": Extension File Not Found");
+                logger.error("Extension File Not Found", e);
+//                System.out.println(e + ": Extension File Not Found");
             }
         }
     }
@@ -249,7 +252,8 @@ public class ArchiveFileHandler {
                 termsSorted.add(archiveField.getTerm());
             }
             int index = termsSorted.indexOf(idTerm);
-            System.out.println("Archive File: " + archiveFile.getTitle() + " - " + index);
+//            System.out.println("Archive File: " + archiveFile.getTitle() + " - " + index);
+            logger.info("Sorting Index of Archive File: " + archiveFile.getTitle() + " is: " + index);
         }
     }
 
@@ -576,7 +580,7 @@ public class ArchiveFileHandler {
                 }
             }
         } catch (NullPointerException e) {
-            logger.info(e + ": No Reference File Found");
+            logger.error("No Reference File Found: ", e);
         }
     }
 
@@ -625,7 +629,8 @@ public class ArchiveFileHandler {
                     archiveFile.getFieldsTerminatedBy(), archiveFile.getLinesTerminatedBy(), archiveFile.getEncoding());
 
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            logger.error("IOException: ", e);
         }
     }
 }

@@ -5,7 +5,8 @@ import org.bibalex.eol.parser.handlers.PropertiesHandler;
 import org.bibalex.eol.parser.DwcaParser;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.io.IOException;
 
 public class Harvester {
 
-    private static final Logger logger = Logger.getLogger(Harvester.class);
+    private static final Logger logger = LoggerFactory.getLogger(Harvester.class);
 
     public static void main(String[] args) throws IOException {
 //        String dwcArchivePath = "/home/ba/EOL_Recources/4.tar.gz";
@@ -40,18 +41,18 @@ public class Harvester {
 
     public String processHarvesting(int resourceId) throws IOException {
         //initialize properties
-        logger.debug("Starting: " + resourceId);
-        logger.debug("Initialize properties");
+        logger.info("Starting: " + resourceId);
+        logger.info("Initialize properties");
         PropertiesHandler.initializeProperties();
         //call storagelayerClient
-        logger.debug("Create storage layer client: ");
+        logger.info("Create storage layer client: ");
         StorageLayerClient storageLayerClient = new StorageLayerClient();
-        logger.debug("Call download: ");
+        logger.info("Call download: ");
         storageLayerClient.downloadResource(resourceId+"", "1","1");
-        logger.debug("Get the property: ");
+        logger.info("Get the property: ");
         String path = PropertiesHandler.getProperty("storage.output.directory") + File.separator + resourceId + "_org";
         System.out.println(path);
-        logger.debug("Call the harvest: ");
+        logger.info("Call the harvest");
         return harvest(path, resourceId);
     }
 
@@ -69,7 +70,8 @@ public class Harvester {
             File extractToFolder = new File(FilenameUtils.removeExtension(path) + ".out");
             dwcArchive = ArchiveFactory.openArchive(myArchiveFile, extractToFolder);
         } catch (Exception e) {
-            System.out.println("Failed to parse the Darwin core archive " + e.getMessage());
+//            System.out.println("Failed to parse the Darwin core archive " + e.getMessage());
+            logger.error("Exception: Failed to Parse the Darwin Core Archive\n", e);
             return null;
         }
         return dwcArchive;

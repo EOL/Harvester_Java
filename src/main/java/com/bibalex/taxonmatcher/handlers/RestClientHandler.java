@@ -1,18 +1,10 @@
 package com.bibalex.taxonmatcher.handlers;
 
-import com.bibalex.taxonmatcher.models.Node;
-import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.ProxyAuthenticationStrategy;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -26,6 +18,8 @@ import java.util.Map;
  * Created by Amr Morad
  */
 public class RestClientHandler {
+    private static final Logger logger = LoggerFactory.getLogger(RestClientHandler.class);
+
     public static Object doConnectionGet(String uri, Object object_1,Object param_1,Object object_2,Object param_2){
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity response = null;
@@ -45,13 +39,17 @@ public class RestClientHandler {
 //                    System.out.println(response.getBody());
                     return response.getBody();
                 } else {
-                    System.out.println("returned code(" + response.getStatusCode() + ")");
+//                    System.out.println("returned code(" + response.getStatusCode() + ")");
+                    logger.info("Returned Response Code: " + response.getStatusCode());
                 }
 
 
+
         }else{
-            System.out.println("Empty uri");
+//            System.out.println("Empty uri");
+            logger.info("Empty URI");
         }
+
         return "";
     }
 
@@ -70,11 +68,14 @@ public class RestClientHandler {
 //                    System.out.println(response.getBody());
                 return response.getBody();
             } else {
-                System.out.println("returned code(" + response.getStatusCode() + ")");
+//                System.out.println("returned code(" + response.getStatusCode() + ")");
+                logger.info("Returned Response Code: " + response.getStatusCode());
             }
 
         } else {
-            System.out.println("Empty uri");
+//            System.out.println("Empty uri");
+            logger.info("Empty URI");
+
         }
         return "";
     }
@@ -107,7 +108,7 @@ public class RestClientHandler {
         org.springframework.http.HttpEntity<Object> requestEntity = new org.springframework.http.HttpEntity<Object>(generatedNodeIds,headers);
         ResponseEntity<ArrayList<JSONObject>> rateResponse = restTemplate.exchange(uri, HttpMethod.POST, requestEntity,new ParameterizedTypeReference<ArrayList<JSONObject>>() {});
 
-        System.out.println(rateResponse.getBody());
+//        System.out.println(rateResponse.getBody());
         return rateResponse.getBody();
 
     }

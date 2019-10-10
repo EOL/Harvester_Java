@@ -18,7 +18,8 @@ import org.gbif.dwca.io.ArchiveField;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
 import org.gbif.dwca.record.StarRecord;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
@@ -38,8 +39,8 @@ public class DwcaParser {
 //    HashMap<String, Association> oneSidedAccoiationsMap;
     HashMap<String, ArrayList<Association>> occurrencesAssociationsHashMap;
     HashMap<String, Integer> occurrenceHashMap;
-//    HashMap<String, Association> associationHashMap;
-    private static final Logger logger = Logger.getLogger(DwcaParser.class);
+    //    HashMap<String, Association> associationHashMap;
+    private static final Logger logger = LoggerFactory.getLogger(DwcaParser.class);
     private int resourceID;
     private Map<String, Map<String, String>> actionFiles;
     int batchSize = 1000;
@@ -55,7 +56,7 @@ public class DwcaParser {
 //        twoSidedAccoiationsMap = new HashMap<>();
 //        oneSidedAccoiationsMap = new HashMap<>();
         measurementOrFactHashMap = new HashMap<>();
-        occurrencesAssociationsHashMap =new HashMap<>();
+        occurrencesAssociationsHashMap = new HashMap<>();
         occurrenceHashMap = new HashMap<>();
 //        associationHashMap = new HashMap<>();
         loadAllReferences();
@@ -71,34 +72,34 @@ public class DwcaParser {
     }
 
     private void loadAllReferences() {
-        logger.debug("Loading all references with term: " + dwca.getExtension(CommonTerms.referenceTerm));
+        logger.info("Loading all references with term: " + dwca.getExtension(CommonTerms.referenceTerm));
         if (dwca.getExtension(CommonTerms.referenceTerm) != null) {
             for (Iterator<Record> it = dwca.getExtension(CommonTerms.referenceTerm).iterator(); it.hasNext(); ) {
                 Reference reference = parseReference(it.next());
-                logger.debug("Adding reference to the map with id: " + reference.getReferenceId());
+                logger.info("Adding reference to the map with id: " + reference.getReferenceId());
                 referencesMap.put(reference.getReferenceId(), reference);
             }
         }
     }
 
     private void loadAllAgents() {
-        logger.debug("Loading all agents with term: " + dwca.getExtension(CommonTerms.agentTerm));
+        logger.info("Loading all agents with term: " + dwca.getExtension(CommonTerms.agentTerm));
         if (dwca.getExtension(CommonTerms.agentTerm) != null) {
             for (Iterator<Record> it = dwca.getExtension(CommonTerms.agentTerm).iterator(); it.hasNext(); ) {
                 Agent agent = parseAgent(it.next());
-                logger.debug("Adding Agent to the map with id: " + agent.getAgentId());
+                logger.info("Adding Agent to the map with id: " + agent.getAgentId());
                 agentsMap.put(agent.getAgentId(), agent);
             }
         }
     }
 
     private void loadAllMeasurementOrFacts() {
-        logger.debug("Loading all measurement or facts with term: " + dwca.getExtension(DwcTerm.MeasurementOrFact));
+        logger.info("Loading all measurement or facts with term: " + dwca.getExtension(DwcTerm.MeasurementOrFact));
         if (dwca.getExtension(DwcTerm.MeasurementOrFact) != null) {
             for (Iterator<Record> it = dwca.getExtension(DwcTerm.MeasurementOrFact).iterator(); it.hasNext(); ) {
 
                 MeasurementOrFact measurementOrFact = parseMeasurementOrFact(it.next());
-                logger.debug("Adding Measurement or fact to the map with id: " + measurementOrFact.getMeasurementId());
+                logger.info("Adding Measurement or fact to the map with id: " + measurementOrFact.getMeasurementId());
                 ArrayList<MeasurementOrFact> measurementOrFacts = measurementOrFactHashMap.get(measurementOrFact.getOccurrenceId());
                 if (!(measurementOrFacts != null))
                     measurementOrFacts = new ArrayList<>();
@@ -133,31 +134,31 @@ public class DwcaParser {
 //        }
 //    }
 
-    private void loadAssociationsByOccurrences(){
-        logger.debug("Loading all associations with term: " + dwca.getExtension(CommonTerms.associationTerm));
+    private void loadAssociationsByOccurrences() {
+        logger.info("Loading all associations with term: " + dwca.getExtension(CommonTerms.associationTerm));
         if (dwca.getExtension(CommonTerms.associationTerm) != null) {
             for (Iterator<Record> it = dwca.getExtension(CommonTerms.associationTerm).iterator(); it.hasNext(); ) {
                 Association association = parseAssociation(it.next());
-                logger.debug("Adding association to the map with id: " + association.getAssociationId());
+                logger.info("Adding association to the map with id: " + association.getAssociationId());
                 ArrayList<Association> associations = occurrencesAssociationsHashMap.get(association.getOccurrenceId());
-                if(associations ==null)
+                if (associations == null)
                     associations = new ArrayList<>();
                 associations.add(association);
-                occurrencesAssociationsHashMap.put(association.getOccurrenceId(),associations);
+                occurrencesAssociationsHashMap.put(association.getOccurrenceId(), associations);
 
             }
         }
     }
 
-    private void loadAllOccurrences(){
-        logger.debug("Loading all occurrences with term: " + dwca.getExtension(CommonTerms.occurrenceTerm));
+    private void loadAllOccurrences() {
+        logger.info("Loading all occurrences with term: " + dwca.getExtension(CommonTerms.occurrenceTerm));
         if (dwca.getExtension(CommonTerms.occurrenceTerm) != null) {
             for (StarRecord starRecord : dwca) {
                 List<Record> occurrences = starRecord.extension(CommonTerms.occurrenceTerm);
-                for(Record record: occurrences) {
+                for (Record record : occurrences) {
                     String occurrence_id = record.value(DwcTerm.occurrenceID);
-                    logger.debug("Adding occurrence to the map with id: " + occurrence_id);
-                    occurrenceHashMap.put(occurrence_id,  Integer.valueOf(starRecord.core().value(CommonTerms.generatedAutoIdTerm)));
+                    logger.info("Adding occurrence to the map with id: " + occurrence_id);
+                    occurrenceHashMap.put(occurrence_id, Integer.valueOf(starRecord.core().value(CommonTerms.generatedAutoIdTerm)));
                 }
             }
         }
@@ -174,81 +175,82 @@ public class DwcaParser {
             termsSorted.add(archiveField.getTerm());
         }
 
-        boolean parent_format=checkParentFormat();
+        boolean parent_format = checkParentFormat();
 
-        runScripts(resourceId, termsSorted, parent_format);
+//        runScripts(resourceId, termsSorted, parent_format);
         loadAllOccurrences();
 
         parseRecords(resourceId, neo4jHandler);
 
     }
 
-    public void runScripts(int resourceId, ArrayList<Term> termsSorted, boolean parent_format){
+    public void runScripts(int resourceId, ArrayList<Term> termsSorted, boolean parent_format) {
         ScriptsHandler scriptsHandler = new ScriptsHandler();
 
         final Path fullPath = Paths.get(dwca.getCore().getLocationFile().getPath());
         final Path base = Paths.get("/", "san");
-        System.out.println("full " + fullPath);
-        System.out.println("base " + base);
+//        System.out.println("full " + fullPath);
+//        System.out.println("base " + base);
+        logger.debug("Full Path: " + fullPath);
+        logger.debug("Base Path: " + base);
         final Path relativePath = base.relativize(fullPath);
-        System.out.println("relative " + relativePath);
+//        System.out.println("relative " + relativePath);
+        logger.debug("Relative Path: " + relativePath);
 
 //        final Path fullPath= Paths.get("/home/ba/neo4j-community-3.3.1/import/taxa.txt");
 //        final Path relativePath=Paths.get("taxa.txt");
 
 //        scriptsHandler.runNeo4jInit();
 
-        if(parent_format)
+        if (parent_format)
             scriptsHandler.runPreProc(fullPath.toString(), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName) + 1), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank) + 1));
-        scriptsHandler.runGenerateIds(fullPath.toString(),  String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus)+1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID)+1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID)+1),
-                this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false",  this.dwca.getCore().getFieldsTerminatedBy());
+        scriptsHandler.runGenerateIds(fullPath.toString(), String.valueOf(termsSorted.indexOf(DwcTerm.acceptedNameUsageID) + 1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonomicStatus) + 1), String.valueOf(termsSorted.indexOf(DwcTerm.parentNameUsageID) + 1), String.valueOf(termsSorted.indexOf(DwcTerm.taxonID) + 1),
+                this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", this.dwca.getCore().getFieldsTerminatedBy());
 
-        if(parent_format){
+        if (parent_format) {
             scriptsHandler.runLoadNodesParentFormat(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
                     String.valueOf(termsSorted.indexOf((Object) CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm))
-                    , String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+1), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2));
-            scriptsHandler.runLoadRelationsParentFormat(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2));
-        }
-
-        else{
+                    , String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm) + 1), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm) + 2));
+            scriptsHandler.runLoadRelationsParentFormat(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm) + 2));
+        } else {
             String ancestors_and_ranks = getAncestorsInResource(termsSorted);
-            String [] ancestors_and_ranks_arr = ancestors_and_ranks.split("\t");
-            String ancestors= ancestors_and_ranks_arr[0];
-            String ranks=ancestors_and_ranks_arr[1];
+            String[] ancestors_and_ranks_arr = ancestors_and_ranks.split("\t");
+            String ancestors = ancestors_and_ranks_arr[0];
+            String ranks = ancestors_and_ranks_arr[1];
 
-            System.out.println(ancestors);
-            System.out.println(ranks);
+//            System.out.println(ancestors);
+//            System.out.println(ranks);
 
-            scriptsHandler.runLoadNodesAncestryFormat(relativePath.toString(), String.valueOf(resourceId), ancestors,ranks,
+            scriptsHandler.runLoadNodesAncestryFormat(relativePath.toString(), String.valueOf(resourceId), ancestors, ranks,
                     String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)),
                     String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
-                    String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+1),
-                    String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2),this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
+                    String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm) + 1),
+                    String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm) + 2), this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false");
 
 //            scriptsHandler.runLoadRelationsAncestryFormat(relativePath.toString(), String.valueOf(resourceId), ancestors,
 //                    String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2));
         }
     }
 
-    public String getAncestorsInResource(ArrayList<Term> termsSorted){
-        String ancestors ="[";
-        String ranks ="[";
+    public String getAncestorsInResource(ArrayList<Term> termsSorted) {
+        String ancestors = "[";
+        String ranks = "[";
 
-        ArrayList<String> ancestors_list=getAllAncestors();
-        for(String term : ancestors_list){
-            if(this.dwca.getCore().hasTerm(term)) {
+        ArrayList<String> ancestors_list = getAllAncestors();
+        for (String term : ancestors_list) {
+            if (this.dwca.getCore().hasTerm(term)) {
                 ancestors += termsSorted.indexOf(TermFactory.instance().findTerm(term)) + ",";
-                String [] uri = term.split("/");
-                ranks += "\""+uri[uri.length-1]+"\",";
+                String[] uri = term.split("/");
+                ranks += "\"" + uri[uri.length - 1] + "\",";
             }
         }
-        ancestors = ancestors.substring(0,ancestors.length()-1)+"]";
-        ranks = ranks.substring(0, ranks.length()-1)+"]";
-        return ancestors+"\t"+ranks;
+        ancestors = ancestors.substring(0, ancestors.length() - 1) + "]";
+        ranks = ranks.substring(0, ranks.length() - 1) + "]";
+        return ancestors + "\t" + ranks;
     }
 
-    public  ArrayList<String> getAllAncestors(){
-        ArrayList<String> ancestors_list=new ArrayList<>();
+    public ArrayList<String> getAllAncestors() {
+        ArrayList<String> ancestors_list = new ArrayList<>();
         ancestors_list.addAll(addPrefixes("domain"));
         ancestors_list.addAll(addPrefixes("kingdom"));
         ancestors_list.addAll(addPrefixes("phylum"));
@@ -264,15 +266,15 @@ public class DwcaParser {
         return ancestors_list;
     }
 
-    public ArrayList<String> addPrefixes(String rank){
-        String [] prefixes = {"mege","super","epi","_group","","sub","infra","subter"};
+    public ArrayList<String> addPrefixes(String rank) {
+        String[] prefixes = {"mege", "super", "epi", "_group", "", "sub", "infra", "subter"};
         String uri = PropertiesHandler.getProperty("ranksURI");
         ArrayList<String> rank_with_prefixes = new ArrayList<>();
-        for(int i=0; i< prefixes.length;i++){
-            if(prefixes[i].startsWith("_"))
-                rank_with_prefixes.add(uri+rank+prefixes[i]);
+        for (int i = 0; i < prefixes.length; i++) {
+            if (prefixes[i].startsWith("_"))
+                rank_with_prefixes.add(uri + rank + prefixes[i]);
             else
-                rank_with_prefixes.add(uri+prefixes[i]+rank);
+                rank_with_prefixes.add(uri + prefixes[i] + rank);
         }
         return rank_with_prefixes;
     }
@@ -290,16 +292,17 @@ public class DwcaParser {
         int i = 0, count = 0;
         ArrayList<NodeRecord> records = new ArrayList<>();
         for (StarRecord rec : dwca) {
-            if(count %10000 ==0 && count!=0){
+            if (count % 10000 == 0 && count != 0) {
                 insertNodeRecordsToMysql(records);
                 records.clear();
-                count =0;
+                count = 0;
             }
             count++;
             int generatedNodeId = Integer.valueOf(rec.core().value(CommonTerms.generatedAutoIdTerm));
             i++;
 //            int generatedNodeId =i;
-            System.out.println(rec.core().value(DwcTerm.taxonID)+" count"+count);
+//            System.out.println(rec.core().value(DwcTerm.taxonID)+" count"+count);
+            logger.info(rec.core().value(DwcTerm.taxonID) + " Count:" + count);
             NodeRecord tableRecord = new NodeRecord(
                     generatedNodeId + "", resourceId);
 
@@ -318,11 +321,12 @@ public class DwcaParser {
                 tableRecord.setTargetOccurrences(parseTargetOccurrenceIdsOfTaxon(tableRecord));
             }
             if (rec.hasExtension(CommonTerms.mediaTerm)) {
-                System.out.println("==============>  parse media");
+//                System.out.println("==============>  parse media");
+                logger.info("Parsing Media");
                 tableRecord.setMedia(parseMedia(rec, tableRecord));
             }
 
-            System.out.println("before adjust refe");
+//            System.out.println("before adjust refe");
             adjustReferences(tableRecord);
 //            checkActionFiles(rec, actions, tableRecord);
             records.add(tableRecord);
@@ -332,28 +336,30 @@ public class DwcaParser {
     }
 
     private void insertNodeRecordsToMysql(ArrayList<NodeRecord> records) {
-        int media_count=0;
-        int vernaculars_count=0;
-        for(NodeRecord record : records){
-            if(record.getMedia()!=null)
+        int media_count = 0;
+        int vernaculars_count = 0;
+        for (NodeRecord record : records) {
+            if (record.getMedia() != null)
                 media_count += record.getMedia().size();
-            if(record.getVernaculars() !=null)
+            if (record.getVernaculars() != null)
                 vernaculars_count += record.getVernaculars().size();
         }
-        System.out.println("media count: "+media_count);
-        System.out.println("vernaculars count: "+vernaculars_count);
+//        System.out.println("media count: "+media_count);
+//        System.out.println("vernaculars count: "+vernaculars_count);
+        logger.info("Media Count: " + media_count);
+        logger.info("Vernaculars Count: " + vernaculars_count);
         RestClientHandler restClientHandler = new RestClientHandler();
         restClientHandler.insertNodeRecordsToMysql(PropertiesHandler.getProperty("addEntriesMysql"), records);
 //        printRecord(tableRecord);
-        System.out.println();
+//        System.out.println();
     }
 
-    private void insertPlaceholderNodesToMysql(){
+    private void insertPlaceholderNodesToMysql() {
         Neo4jHandler neo4jHandler = new Neo4jHandler();
         ArrayList<Node> placeholderNodes = neo4jHandler.getPlaceholderNodes(this.resourceID);
-        if(placeholderNodes.size() !=0) {
+        if (placeholderNodes.size() != 0) {
             ArrayList<NodeRecord> records = new ArrayList<>();
-            for (int i=0; i<placeholderNodes.size(); i++) {
+            for (int i = 0; i < placeholderNodes.size(); i++) {
                 NodeRecord tableRecord = new NodeRecord(
                         placeholderNodes.get(i).getGeneratedNodeId() + "", this.resourceID);
 
@@ -385,13 +391,13 @@ public class DwcaParser {
         return measurementOrFacts;
     }
 
-    private Map<String, String> parseTargetOccurrenceIdsOfTaxon(NodeRecord rec){
-        Map<String,String> targetOccurrenceIds = new HashMap<>();
-        ArrayList<Integer> generated_node_ids=new ArrayList<>();
+    private Map<String, String> parseTargetOccurrenceIdsOfTaxon(NodeRecord rec) {
+        Map<String, String> targetOccurrenceIds = new HashMap<>();
+        ArrayList<Integer> generated_node_ids = new ArrayList<>();
         ArrayList<Association> associations = rec.getAssociations();
 
-        for(int i=0; i<associations.size(); i++){
-            Association association =associations.get(i);
+        for (int i = 0; i < associations.size(); i++) {
+            Association association = associations.get(i);
             String targetOccurrence = association.getTargetOccurrenceId();
             String generated_node_id = String.valueOf(occurrenceHashMap.get(targetOccurrence));
             generated_node_ids.add(Integer.valueOf(generated_node_id));
@@ -400,11 +406,11 @@ public class DwcaParser {
         Neo4jHandler neo4jHandler = new Neo4jHandler();
         ArrayList<Integer> page_ids = neo4jHandler.getPageIdsOfNodes(generated_node_ids);
 
-        for(int i=0; i<associations.size(); i++){
-            Association association =associations.get(i);
+        for (int i = 0; i < associations.size(); i++) {
+            Association association = associations.get(i);
             String targetOccurrence = association.getTargetOccurrenceId();
-            if(page_ids.get(i)!=-1)
-                targetOccurrenceIds.put(targetOccurrence,String.valueOf(page_ids.get(i)));
+            if (page_ids.get(i) != -1)
+                targetOccurrenceIds.put(targetOccurrence, String.valueOf(page_ids.get(i)));
         }
         return targetOccurrenceIds;
     }
@@ -416,7 +422,7 @@ public class DwcaParser {
 
             if (action != null) {
                 if (action.equalsIgnoreCase(Constants.INSERT)) {
-                    System.out.println("insert that action is insert");
+//                    System.out.println("insert that action is insert");
                     insertTaxonToMysql(tableRecord);
                 }
 //                } else if (action.equalsIgnoreCase(Constants.UPDATE) || action.equalsIgnoreCase(Constants.UNCHANGED)) {
@@ -425,7 +431,7 @@ public class DwcaParser {
 //                    //delete
 //                }
             } else {
-                System.out.println("insert from else of action is null");
+//                System.out.println("insert from else of action is null");
                 insertTaxonToMysql(tableRecord);
             }
         } /*else {
@@ -433,7 +439,7 @@ public class DwcaParser {
             insertTaxonToMysql(tableRecord);
         }*/
         if (newResource) {
-            System.out.println("new resource");
+//            System.out.println("new resource");
             insertTaxonToMysql(tableRecord);
         }
     }
@@ -443,7 +449,7 @@ public class DwcaParser {
         RestClientHandler restClientHandler = new RestClientHandler();
         restClientHandler.doConnection(PropertiesHandler.getProperty("addEntryMysql"), tableRecord);
         printRecord(tableRecord);
-        System.out.println();
+//        System.out.println();
     }
 
 
@@ -455,7 +461,8 @@ public class DwcaParser {
             action = actions.get(extensionRecord.value(CommonTerms.occurrenceID));
         else
             action = "I";
-        System.out.println("occ " + action);
+//        System.out.println("occ " + action);
+        logger.debug("Occ: " + action);
         return action;
 
     }
@@ -469,7 +476,8 @@ public class DwcaParser {
         } else {
             action = "I";
         }
-        System.out.println("media " + action);
+//        System.out.println("media " + action);
+        logger.debug("Media: " + action);
         return action;
     }
 
@@ -482,11 +490,13 @@ public class DwcaParser {
             System.out.println(actions);
             if (actions != null && actions.get(agentId) != null) {
                 action = actions.get(agentId);
-                System.out.println("agent action found");
+//                System.out.println("agent action found");
+                logger.info("Agent Action Found");
             } else {
                 action = "I";
             }
-            System.out.println("agent " + action);
+//            System.out.println("agent " + action);
+            logger.debug("Agent: " + action);
         }
         return action;
     }
@@ -497,14 +507,16 @@ public class DwcaParser {
         String action = "";
         if (referenceFile != null) {
             Map<String, String> actions = actionFiles.get(referenceFile.getLocation() + "_action");
-            System.out.println(actions);
+//            System.out.println(actions);
             if (actions != null && actions.get(referenceId) != null) {
                 action = actions.get(referenceId);
-                System.out.println("reference action found");
+//                System.out.println("reference action found");
+                logger.info("Reference Action Found");
             } else {
                 action = "I";
             }
-            System.out.println("refe " + action);
+//            System.out.println("refe " + action);
+            logger.debug("Reference: " + action);
         }
         return action;
     }
@@ -515,24 +527,28 @@ public class DwcaParser {
         if (vernacularFile != null) {
             Map<String, String> actions = actionFiles.get(vernacularFile.getLocation() + "_action");
             if (actions != null) {
-                System.out.println(actions);
+//                System.out.println(actions);
 
                 String name = extensionRecord.value(DwcTerm.vernacularName);
                 String language = extensionRecord.value(CommonTerms.languageTerm);
                 String key = name + Constants.SEPARATOR + language;
 
-                System.out.println(key);
+//                System.out.println(key);
+                logger.debug("Key: " + key);
                 if (actions.get(key) != null) {
-                    System.out.println("vernacular action found");
+//                    System.out.println("vernacular action found");
+                    logger.info("Vernacular Action Found");
                     action = actions.get(key);
                 } else {
-                    System.out.println("vernacular action not found");
+//                    System.out.println("vernacular action not found");
+                    logger.info("Vernacular Action Not Found");
                     action = "I";
                 }
             } else {
                 action = "I";
             }
-            System.out.println("vernacular " + action);
+//            System.out.println("vernacular " + action);
+            logger.debug("Vernacular: " + action);
         }
         return action;
     }
@@ -604,8 +620,7 @@ public class DwcaParser {
         if (nodeRecord.getReferences() != null) {
             if (!refs.contains(ref))
                 refs.add(ref);
-        }
-        else {
+        } else {
             refs = new ArrayList<Reference>();
             refs.add(ref);
             nodeRecord.setReferences(refs);
@@ -653,7 +668,8 @@ public class DwcaParser {
             action = actions.get(taxonID);
         else
             action = "I";
-        System.out.println("taxon " + action);
+//        System.out.println("taxon " + action);
+        logger.debug("Taxon: " + action);
         Taxon taxonData = new Taxon(record.core().value(DwcTerm.taxonID), record.core().value(DwcTerm.scientificName),
                 record.core().value(DwcTerm.parentNameUsageID), record.core().value(DwcTerm.kingdom),
                 record.core().value(DwcTerm.phylum), record.core().value(DwcTerm.class_),
@@ -677,7 +693,8 @@ public class DwcaParser {
             if (pageId != 0)
                 taxonData.setPageEolId(String.valueOf(pageId));
         }
-        System.out.println("taxon ------>" + taxonData.getIdentifier());
+//        System.out.println("taxon ------>" + taxonData.getIdentifier());
+        logger.debug("Taxon: " + taxonData.getIdentifier());
         return taxonData;
     }
 
@@ -875,53 +892,56 @@ public class DwcaParser {
 
     private void printRecord(NodeRecord nodeRecord) {
 
-        System.out.print("===================================================");
-        System.out.print("===================================================");
-        System.out.println("-------------scientific name---------------");
-        System.out.println(nodeRecord.getTaxon().getScientificName());
+//        System.out.print("===================================================");
+//        System.out.print("===================================================");
+//        System.out.println("-------------scientific name---------------");
+//        System.out.println(nodeRecord.getTaxon().getScientificName());
+        logger.info("Scientific Name: " + nodeRecord.getTaxon().getScientificName());
 //        System.out.println(" " + nodeRecord.getTaxonId());
-        System.out.println("-------------Media---------------");
+//        System.out.println("-------------Media---------------");
         if (nodeRecord.getMedia() != null && nodeRecord.getMedia().size() > 0)
-            System.out.println(nodeRecord.getMedia().size() + "\n" + nodeRecord.getMedia().get(0).
+//            System.out.println(nodeRecord.getMedia().size() + "\n" + nodeRecord.getMedia().get(0).
+//                    getMediaId() + " " + nodeRecord.getMedia().get(0).getType());
+            logger.info("Media: "+ nodeRecord.getMedia().size() + "\n" + nodeRecord.getMedia().get(0).
                     getMediaId() + " " + nodeRecord.getMedia().get(0).getType());
 
-        System.out.println("-------------Occ---------------");
+//        System.out.println("-------------Occ---------------");
 
-        if (nodeRecord.getOccurrences() != null && nodeRecord.getOccurrences().size() > 0)
+//        if (nodeRecord.getOccurrences() != null && nodeRecord.getOccurrences().size() > 0)
 //            System.out.println(nodeRecord.getReferences().size() + "\n" + nodeRecord.getOccurrences().
 //                    get(0).getSex() + " " + nodeRecord.getOccurrences().get(0).getBehavior());
 
-            System.out.println("----------------Vernaculars---------------");
+//            System.out.println("----------------Vernaculars---------------");
 
         if (nodeRecord.getVernaculars() != null && nodeRecord.getVernaculars().size() > 0)
-            System.out.println(nodeRecord.getVernaculars().size() + "\n" + nodeRecord.getVernaculars().
+            logger.info("Vernaculars: " + nodeRecord.getVernaculars().size() + "\n" + nodeRecord.getVernaculars().
                     get(0).getName() + " " + nodeRecord.getVernaculars().get(0).getSource());
 
-        System.out.println("----------------Measu------------------ ");
+//        System.out.println("----------------Measu------------------ ");
 
         if (nodeRecord.getMeasurementOrFacts() != null && nodeRecord.getMeasurementOrFacts().size() > 0)
-            System.out.println(nodeRecord.getMeasurementOrFacts().size() + "\n" + nodeRecord.getMeasurementOrFacts().
+            logger.info("Measurements or Facts: " + nodeRecord.getMeasurementOrFacts().size() + "\n" + nodeRecord.getMeasurementOrFacts().
                     get(0).getMeasurementId() + " " + nodeRecord.getMeasurementOrFacts().get(0).getContributor());
 
-        System.out.println("------------------Assoc-------------------- ");
+//        System.out.println("------------------Assoc-------------------- ");
 
         if (nodeRecord.getAssociations() != null && nodeRecord.getAssociations().size() > 0)
-            System.out.println(nodeRecord.getAssociations().size() + "\n" + nodeRecord.getAssociations().
+            logger.info("Associations: " + nodeRecord.getAssociations().size() + "\n" + nodeRecord.getAssociations().
                     get(0).getAssociationId() + " " + nodeRecord.getAssociations().get(0).getContributor());
 
-        System.out.println("------------------agents------------------");
+//        System.out.println("------------------agents------------------");
         if (nodeRecord.getMedia() != null && nodeRecord.getMedia().size() > 0 && nodeRecord.getMedia().get(0) != null &&
                 nodeRecord.getMedia().get(0).getAgents() != null && nodeRecord.getMedia().get(0).getAgents().size() > 0)
-            System.out.println(nodeRecord.getMedia().get(0).getAgents().size() + "\n" +
+            logger.info("Agents: " + nodeRecord.getMedia().get(0).getAgents().size() + "\n" +
                     nodeRecord.getMedia().get(0).getAgents().get(0).getAgentId());
 
-        System.out.println("---------------------refs----------------");
+//        System.out.println("---------------------refs----------------");
 
         if (nodeRecord.getReferences() != null && nodeRecord.getReferences().size() > 0)
-            System.out.println(nodeRecord.getReferences().size() + "\n" + nodeRecord.getReferences().get(0).
+            logger.info("References: " + nodeRecord.getReferences().size() + "\n" + nodeRecord.getReferences().get(0).
                     getDoi() + " " + nodeRecord.getReferences().get(0).getFullReference());
-        System.out.print("===================================================");
-        System.out.print("===================================================");
+//        System.out.print("===================================================");
+//        System.out.print("===================================================");
     }
 
     private String getNameOfActionFile(String title) {
@@ -974,7 +994,6 @@ public class DwcaParser {
 //        scriptsHandler.runLoadNodesParentFormat(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
 //                String.valueOf(16), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)));
 //        scriptsHandler.runLoadRelationsParentFormat(relativePath.toString(), String.valueOf(555), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)));
-
 
 
 //        Archive dwcArchive = null;
@@ -1046,10 +1065,10 @@ public class DwcaParser {
 
 //        String ranks=dwcaParser.getAncestorsInResource(termsSorted);
 //        System.out.println(ranks);
-        Media media=new Media("","","","gf/dg+f","","","","","","","","","","",
-                "","","","","","","","","","","","",""
-                ,"","","","","","");
-        System.out.println("hena");
+        Media media = new Media("", "", "", "gf/dg+f", "", "", "", "", "", "", "", "", "", "",
+                "", "", "", "", "", "", "", "", "", "", "", "", ""
+                , "", "", "", "", "", "");
+//        System.out.println("hena");
 
     }
 }

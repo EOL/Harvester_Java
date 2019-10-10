@@ -1,12 +1,16 @@
 package org.bibalex.eol.utils;
 
 import org.apache.commons.io.FileUtils;
+
+import org.bibalex.eol.parser.DwcaParser;
 import org.bibalex.eol.validator.OwnDwcaWriter;
 import org.gbif.dwc.terms.Term;
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveField;
 import org.gbif.dwca.io.ArchiveFile;
 import org.gbif.dwca.record.Record;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -20,6 +24,7 @@ public class Constants {
     public static final String DELETE = "D";
     public static final String UNCHANGED = "N";
     public static final String SEPARATOR = "+";
+    private static final Logger logger = LoggerFactory.getLogger(Constants.class);
 
 
     public static boolean copyContentOfArchiveFileToDisk(ArrayList<Record> records, ArchiveFile archiveFile) {
@@ -52,7 +57,8 @@ public class Constants {
             }
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            logger.error("IOException: ", e);
         }
 
         return false;
@@ -79,7 +85,8 @@ public class Constants {
             out.write(header.getBytes());
             out.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            logger.error("IOException: ", e);
         }
 
     }

@@ -1,7 +1,8 @@
 package com.deltacalculator;
 
-import org.apache.log4j.Logger;
 import org.gbif.dwca.io.Archive;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.Null;
 import java.io.*;
@@ -13,7 +14,7 @@ public class DeltaCalculator {
     public DeltaCalculator() {
     }
 
-    private static final Logger logger = Logger.getLogger(DeltaCalculator.class);
+    private static final Logger logger = LoggerFactory.getLogger(DeltaCalculator.class);
 
     public static void main(String[] args) {
       File file1 = new File ("/home/ba/eol_workspace/originals/421_org.out_valid.zip");
@@ -33,8 +34,8 @@ public class DeltaCalculator {
                 archive2Path = updatedVersionFile.getPath();
         try {
             Archive dwca1 = archiveHandler.openDwcAFolder(archive1Path), dwca2 = archiveHandler.openDwcAFolder(archive2Path);
-            System.out.println(dwca1.getMetadataLocation());
-            System.out.println(dwca2.getMetadataLocation());
+//            System.out.println(dwca1.getMetadataLocation());
+//            System.out.println(dwca2.getMetadataLocation());
             logger.info("Version 1 Meta File: " + dwca1.getMetadataLocation());
             logger.info("Version 2 Meta File: " + dwca2.getMetadataLocation());
             File metaFile = new File(dwca2.getMetadataLocation());
@@ -55,8 +56,8 @@ public class DeltaCalculator {
             commandExecutor.removeDirectory(DWCADiff.getPath());
             return DWCADiff.getPath()+".tar.gz";
         } catch (NullPointerException e) {
-            logger.info(e);
-            System.out.println(e);
+            logger.error("NullPointerException: ", e);
+//            System.out.println(e);
             return "";
         }
 

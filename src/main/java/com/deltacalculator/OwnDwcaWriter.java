@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.LogManager;
 
 /**
  * Simple writer class to create valid dwc archives using tab data files.
@@ -26,7 +27,7 @@ import java.util.*;
  * For usage of this class please @see DwcaWriterTest.
  */
 public class OwnDwcaWriter {
-    private Logger log = LoggerFactory.getLogger(OwnDwcaWriter.class);
+    public static final Logger log = LoggerFactory.getLogger(OwnDwcaWriter.class);
     private final File dir;
     private final boolean useHeaders;
     private long recordNum;
@@ -141,7 +142,7 @@ public class OwnDwcaWriter {
 
         // make sure coreId is not null for extensions
         if (coreRowType != rowType && coreId == null){
-            log.warn("Adding an {} extension record to a core without an Id! Skip this record", rowType);
+            log.warn("Adding an "+rowType+" extension record to a core without an Id! Skip this record.");
 
         } else {
             String[] row = new String[columns.size() + 1];
@@ -209,7 +210,7 @@ public class OwnDwcaWriter {
 
         // make sure coreId is not null for extensions
         if (coreRowType != rowType && coreId == null){
-            log.warn("Adding an {} extension record to a core without an Id! Skip this record", rowType);
+            log.warn("Adding an "+rowType+" extension record to a core without an Id! Skip this record");
 
         } else {
             String[] row = new String[columns.size()];

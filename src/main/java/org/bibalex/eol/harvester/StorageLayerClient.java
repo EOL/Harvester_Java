@@ -9,8 +9,10 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.ProxyAuthenticationStrategy;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.bibalex.eol.parser.handlers.PropertiesHandler;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -28,7 +30,7 @@ import org.json.*;
 
 public class StorageLayerClient {
 
-    private static final Logger logger = Logger.getLogger(StorageLayerClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(StorageLayerClient.class);
 
     public StorageLayerClient() throws IOException {
     }
@@ -39,7 +41,8 @@ public class StorageLayerClient {
 
 
     public static void downloadResource(String resId, String isOrg, String isNew) {
-        logger.debug("Downloading resource into harvester: " + resId);
+        DOMConfigurator.configure("log4j2.xml");
+        logger.info("Downloading resource number: " +resId+" into Harvester");
         final String uri = PropertiesHandler.getProperty("storage.layer.api.url") +
                 PropertiesHandler.getProperty("download.resource.url");
 
@@ -48,10 +51,10 @@ public class StorageLayerClient {
             CredentialsProvider credsProvider = new BasicCredentialsProvider();
 
             String proxyUrl = PropertiesHandler.getProperty("proxy");
-            System.out.println(proxyUrl);
+//            System.out.println(proxyUrl);
 
             int port = Integer.parseInt(PropertiesHandler.getProperty("port"));
-            System.out.println(port);
+//            System.out.println(port);
 
 
             credsProvider.setCredentials(new AuthScope(proxyUrl, port),
@@ -71,7 +74,7 @@ public class StorageLayerClient {
         } else {
             restTemplate = new RestTemplate();
         }
-        System.out.println("done proxy");
+//        System.out.println("done proxy");
         restTemplate.getMessageConverters().add(
                 new ByteArrayHttpMessageConverter());
 
@@ -84,16 +87,18 @@ public class StorageLayerClient {
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
 
         HttpEntity<String> entity = new HttpEntity<String>(headers);
-        System.out.println("before send request");
-        System.out.println(uri);
-        System.out.println(params);
+//        System.out.println("before send request");
+//        System.out.println(uri);
+//        System.out.println(params);
+        logger.info("Sending Request: "+uri);
+        logger.info("Request Parameters: "+params);
         try {
             ResponseEntity<byte[]> response = restTemplate.exchange(
                     uri,
                     HttpMethod.GET, entity, byte[].class, params);
-            System.out.println("after request");
+//            System.out.println("after request");
             HttpHeaders outHeaders = response.getHeaders();
-            System.out.println(outHeaders.get("Content-disposition").size() + "_----------------------");
+//            System.out.println(outHeaders.get("Content-disposition").size() + "_----------------------");
             String fileName = "";
             if (outHeaders.get("Content-disposition").size() > 0) {
                 fileName = outHeaders.get("Content-disposition").get(0);
@@ -101,7 +106,7 @@ public class StorageLayerClient {
             }
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                System.out.println("creating file");
+//                System.out.println("creating file");
                 File directory = new File(PropertiesHandler.getProperty
                         ("storage.output.directory") + File.separator + resId + (isNew.equalsIgnoreCase("1") ? "" : "_old") + "_" +
                         (isOrg.equalsIgnoreCase("1") ? "org" : "core"));
@@ -112,23 +117,24 @@ public class StorageLayerClient {
                     fos.write(response.getBody());
                     fos.close();
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
+                    logger.error("FileNotFoundException: ", e);
                 } catch (IOException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
+                    logger.error("IOException: ", e);
                 }
-
-
             }
             else return;
         } catch (HttpClientErrorException ex) {
-            logger.error(ex + ": Resource Version not found");
+            logger.error("HttpClientErrorException: ", ex);
+            logger.info("Resource number: "+resId+", version not found");
             return;
         }
     }
 
 
     public static void uploadDWCAResource(String resId, String fileName) throws IOException {
-        logger.debug("Uploading DWCA resource (" + resId + ") into SL.");
+        logger.info("Uploading DWCA resource number: " + resId + " into SL.");
         final String uri = PropertiesHandler.getProperty("storage.layer.api.url") +
                 PropertiesHandler.getProperty("upload.resource.url");
 
@@ -161,7 +167,7 @@ public class StorageLayerClient {
 //                new ByteArrayHttpMessageConverter());
 
         Map<String, String> params = new HashMap<String, String>();
-        System.out.println("before params");
+//        System.out.println("before params");
         params.put(PropertiesHandler.getProperty("upload.var1"), resId);
         params.put(PropertiesHandler.getProperty("upload.var2"), "0");
 
@@ -180,22 +186,22 @@ public class StorageLayerClient {
         HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
                 new HttpEntity<LinkedMultiValueMap<String, Object>>(map, headers);
 
-        System.out.println("before send request");
+//        System.out.println("before send request");
         ResponseEntity<String> response = restTemplate.exchange(
                 uri,
                 HttpMethod.POST, requestEntity, String.class, params);
 
 
         if (response.getStatusCode() == HttpStatus.OK) {
-            logger.debug("Uplaoded DWCA resource (" + resId + ")");
+            logger.info("Uplaoded DWCA resource number: " + resId);
         } else {
-            logger.error("org.bibalex.eol.harvester.client.StorageLayerClient.uploadDWCAResource: returned code(" + response.getStatusCode() + ")");
+            logger.error("Returned code: " + response.getStatusCode());
         }
 
     }
 
     public ArrayList<String> downloadMedia(String resId, ArrayList<ArrayList<String>> mediaFiles) throws IOException {
-        logger.debug("Request to storage layer to download media of resource (" + resId + ").");
+        logger.info("Request to storage layer to download media of resource number: " + resId);
         final String uri = PropertiesHandler.getProperty("storage.layer.api.url") + PropertiesHandler.getProperty("media.resource.url");
 
 //        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
@@ -239,7 +245,7 @@ public class StorageLayerClient {
         headers.set("Accept", "application/json"); // looks like you want a string back
 
         String mediaJson = getJson(mediaFiles);
-        System.out.println("--------------------" + mediaJson);
+//        System.out.println("--------------------" + mediaJson);
         HttpEntity<String> entity = new HttpEntity<String>(mediaJson, headers);
 
 
@@ -249,11 +255,10 @@ public class StorageLayerClient {
 
 
         if (response.getStatusCode() == HttpStatus.OK) {
-            logger.debug("Uplaoded DWCA resource (" + resId + ")");
+            logger.debug("Uplaoded DWCA resource number: " + resId);
             System.out.println(response.getBody());
         } else {
-            logger.error("org.bibalex.eol.harvester.client.StorageLayerClient.uploadDWCAResource:" +
-                    " returned code(" + response.getStatusCode() + ")");
+            logger.error("returned code: " + response.getStatusCode());
         }
         return parseJson(response.getBody(), mediaFiles);
     }
@@ -275,16 +280,16 @@ public class StorageLayerClient {
         JSONObject obj = new JSONObject(json);
         for (List<String> url : urls) {
             String path = obj.getString(url.get(0));
-            System.out.println(path);
+//            System.out.println(path);
 
             String[] parts = path.split(",");
             if (parts[1].replaceAll("\\s+","").equalsIgnoreCase("true"))
                 paths.add(parts[0]);
         }
-        System.out.println(paths);
+//        System.out.println(paths);
         return paths;
     }
-    public static String callDeltaCalculator(String oldPath, String updatedPath) throws IOException {
+    public static String callDeltaCalculator(String oldPath, String updatedPath, String resourceID) throws IOException {
         DeltaCalculator deltaCalculator = new DeltaCalculator();
 
 
@@ -295,7 +300,7 @@ public class StorageLayerClient {
         Files.copy(oldVersion.toPath(), oldVersionArchive.toPath(), StandardCopyOption.REPLACE_EXISTING);
         Files.copy(updatedVersion.toPath(), updatedVersionArchive.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-        logger.info("Updated Version of the existing resource found - calling Delta Calculator");
+        logger.info("Updated Version of resource number: "+resourceID+" found - calling Delta Calculator");
         String deltaPath = deltaCalculator.deltaCalculatorMain(oldVersionArchive, updatedVersionArchive);
         return deltaPath;
     }

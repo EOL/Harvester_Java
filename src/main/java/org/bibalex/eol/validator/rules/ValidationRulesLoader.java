@@ -2,7 +2,8 @@ package org.bibalex.eol.validator.rules;
 
 //import org.eol.handlers.LogHandler;
 import org.bibalex.eol.validator.handlers.XMLHandler;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class ValidationRulesLoader {
 //    protected static Logger logger;
-private static final Logger logger = Logger.getLogger(ValidationRulesLoader.class);
+private static final Logger logger = LoggerFactory.getLogger(ValidationRulesLoader.class);
     private static List<String> rowTypeList = new ArrayList<String>();
     private static List<FieldValidationRule> fieldValidationRuleList = new
             ArrayList<FieldValidationRule>();
@@ -20,6 +21,7 @@ private static final Logger logger = Logger.getLogger(ValidationRulesLoader.clas
             ArrayList<RowValidationRule>();
     private static List<MetaFileValidationRule> metaFileValidationRuleList = new
             ArrayList<MetaFileValidationRule>();
+
 
     /**
      * Construct a new Loader for the validation rules
@@ -41,7 +43,7 @@ private static final Logger logger = Logger.getLogger(ValidationRulesLoader.clas
         logger.info("\t\t" + "(FieldValidationRules = " + fieldValidationRulesNodeList.getLength
                 () + ")");    //Just a separator
         for (int i = 0; i < fieldValidationRulesNodeList.getLength(); i++) {
-            logger.info("--------------------Rule " + (i + 1) + "--------------------");
+            logger.info("Rule " + (i + 1));
             Node fieldValidationRuleNode = fieldValidationRulesNodeList.item(i);
             if (fieldValidationRuleNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) fieldValidationRuleNode;
@@ -67,7 +69,6 @@ private static final Logger logger = Logger.getLogger(ValidationRulesLoader.clas
                 logger.info("FailureType = " + failureTypeString);
 
             }
-            logger.info("-----------------------------------------------");
         }
     }
 
@@ -83,7 +84,7 @@ private static final Logger logger = Logger.getLogger(ValidationRulesLoader.clas
         logger.info("\t\t" + "(RowValidationRules = " + rowValidationRulesNodeList.getLength() +
                 ")");    //Just a separator
         for (int i = 0; i < rowValidationRulesNodeList.getLength(); i++) {
-            logger.info("--------------------Rule " + (i + 1) + "--------------------");
+            logger.info("Rule " + (i + 1));
             Node rowValidationRuleNode = rowValidationRulesNodeList.item(i);
             if (rowValidationRuleNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) rowValidationRuleNode;
@@ -106,7 +107,6 @@ private static final Logger logger = Logger.getLogger(ValidationRulesLoader.clas
                 logger.info("FailureMessage = " + eElement.getElementsByTagName("FailureMessage")
                         .item(0).getTextContent());
             }
-            logger.info("-----------------------------------------------");
         }
 
     }
@@ -223,7 +223,7 @@ private static final Logger logger = Logger.getLogger(ValidationRulesLoader.clas
         rowValidationRuleList.clear();
 
         XMLHandler xmlHandler = new XMLHandler();
-        logger.info("============ STARTING GETTING VALIDATION RULES ==============");
+        logger.info("Calling loadValidationRules");
         NodeList nList = xmlHandler.document.getElementsByTagName("RulesList");
 
         // Looping on rules lists for each row type
@@ -231,13 +231,13 @@ private static final Logger logger = Logger.getLogger(ValidationRulesLoader.clas
             Node ruleListNode = nList.item(temp);
             Element ruleListNodeElement = (Element) ruleListNode;
             String rowType = ruleListNodeElement.getAttribute("RowType");
-            logger.info("====== Row Type = " + rowType + " ======");
+            logger.info("Row Type: " + rowType);
             rowTypeList.add(rowType);
 
             loadFieldValidationRules(ruleListNode, rowType);
             loadRowValidationRules(ruleListNode, rowType);
         }
-        logger.info("============ FINISHED GETTING VALIDATION RULES ==============");
+        logger.info("Done Calling loadValidationRules");
         return true;
     }
 }

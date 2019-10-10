@@ -1,22 +1,24 @@
 package com.deltacalculator;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+
 import org.gbif.dwc.terms.DwcTerm;
 import org.gbif.dwca.io.ArchiveFile;
 import java.io.*;
 import java.util.ArrayList;
 import org.bibalex.eol.utils.CommonTerms;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import static com.deltacalculator.DeltaCalculator.DWCADiff;
 
 public class CommandExecutor {
-    private static final Logger logger = Logger.getLogger(CommandExecutor.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommandExecutor.class);
 
 
     void removeDirectory(String directory) {
-        System.out.println("Removing Directory: " + directory);
+//        System.out.println("Removing Directory: " + directory);
         logger.info("Removing Directory: " + directory);
         Process removeDir = null;
         try {
@@ -24,27 +26,27 @@ public class CommandExecutor {
             removeDir.waitFor();
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error(e);
+            logger.error("IOException: ", e);
         } catch (InterruptedException e) {
             e.printStackTrace();
-            logger.error(e);
+            logger.error("InterruptedException: ", e);
         }
 
     }
 
     void compress(File dwcADir) {
-        System.out.println("Compressing Archive: " + dwcADir.getPath());
+//        System.out.println("Compressing Archive: " + dwcADir.getPath());
         logger.info("Compressing Archive: " + dwcADir.getPath());
         try {
             Process compress = Runtime.getRuntime().exec("tar -czf " + dwcADir.getPath() + ".tar.gz" + " " + dwcADir.getPath());
             compress.waitFor();
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e);
+//            e.printStackTrace();
+            logger.error("IOException: ", e);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
-            logger.error(e);
+            logger.error("InterruptedException: ", e);
         }
 
     }
@@ -53,7 +55,7 @@ public class CommandExecutor {
         ArchiveFileHandler archiveFileHandler = new ArchiveFileHandler();
         String file1SDIFF = file1,
                 file2SDIFF = file2;
-        System.out.println("Comparing Files: " + file1 + ", " + file2);
+//        System.out.println("Comparing Files: " + file1 + ", " + file2);
         logger.info("Comparing Files: " + file1 + ", " + file2);
         if (!DWCADiff.exists())
             DWCADiff.mkdir();
@@ -71,7 +73,7 @@ public class CommandExecutor {
             }
             else {
                 String command = "sdiff " + file1SDIFF + " " + file2SDIFF + " -s" + " -H" + " -w" + "6144";
-                System.out.println("Executing Command: " + command);
+//                System.out.println("Executing Command: " + command);
                 logger.info("Executing Command: " + command);
                 Process sDiff = Runtime.getRuntime().exec(command);
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(sDiff.getInputStream()));
@@ -98,7 +100,7 @@ public class CommandExecutor {
                         String part1 = line.substring(0, line.indexOf("|") + 1).trim(),
                                 part2 = line.substring(line.indexOf("|") + 1).trim();
                         int sortingColumnIndex[] = archiveFileHandler.getSortingColumnIndex(archiveFile);
-                        System.out.println("&&&&&&&&&&&&&&&&&& " + part1.split(delimiter)[sortingColumnIndex[0]] + part1.split(delimiter)[sortingColumnIndex[1]] + "&&&&&&&&&&&&\n\n\n ***********************  " + part2.split(delimiter)[sortingColumnIndex[0]] + part2.split(delimiter)[sortingColumnIndex[1]] + "*********************");
+//                        System.out.println("&&&&&&&&&&&&&&&&&& " + part1.split(delimiter)[sortingColumnIndex[0]] + part1.split(delimiter)[sortingColumnIndex[1]] + "&&&&&&&&&&&&\n\n\n ***********************  " + part2.split(delimiter)[sortingColumnIndex[0]] + part2.split(delimiter)[sortingColumnIndex[1]] + "*********************");
 
                         boolean updatedRecord =
                                 String.valueOf(part1.split(delimiter)[sortingColumnIndex[0]] + part1.split(delimiter)[sortingColumnIndex[1]]).equalsIgnoreCase(String.valueOf(part2.split(delimiter)[sortingColumnIndex[0]] + part2.split(delimiter)[sortingColumnIndex[1]]));
@@ -139,7 +141,7 @@ public class CommandExecutor {
 
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error(e);
+            logger.error("IOException: ", e);
         }
         return diffFile;
     }
@@ -158,7 +160,7 @@ public class CommandExecutor {
         ExternalSort.delimiter = archiveFileDelimiter;
         ExternalSort.size = sortingColumnIndex.length;
         ExternalSort.sortingColumnIndex = sortingColumnIndex;
-        System.out.println("Sorting File: " + inputFile.getPath());
+//        System.out.println("Sorting File: " + inputFile.getPath());
         logger.info("Sorting File: " + inputFile.getPath());
         File outputFile = new File(inputFile.getPath());
         ExternalSort.sort(inputFile, outputFile);

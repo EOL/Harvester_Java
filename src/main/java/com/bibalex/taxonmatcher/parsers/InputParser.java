@@ -1,12 +1,16 @@
 package com.bibalex.taxonmatcher.parsers;
 
+import com.bibalex.taxonmatcher.controllers.NodeMapper;
 import com.bibalex.taxonmatcher.handlers.LogHandler;
 import com.bibalex.taxonmatcher.handlers.ResourceHandler;
 import com.bibalex.taxonmatcher.handlers.SolrHandler;
 import org.apache.solr.common.SolrInputDocument;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -16,13 +20,14 @@ public class InputParser {
 
     private int limit;
     private SolrHandler solrHandler;
+    private static final Logger logger = LoggerFactory.getLogger(InputParser.class);
 
     public InputParser() {
         limit = Integer.parseInt(ResourceHandler.getPropertyValue("fileLimit"));
         solrHandler = new SolrHandler();
     }
 
-    public void readFile(String filePath){
+    public void readFile(String filePath) {
         System.out.println("Read file");
         BufferedReader bReader = null;
         ArrayList<String> lines = new ArrayList<String>();
@@ -37,7 +42,7 @@ public class InputParser {
 
             while ((line = bReader.readLine()) != null) {
                 lines.add(line);
-                if (i > limit){
+                if (i > limit) {
                     parseTabSeparatedLines(lines);
                     lines = new ArrayList<String>();
                     i = 0;
@@ -46,46 +51,48 @@ public class InputParser {
             bReader.close();
             parseTabSeparatedLines(lines);
         } catch (java.io.IOException e) {
-            e.printStackTrace();
+            logger.error("IOException: ", e);
         }
     }
 
-    private void parseTabSeparatedLines(ArrayList<String> lines){
-        System.out.println("parse tab sepaerated");
-        for (String line : lines){
-            String [] splittedLine = line.split("\t", -1);
-            for(String k : splittedLine){
-                System.out.print(k + " ");
-            }
-            System.out.println();
+    private void parseTabSeparatedLines(ArrayList<String> lines) {
+//        System.out.println("parse tab sepaerated");
+        logger.info("Parsing Tab Separated Lines");
+        for (String line : lines) {
+            String[] splittedLine = line.split("\t", -1);
+//            for (String k : splittedLine) {
+//                System.out.print(k + " ");
+//            }
+//            System.out.println();
             indexDynamicHierarchy(splittedLine);
         }
     }
 
-    public void readNewNodesFile(){
-        
+    public void readNewNodesFile() {
+
     }
 
-    private void indexDynamicHierarchy(String [] splittedLine){
+    private void indexDynamicHierarchy(String[] splittedLine) {
 
-        System.out.println("index dynamic hierarchy");
+//        System.out.println("index dynamic hierarchy");
+        logger.info("Index Dynamic Hierarchy");
         SolrInputDocument document = fillCommonFields(splittedLine);
 
 //        String [] childrenNames = splittedLine[9].split("\\|");
 //        for (String childName : childrenNames)
 //            document.addField("children", childName);
 
-        String [] childrenNodesIds = splittedLine[9].split("\\|");
+        String[] childrenNodesIds = splittedLine[9].split("\\|");
         for (String childNodeId : childrenNodesIds)
             document.addField("children_nodes_ids", childNodeId);
 
-        String [] pageOtherNodes = splittedLine[10].split("\\|");
+        String[] pageOtherNodes = splittedLine[10].split("\\|");
         for (String pageOtherNode : pageOtherNodes)
             document.addField("page_other_nodes", pageOtherNode);
 
-        for (String s : splittedLine)
-            System.out.println(s + " ");
-        System.out.println();
+//        for (String s : splittedLine)
+//            System.out.println(s + " ");
+//        System.out.println();
 
         document.addField("pageId", splittedLine[11]);
 
@@ -96,34 +103,35 @@ public class InputParser {
         solrHandler.commitDocument(document);
     }
 
-    private SolrInputDocument fillCommonFields(String [] splittedLine){
-        System.out.println("fillCommon");
+    private SolrInputDocument fillCommonFields(String[] splittedLine) {
+//        System.out.println("fillCommon");
+        logger.info("Fill Common Fields");
         SolrInputDocument document = new SolrInputDocument();
 
         document.addField("id", splittedLine[0]);
         document.addField("scientific_name", splittedLine[1]);
         document.addField("rank", splittedLine[2]);
 
-        String [] nodeSynonyms = splittedLine[3].split("\\|");
-        for(String synonym : nodeSynonyms)
+        String[] nodeSynonyms = splittedLine[3].split("\\|");
+        for (String synonym : nodeSynonyms)
             document.addField("synonyms", synonym);
 
         document.addField("kingdom", splittedLine[4]);
         document.addField("family", splittedLine[5]);
         document.addField("genus", splittedLine[6]);
 
-        String [] ancestors = splittedLine[7].split("\\|");
-        for(String ancestor : ancestors)
+        String[] ancestors = splittedLine[7].split("\\|");
+        for (String ancestor : ancestors)
             document.addField("ancestors", ancestor);
 
-        String [] children = splittedLine[8].split("\\|");
-        for(String child : children)
+        String[] children = splittedLine[8].split("\\|");
+        for (String child : children)
             document.addField("children", child);
 
         return document;
     }
 
-    public static void main (String[] args){
+    public static void main(String[] args) {
         ResourceHandler.initialize("config.properties");
         LogHandler.initializeHandler();
 
