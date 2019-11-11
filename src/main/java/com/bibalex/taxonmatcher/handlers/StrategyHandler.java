@@ -7,15 +7,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.apache.logging.log4j.Logger;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by Amr.Morad
- */
 public class StrategyHandler {
 
     private ArrayList<Strategy> strategies;
@@ -32,16 +28,19 @@ public class StrategyHandler {
         JSONArray jsonArray = null;
         try {
             ClassLoader classLoader = getClass().getClassLoader();
-            jsonArray = (JSONArray) parser.parse(new FileReader(classLoader.getResource("strategies.json").getFile()));
+            jsonArray = (JSONArray) parser.parse(new FileReader(classLoader
+                    .getResource(ResourceHandler.getPropertyValue("strategiesFile")).getFile()));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         for (Object jsonArrayElement : jsonArray){
             JSONObject jsonObject = (JSONObject) jsonArrayElement;
-            Strategy strategy = new Strategy((String)jsonObject.get("attribute"), (String)jsonObject.get("index"),
-                    (String)jsonObject.get("type"));
+            Strategy strategy = new Strategy((String)jsonObject.get(ResourceHandler.getPropertyValue("attribute")),
+                    (String)jsonObject.get(ResourceHandler.getPropertyValue("index")),
+                    (String)jsonObject.get(ResourceHandler.getPropertyValue("type")));
             strategies.add(strategy);
         }
     }
@@ -68,10 +67,8 @@ public class StrategyHandler {
             oldIndex++;
         }
         oldIndex++;
-        logger.info("Index is: "+ oldIndex);
+        logger.info("Index is: " + oldIndex);
         logger.info("================================");
         return oldIndex > strategies.size() - 1 ? null : strategies.get(oldIndex);
     }
-
-
 }

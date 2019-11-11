@@ -1,11 +1,8 @@
 package com.bibalex.taxonmatcher.handlers;
 
-import java.util.Properties;
 import com.bibalex.taxonmatcher.util.PropertyLoader;
+import java.util.Properties;
 
-/**
- * Created by Amr.Morad
- */
 public class ResourceHandler {
 
     private static Properties props = new Properties();

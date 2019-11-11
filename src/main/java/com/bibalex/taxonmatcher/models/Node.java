@@ -1,18 +1,11 @@
-
 package com.bibalex.taxonmatcher.models;
 
 import com.bibalex.taxonmatcher.handlers.Neo4jHandler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
-
-/**
- * Created by Amr.Morad
- */
 public class Node implements Serializable {
-
     String nodeId;
     int resourceId;
     String scientificName;
@@ -27,11 +20,11 @@ public class Node implements Serializable {
     long updated_at;
     String canonicalName;
     Neo4jHandler neo4jHandler= new Neo4jHandler();
-//    Neo4jHandler neo4jHandler;
 
     public Node(){}
+
     public Node(String nodeId, int resourceId, String scientificName, int generatedNodeId, String rank, int parentGeneratedNodeId,
-                String parentNodeId, String acceptedNodeId, int acceptedNodeGeneratedId, int pageId, int created_at, int updated_at) {
+            String parentNodeId, String acceptedNodeId, int acceptedNodeGeneratedId, int pageId, int created_at, int updated_at) {
         this.nodeId = nodeId;
         this.resourceId = resourceId;
         this.scientificName = scientificName;
@@ -44,7 +37,6 @@ public class Node implements Serializable {
         this.pageId = pageId;
         this.created_at = created_at;
         this.updated_at = updated_at;
-//        neo4jHandler = new Neo4jHandler();
     }
 
     public Node(int resourceId, String nodeId, String scientificName, String rank, int parentGeneratedNodeId) {

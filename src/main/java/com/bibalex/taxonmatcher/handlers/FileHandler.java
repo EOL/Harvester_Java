@@ -2,13 +2,9 @@ package com.bibalex.taxonmatcher.handlers;
 
 import com.bibalex.taxonmatcher.controllers.NodeMapper;
 import org.apache.logging.log4j.Logger;
-
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**
- * Created by Amr.Morad
- */
 public class FileHandler {
 
     private static Logger logger;

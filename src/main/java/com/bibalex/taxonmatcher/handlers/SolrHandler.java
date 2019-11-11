@@ -1,6 +1,5 @@
 package com.bibalex.taxonmatcher.handlers;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.bibalex.taxonmatcher.controllers.NodeMapper;
 import com.bibalex.taxonmatcher.models.Node;
 import com.bibalex.taxonmatcher.util.Neo4jSolr;
@@ -13,13 +12,9 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.common.SolrDocumentList;
 import org.json.simple.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by Amr.Morad
- */
 public class SolrHandler {
 
     private String zkHostString;
@@ -29,7 +24,6 @@ public class SolrHandler {
     CloudSolrClient client = null;
     private GlobalNamesHandler globalNameHandler;
 
-
     public SolrHandler() {
         zkHostString = ResourceHandler.getPropertyValue("zookeeperHost");
         defaultCollection = ResourceHandler.getPropertyValue("defaultCollection");
@@ -38,11 +32,12 @@ public class SolrHandler {
         solr.setDefaultCollection(defaultCollection);
         globalNameHandler = new GlobalNamesHandler();
         logger = LogHandler.getLogger(NodeMapper.class.getName());
-        openConnection("indexer");
+        openConnection(defaultCollection);
     }
 
     public SolrDocumentList performQuery(String queryString) {
         SolrQuery query = new SolrQuery();
+
         query.setQuery(queryString);
         try {
             return solr.query(query).getResults();
@@ -66,7 +61,7 @@ public class SolrHandler {
     }
 
     public CloudSolrClient openConnection(String collectionName) {
-        String zkHosts = "localhost:9983";
+        String zkHosts = ResourceHandler.getPropertyValue("zookeeperHost");
         client = new CloudSolrClient.Builder().withZkHost(zkHosts).build();
         client.setDefaultCollection(collectionName);
         return client;
@@ -77,57 +72,62 @@ public class SolrHandler {
         generatedNodeIds[0] = node.getGeneratedNodeId();
         ArrayList<JSONObject> returnedJson = Neo4jHandler.getJSonObject(generatedNodeIds);
         JSONObject obj = returnedJson.get(0);
-
         Neo4jSolr neo4jSolr = new Neo4jSolr();
-        int resource_id = neo4jSolr.getInt(obj, "resource id");
+        int resource_id = neo4jSolr.getInt(obj,
+                ResourceHandler.getPropertyValue("neo4jResourceID"));
 //        int resource_id = node.getResourceId();
-        String scientificName = neo4jSolr.getString(obj, "scientific name");
-        String rank = neo4jSolr.getString(obj, "Rank");
-        String canonicalName = neo4jSolr.getString(obj, "canonical name");
+        String scientificName = neo4jSolr.getString(obj,
+                ResourceHandler.getPropertyValue("neo4jScientificName"));
+        String rank = neo4jSolr.getString(obj,
+                ResourceHandler.getPropertyValue("neo4jRank"));
+        String canonicalName = neo4jSolr.getString(obj,
+                ResourceHandler.getPropertyValue("neo4jCanonicalName"));
         boolean is_hybrid = neo4jSolr.isHybrid(obj);
-        ArrayList<String> canonicalSynonyms = neo4jSolr.getStringArray(obj, "canonical synonyms");
-        ArrayList<String> otherCanonicalSynonyms = neo4jSolr.getStringArray(obj, "other canonical synonyms");
-        ArrayList<String> synonyms = neo4jSolr.getStringArray(obj, "synonyms");
-        ArrayList<String> otherSynonyms = neo4jSolr.getStringArray(obj, "other synonyms");
-        ArrayList<String> childrenIds = neo4jSolr.getStringArray(obj, "children IDS");
-        ArrayList<Integer> ancestorsIds = neo4jSolr.getIntegerArray(obj, "ancestors IDS");
-
+        ArrayList<String> canonicalSynonyms = neo4jSolr.getStringArray(obj,
+                ResourceHandler.getPropertyValue("neo4jCanonicalSynonyms"));
+        ArrayList<String> otherCanonicalSynonyms = neo4jSolr.getStringArray(obj,
+                ResourceHandler.getPropertyValue("neo4jOtherCanonicalSynonyms"));
+        ArrayList<String> synonyms = neo4jSolr.getStringArray(obj,
+                ResourceHandler.getPropertyValue("neo4jSynonyms"));
+        ArrayList<String> otherSynonyms = neo4jSolr.getStringArray(obj,
+                ResourceHandler.getPropertyValue("neo4jOtherSynonyms"));
+        ArrayList<String> childrenIds = neo4jSolr.getStringArray(obj,
+                ResourceHandler.getPropertyValue("neo4jChildrenIDS"));
+        ArrayList<Integer> ancestorsIds = neo4jSolr.getIntegerArray(obj,
+                ResourceHandler.getPropertyValue("neo4jAncestorsIDS"));
 //        openConnection("indexer");
         SolrInputDocument doc = new SolrInputDocument();
 
         if (resource_id == Integer.valueOf(ResourceHandler.getPropertyValue("DWHId"))) {
             if (!scientificName.equals("")) {
-                doc.addField("scientific_name", scientificName);
+                doc.addField(ResourceHandler.getPropertyValue("scientificName"), scientificName);
             }
             if (!canonicalName.equals("")) {
-                doc.addField("canonical_name", canonicalName);
+                doc.addField(ResourceHandler.getPropertyValue("canonicalName"), canonicalName);
             }
-            doc.addField("canonical_synonyms", canonicalSynonyms);
-            doc.addField("synonyms", synonyms);
-            doc.addField("children_ids", childrenIds);
-            doc.addField("ancestors_ids", ancestorsIds);
-            doc.addField("other_canonical_synonyms", otherCanonicalSynonyms);
-            doc.addField("other_synonyms", otherSynonyms);
+            doc.addField(ResourceHandler.getPropertyValue("canonicalSynonyms"), canonicalSynonyms);
+            doc.addField(ResourceHandler.getPropertyValue("synonyms"), synonyms);
+            doc.addField(ResourceHandler.getPropertyValue("childrenIDS"), childrenIds);
+            doc.addField(ResourceHandler.getPropertyValue("ancestorsIDS"), ancestorsIds);
+            doc.addField(ResourceHandler.getPropertyValue("otherCanonicalSynonyms"), otherCanonicalSynonyms);
+            doc.addField(ResourceHandler.getPropertyValue("otherSynonyms"), otherSynonyms);
         }
         else{
-            doc.addField("other_scientific_name", scientificName);
-            doc.addField("other_canonical_synonyms", canonicalSynonyms);
-            doc.addField("other_synonyms", synonyms);
+            doc.addField(ResourceHandler.getPropertyValue("otherScientificName"), scientificName);
+            doc.addField(ResourceHandler.getPropertyValue("otherCanonicalSynonyms"), canonicalSynonyms);
+            doc.addField(ResourceHandler.getPropertyValue("otherSynonyms"), synonyms);
         }
 
-        doc.addField("id", node.getGeneratedNodeId());
+        doc.addField(ResourceHandler.getPropertyValue("ID"), node.getGeneratedNodeId());
         if (pageId != -1) {
-            doc.addField("page_id", pageId);
+            doc.addField(ResourceHandler.getPropertyValue("pageID"), pageId);
         }
         if (!rank.equals("")) {
-            doc.addField("rank", rank);
+            doc.addField(ResourceHandler.getPropertyValue("rank"), rank);
         }
         if (String.valueOf(is_hybrid) != null) {
-            doc.addField("is_hybrid", is_hybrid);
+            doc.addField(ResourceHandler.getPropertyValue("isHybrid"), is_hybrid);
         }
-
-
-
         logger.info("new added doc: " + doc);
         client.add(doc);
         client.commit();
@@ -151,80 +151,87 @@ public class SolrHandler {
             otherCanonicalSynonyms.add(globalNameHandler.getCanonicalForm(node.getScientificName()));
         }
 
-
 //        openConnection("indexer");
         SolrInputDocument doc = new SolrInputDocument();
 
-        SolrQuery q = new SolrQuery("id:" + generatedNodeId);
+//        SolrQuery q = new SolrQuery("id:" + generatedNodeId);
+        String query =  ResourceHandler.getPropertyValue("ID") + ResourceHandler.getPropertyValue("searchqueryColon") ;
+        SolrQuery q = new SolrQuery(query + generatedNodeId);
         QueryResponse r = client.query(q);
-
         SolrDocument oldDoc = r.getResults().get(0);
-        doc.addField("id", generatedNodeId);
+        doc.addField(ResourceHandler.getPropertyValue("ID"), generatedNodeId);
 
-        //scientificName is empty string canonical will be empty string also and wo,t be inserted in  solr
+        //scientificName is empty string canonical will be empty string also and won't be inserted in  solr
         //pageId is -1 won't be inserted in solr
         //rank if empty string won't be inserted in solr
         //update other canonical synonyms and other synonyms include adding old one too
         //update canonical synonyms and synonyms not include adding old one
 
-        if (oldDoc.getFieldValues("scientific_name") != null) {
-            doc.addField("scientific_name", neo4jSolr.mapToDoc(oldDoc.getFieldValues("scientific_name")));
+        if (oldDoc.getFieldValues(ResourceHandler.getPropertyValue("scientificName")) != null) {
+            doc.addField(ResourceHandler.getPropertyValue("scientificName"),
+                    neo4jSolr.mapToDoc(oldDoc.getFieldValues(ResourceHandler.getPropertyValue("scientificName"))));
         }
 
-        if (oldDoc.getFieldValues("rank") != null) {
-            doc.addField("rank", neo4jSolr.mapToDoc(oldDoc.getFieldValues("rank")));
+        if (oldDoc.getFieldValues(ResourceHandler.getPropertyValue("rank")) != null) {
+            doc.addField(ResourceHandler.getPropertyValue("rank"),
+                    neo4jSolr.mapToDoc(oldDoc.getFieldValues(ResourceHandler.getPropertyValue("rank"))));
         }
 
-        if (oldDoc.getFieldValues("page_id") != null) {
-            doc.addField("page_id", neo4jSolr.mapToDoc(oldDoc.getFieldValues("page_id")));
+        if (oldDoc.getFieldValues(ResourceHandler.getPropertyValue("pageID")) != null) {
+            doc.addField(ResourceHandler.getPropertyValue("pageID"),
+                    neo4jSolr.mapToDoc(oldDoc.getFieldValues(ResourceHandler.getPropertyValue("pageID"))));
         }
 
-        if (oldDoc.getFieldValues("canonical_name") != null) {
-            doc.addField("canonical_name", neo4jSolr.mapToDoc(oldDoc.getFieldValues("canonical_name")));
+        if (oldDoc.getFieldValues(ResourceHandler.getPropertyValue("canonicalName")) != null) {
+            doc.addField(ResourceHandler.getPropertyValue("canonicalName"),
+                    neo4jSolr.mapToDoc(oldDoc.getFieldValues(ResourceHandler.getPropertyValue("canonicalName"))));
         }
 
-        if (String.valueOf(oldDoc.getFieldValues("is_hybrid")) != null) {
-            doc.addField("is_hybrid", neo4jSolr.mapToDoc(oldDoc.getFieldValues("is_hybrid")));
+        if (String.valueOf(oldDoc.getFieldValues(ResourceHandler.getPropertyValue("isHybrid"))) != null) {
+            doc.addField(ResourceHandler.getPropertyValue("isHybrid"),
+                    neo4jSolr.mapToDoc(oldDoc.getFieldValues(ResourceHandler.getPropertyValue("isHybrid"))));
         }
 
-        if (canonicalSynonyms.size() > 0 || oldDoc.getFieldValues("canonical_synonyms") != null) {
-            if (oldDoc.getFieldValues("canonical_synonyms") != null) {
-                ArrayList oldCanonicalSynonyms = (ArrayList) oldDoc.getFieldValues("canonical_synonyms");
+        if (canonicalSynonyms.size() > 0 || oldDoc.getFieldValues(ResourceHandler.getPropertyValue("canonicalSynonyms")) != null) {
+            if (oldDoc.getFieldValues(ResourceHandler.getPropertyValue("canonicalSynonyms")) != null) {
+                ArrayList oldCanonicalSynonyms = (ArrayList) oldDoc.getFieldValues(ResourceHandler.getPropertyValue("canonicalSynonyms"));
                 canonicalSynonyms.addAll(oldCanonicalSynonyms);
             }
-            doc.addField("canonical_synonyms", neo4jSolr.mapToDoc(canonicalSynonyms));
+            doc.addField(ResourceHandler.getPropertyValue("canonicalSynonyms"), neo4jSolr.mapToDoc(canonicalSynonyms));
         }
 
-        if (otherCanonicalSynonyms.size() > 0 || oldDoc.getFieldValues("other_canonical_synonyms") != null) {
-            if (oldDoc.getFieldValues("other_canonical_synonyms") != null) {
-                ArrayList oldOtherCanonicalSynonyms = (ArrayList) oldDoc.getFieldValues("other_canonical_synonyms");
+        if (otherCanonicalSynonyms.size() > 0 || oldDoc.getFieldValues(ResourceHandler.getPropertyValue("otherCanonicalSynonyms")) != null) {
+            if (oldDoc.getFieldValues(ResourceHandler.getPropertyValue("otherCanonicalSynonyms")) != null) {
+                ArrayList oldOtherCanonicalSynonyms = (ArrayList) oldDoc.getFieldValues(ResourceHandler.getPropertyValue("otherCanonicalSynonyms"));
                 otherCanonicalSynonyms.addAll(oldOtherCanonicalSynonyms);
             }
-            doc.addField("other_canonical_synonyms", neo4jSolr.mapToDoc(otherCanonicalSynonyms));
+            doc.addField(ResourceHandler.getPropertyValue("otherCanonicalSynonyms"), neo4jSolr.mapToDoc(otherCanonicalSynonyms));
         }
 
-        if (synonyms.size() > 0 || oldDoc.getFieldValues("synonyms") != null) {
-            if (oldDoc.getFieldValues("synonyms") != null) {
-                ArrayList oldSynonyms = (ArrayList) oldDoc.getFieldValues("synonyms");
+        if (synonyms.size() > 0 || oldDoc.getFieldValues(ResourceHandler.getPropertyValue("synonyms")) != null) {
+            if (oldDoc.getFieldValues(ResourceHandler.getPropertyValue("synonyms")) != null) {
+                ArrayList oldSynonyms = (ArrayList) oldDoc.getFieldValues(ResourceHandler.getPropertyValue("synonyms"));
                 synonyms.addAll(oldSynonyms);
             }
-            doc.addField("synonyms", neo4jSolr.mapToDoc(synonyms));
+            doc.addField(ResourceHandler.getPropertyValue("synonyms"), neo4jSolr.mapToDoc(synonyms));
         }
 
-        if (otherSynonyms.size() > 0 || oldDoc.getFieldValues("other_synonyms") != null) {
-            if (oldDoc.getFieldValues("other_synonyms") != null) {
-                ArrayList oldOtherSynonyms = (ArrayList) oldDoc.getFieldValues("other_synonyms");
+        if (otherSynonyms.size() > 0 || oldDoc.getFieldValues(ResourceHandler.getPropertyValue("otherSynonyms")) != null) {
+            if (oldDoc.getFieldValues(ResourceHandler.getPropertyValue("otherSynonyms")) != null) {
+                ArrayList oldOtherSynonyms = (ArrayList) oldDoc.getFieldValues(ResourceHandler.getPropertyValue("otherSynonyms"));
                 otherSynonyms.addAll(oldOtherSynonyms);
             }
-            doc.addField("other_synonyms", neo4jSolr.mapToDoc(otherSynonyms));
+            doc.addField(ResourceHandler.getPropertyValue("otherSynonyms"), neo4jSolr.mapToDoc(otherSynonyms));
         }
 
-        if (oldDoc.getFieldValues("children_ids") != null) {
-            doc.addField("children_ids", neo4jSolr.mapToDoc(oldDoc.getFieldValues("children_ids")));
+        if (oldDoc.getFieldValues(ResourceHandler.getPropertyValue("childrenIDS")) != null) {
+            doc.addField(ResourceHandler.getPropertyValue("childrenIDS"),
+                    neo4jSolr.mapToDoc(oldDoc.getFieldValues(ResourceHandler.getPropertyValue("childrenIDS"))));
         }
 
-        if (oldDoc.getFieldValues("ancestors_ids") != null) {
-            doc.addField("ancestors_ids", neo4jSolr.mapToDoc(oldDoc.getFieldValues("ancestors_ids")));
+        if (oldDoc.getFieldValues(ResourceHandler.getPropertyValue("ancestorsIDS")) != null) {
+            doc.addField(ResourceHandler.getPropertyValue("ancestorsIDS"),
+                    neo4jSolr.mapToDoc(oldDoc.getFieldValues(ResourceHandler.getPropertyValue("ancestorsIDS"))));
         }
 
         client.add(doc);
@@ -237,10 +244,11 @@ public class SolrHandler {
         ResourceHandler.initialize("configs.properties");
         LogHandler.initializeHandler();
         SolrHandler sh = new SolrHandler();
-        Node node = new Node("2", 2, "other tiger synonym", 485, "family", 5,
-                "5", "6", 6, -1, -1, -1);
+        Node node = new Node("2", 2, "other tiger synonym", 2855108, "family",
+                5, "5", "6", 6, -1, -1, -1);
         try {
-            sh.addDocument(node, 5);
+//            sh.addDocument(node, 7);
+            sh.updateRecord(2855108,node);
             System.out.println("without close");
         } catch (IOException e) {
             e.printStackTrace();

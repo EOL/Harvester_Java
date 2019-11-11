@@ -2,12 +2,8 @@ package com.bibalex.taxonmatcher.handlers;
 
 import org.gbif.dwca.io.Archive;
 import org.gbif.dwca.io.ArchiveFile;
-
 import java.util.Set;
 
-/**
- * Created by Amr.Morad
- */
 public class DwcaHandler {
 
     public ArchiveFile getArchiveFile(Archive dwcArchive, String rowTypeURI) throws Exception {

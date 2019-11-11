@@ -1,10 +1,6 @@
 package com.bibalex.taxonmatcher.models;
 
-/**
- * Created by Amr.Morad on 3/12/2017.
- */
 public class Strategy {
-
     String attribute;
     String index;
     String type;
@@ -28,7 +24,6 @@ public class Strategy {
     }
 
     public void setAttribute(String attribute) {
-
         this.attribute = attribute;
     }
 

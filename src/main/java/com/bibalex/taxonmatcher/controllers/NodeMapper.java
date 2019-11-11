@@ -2,16 +2,11 @@ package com.bibalex.taxonmatcher.controllers;
 
 import com.bibalex.taxonmatcher.handlers.*;
 import com.bibalex.taxonmatcher.models.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrServerException;
-
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Created by Amr.Morad
- */
 public class NodeMapper {
 
     private StrategyHandler strategyHandler;
@@ -81,7 +76,6 @@ public class NodeMapper {
 //        System.out.println("---------------- has children is ------------- " + node.hasChildren() + " size " + node.getChildren().size());
         ArrayList<Node> children = node.getChildren();
         if(children.size() > 0 ){
-
             logger.info("====================children=================");
             mapNodes(nodeHandler.nodeMapper(children));
         }
@@ -98,16 +92,16 @@ public class NodeMapper {
             if (globalNameHandler.isVirus(node.getScientificName())){
                 System.out.println("map node: virus");
                 logger.info("map node: virus");
-                //not finalized as we need ancestor to be arraylist
-                // we don't know the root node of virus
-//                ancestor = nodeHandler.nodeMapper(nodeHandler.nativeVirus()).get(0);
-//                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
+//                  not finalized as we need ancestor to be arraylist
+//                  we don't know the root node of virus
+//                  ancestor = nodeHandler.nodeMapper(nodeHandler.nativeVirus()).get(0);
+//                  ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
                 ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages);
             }else{
                 System.out.println("map Node : not virus neither surrogate");
                 logger.info("map Node : not virus neither surrogate");
                 logger.info("before matched ancestors");
-//            ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
+//                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
                 ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages);
                 logger.info("after matched ancestors");
             }
@@ -115,7 +109,7 @@ public class NodeMapper {
         }
     }
 
-    private void  mapUnflaggedNode(Node node, Node ancestor, int depth, Strategy strategy,ArrayList<Node> ancestors){
+    private void  mapUnflaggedNode(Node node, Node ancestor, int depth, Strategy strategy, ArrayList<Node> ancestors){
         ArrayList<SearchResult> results = searchHandler.getResults(node, strategy, ancestor);
         Strategy nextStrategy;
         if(results.size() == 1){
@@ -126,8 +120,6 @@ public class NodeMapper {
             } else {
                 mapToPage(node, results.get(0).getPageId(), results.get(0).getNodeId());
             }
-
-
         }else if(results.size() > 1){
             logger.info("results returned is greater than one");
             logger.info("before getting best match");
@@ -143,7 +135,6 @@ public class NodeMapper {
             logger.info("no result found start node id is "+node.getGeneratedNodeId()+" depth is"+depth);
             nextStrategy = strategyHandler.getNextStrategy(strategy);
             if (nextStrategy == null) {
-
                 nextStrategy = strategyHandler.firstNonScientificStrategy();
                 depth++;
                 Node prev_ancestor = ancestor;
@@ -167,9 +158,7 @@ public class NodeMapper {
 
     private MatchingScore findBestMatch(Node node, ArrayList<SearchResult> results){
         ArrayList<MatchingScore> scores = new ArrayList<MatchingScore>();
-
         for(SearchResult result : results){
-
             logger.info("before getting matched children count");
 //            System.out.println(neo4jHandler.getNodesFromIds(result.getChildren()));
             int matchedChildrenCount = matchingScoreHandler.countMatches(nodeHandler.nodeMapper(neo4jHandler.getNodesFromIds(result.getChildren())),nodeHandler.nodeMapper(node.getChildren()));
@@ -193,7 +182,7 @@ public class NodeMapper {
             logger.info("overall score: "+overallScore);
             MatchingScore score = new MatchingScore(matchedChildrenCount,
                     matchedAncestorsCount, overallScore, result.getPageId(), result.getNodeId());
-            logger.info("score: "+score.getScore() + " of page: "+score.getPageId());
+            logger.info("score: " + score.getScore() + " of page: " + score.getPageId());
             System.out.println("**********************************************************************************");
             scores.add(score);
         }
@@ -210,7 +199,7 @@ public class NodeMapper {
 
         for( int i = scores.size()-1 ; i >= 0 ;i--)
         {
-            if(scores.get(i).getPageId()!=0)
+            if(scores.get(i).getPageId()!= 0)
                 return scores.get(i) ;
         }
 
@@ -228,10 +217,10 @@ public class NodeMapper {
         }
 //        boolean response =neo4jHandler.assignPageToNode(node.getGeneratedNodeId(), pageId);
 //        if (response ==true){
-        nodePages.put(node.getGeneratedNodeId(),pageId);
+        nodePages.put(node.getGeneratedNodeId(), pageId);
         node.setPageId(pageId);
 //        }
-        System.out.println("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
+        System.out.println("Node with name " + node.getScientificName() + " is mapped to page " + node.getPageId());
         logger.info("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
 //        fileHandler.writeToFile("Node with name " + node.getScientificName() + " is mapped to page "+node.getPageId());
         return node;
@@ -263,7 +252,4 @@ public class NodeMapper {
         //  Page newPage = new Page();
        // node.setPageId(newPage.getId());
     }
-
-
-
 }

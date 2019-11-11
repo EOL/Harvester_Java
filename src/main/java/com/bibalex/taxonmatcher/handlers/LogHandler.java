@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
- * Created by Amr.Morad
- */
 public class LogHandler {
 
     private static boolean initialized = false;

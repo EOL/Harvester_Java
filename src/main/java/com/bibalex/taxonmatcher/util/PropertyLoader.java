@@ -6,9 +6,6 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-/**
- * Created by Amr.Morad
- */
 public abstract class PropertyLoader {
     private static final boolean THROW_ON_LOAD_FAILURE = true;
     private static final boolean LOAD_AS_RESOURCE_BUNDLE = false;

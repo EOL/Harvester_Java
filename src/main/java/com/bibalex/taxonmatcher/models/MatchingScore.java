@@ -1,8 +1,5 @@
 package com.bibalex.taxonmatcher.models;
 
-/**
- * Created by Amr.Morad on 3/21/2017.
- */
 public class MatchingScore {
     int numberOfMatchingChildren;
     int numberOfMatchingAncestors;
@@ -23,7 +20,6 @@ public class MatchingScore {
     }
 
     public int getPageId() {
-
         return pageId;
     }
 

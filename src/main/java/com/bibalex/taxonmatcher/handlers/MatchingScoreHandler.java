@@ -3,18 +3,11 @@ package com.bibalex.taxonmatcher.handlers;
 import com.bibalex.taxonmatcher.models.Node;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONArray;
-import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Has;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import static apoc.coll.Coll.compare;
-
-/**
- * Created by Amr.Morad on 3/21/2017.
- */
 public class MatchingScoreHandler {
 
     private double minimumAncestoryMatchPercentage;
@@ -53,7 +46,7 @@ public class MatchingScoreHandler {
         return childrenNames;
     }
 
-    //count ancestors has pageId
+//    count ancestors has pageId
 //    public int countAncestors(Node node){
 //        int count = 0;
 //        //why call node.getAncestors multiple times
@@ -75,7 +68,6 @@ public class MatchingScoreHandler {
             for (Node n : ancestors) {
                 if (n.getPageId() != 0 || nodesPages.get(n.getGeneratedNodeId()) != null)
                     count++;
-
             }
             return matchingAncestorsScore(count, ancestors.size());
         }
@@ -98,9 +90,9 @@ public class MatchingScoreHandler {
                     return 2;
                 }
             }
-            else if(node_authors.size()== other_authors.size()) {
+            else if(node_authors.size() == other_authors.size()) {
                 int counter = 0;
-                for (int i = 0 ; i<node_authors.size(); i++)
+                for (int i = 0 ; i < node_authors.size() ; i++)
                 {
                     if(other_authors.contains(node_authors.get(i)))
                     {
@@ -108,11 +100,9 @@ public class MatchingScoreHandler {
                     }
                 }
                 if(counter == node_authors.size()){return 2.0;}
-
             }
             return 1.0;
         }
-
         return 0.5;
     }
 
@@ -125,7 +115,7 @@ public class MatchingScoreHandler {
     {
         ArrayList<Node> afterMapping = new ArrayList<Node>();
         ObjectMapper mapper = new ObjectMapper();
-        for(int i =0 ; i<beforeMapping.size();i++)
+        for(int i =0 ; i < beforeMapping.size();i++)
         {
             Node n = mapper.convertValue(beforeMapping.get(i), Node.class);
             afterMapping.add(n);
@@ -133,11 +123,9 @@ public class MatchingScoreHandler {
         return afterMapping;
     }
 
-    public static void main(String [] args){
-
-
-       MatchingScoreHandler msh= new MatchingScoreHandler();
-        System.out.println(msh.samenessOfNames("Globorotalia miocenica subsp. mediterranea  Conil & Lys, 1969","Globorotalia miocenica subsp. mediterranea Conil & Lys, 1969"));
+    public static void main (String [] args){
+       MatchingScoreHandler msh = new MatchingScoreHandler();
+        System.out.println(msh.samenessOfNames("Globorotalia miocenica subsp. mediterranea  Conil & Lys, 1969", "Globorotalia miocenica subsp. mediterranea Conil & Lys, 1969"));
 
     }
 }

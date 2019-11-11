@@ -2,11 +2,7 @@ package com.bibalex.taxonmatcher.models;
 
 import java.util.ArrayList;
 
-/**
- * Created by amr.morad.
- */
 public class SearchResult {
-
     private int nodeId;
     private int pageId;
     private ArrayList<Integer> children;

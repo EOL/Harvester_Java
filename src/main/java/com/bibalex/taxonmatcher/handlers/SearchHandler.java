@@ -7,13 +7,9 @@ import com.bibalex.taxonmatcher.models.Strategy;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
-/**
- * Created by Amr.Morad
- */
 public class SearchHandler {
 
     private GlobalNamesHandler globalNameHandler;
@@ -33,20 +29,20 @@ public class SearchHandler {
 
     private String buildSearchQuery(Node node, Strategy strategy, Node ancestor){
         String searchQuery = "";
-        String scientificNameAttr = "scientific_name";
+        String scientificNameAttr = ResourceHandler.getPropertyValue("scientificName");
         if (strategy != null){
             searchQuery += strategy.getIndex();
 //            searchQuery += strategy.getType().equalsIgnoreCase("in") ? " : " : " = ";
-            searchQuery += ":";
-            searchQuery += '"';
-
-            if(strategy.getIndex().equalsIgnoreCase("synonyms")||strategy.getIndex().equalsIgnoreCase("other_synonyms")){
+            searchQuery += ResourceHandler.getPropertyValue("searchqueryColon");
+            searchQuery += ResourceHandler.getPropertyValue("searchQueryQuotation");
+            if(strategy.getIndex().equalsIgnoreCase(ResourceHandler.getPropertyValue("synonyms"))
+                    ||strategy.getIndex().equalsIgnoreCase(ResourceHandler.getPropertyValue("otherSynonyms"))){
                searchQuery +=node.getScientificName();
             }
-            else if(strategy.getIndex().equalsIgnoreCase("canonical_synonyms")||strategy.getIndex().equalsIgnoreCase("other_canonical_synonyms")){
+            else if(strategy.getIndex().equalsIgnoreCase(ResourceHandler.getPropertyValue("canonicalSynonyms"))
+                    ||strategy.getIndex().equalsIgnoreCase(ResourceHandler.getPropertyValue("otherCanonicalSynonyms"))){
                 searchQuery += globalNameHandler.getCanonicalForm(node.getScientificName());
             }
-
 
 
 //            if (strategy.getIndex().equalsIgnoreCase("synonyms")||strategy.getIndex().equalsIgnoreCase("other_synonyms")||
@@ -93,9 +89,7 @@ public class SearchHandler {
                 searchQuery += strategy.getAttribute().equalsIgnoreCase(scientificNameAttr) ?
                         node.getScientificName() : globalNameHandler.getCanonicalForm(node.getScientificName());
             }
-            searchQuery += '"';
-
-
+            searchQuery += ResourceHandler.getPropertyValue("searchQueryQuotation");
             //not finalized
             //case search by canonical name
             //if next strategy == null search by canonical and ancestor at that depth
@@ -128,25 +122,28 @@ public class SearchHandler {
 //        long startTime = System.nanoTime();
         SolrDocumentList solrResultDocuments = solrHandler.performQuery(searchQuery);
 //        long endTime = System.nanoTime();
-//
 //        long duration = (endTime - startTime);
 //        System.out.println("duration of performing query in solr: "+ duration);
-
         logger.info(" after performing query");
-        System.out.println("tttttttttt"+ solrResultDocuments.toString());
+        System.out.println("*********" + solrResultDocuments.toString());
         ArrayList<SearchResult> results = new ArrayList<SearchResult>();
         for(SolrDocument document : solrResultDocuments){
-            if(document.getFieldValues("children_ids")!=null) {
-                children = castObjectsCollectionToIntegerList(document.getFieldValues("children_ids"));
+            if(document.getFieldValues(ResourceHandler.getPropertyValue("childrenIDS")) != null) {
+                children = castObjectsCollectionToIntegerList(document
+                        .getFieldValues(ResourceHandler.getPropertyValue("childrenIDS")));
             }
-            if(document.getFieldValues("ancestors_ids")!=null) {
-                ancestors = castObjectsCollectionToIntegerList(document.getFieldValues("ancestors_ids"));
+            if(document.getFieldValues(ResourceHandler.getPropertyValue("ancestorsIDS")) != null) {
+                ancestors = castObjectsCollectionToIntegerList(document
+                        .getFieldValues(ResourceHandler.getPropertyValue("ancestorsIDS")));
             }
 
-            int pageId = document.getFieldValue("page_id") == null? 0:Integer.parseInt(document.getFieldValue("page_id").toString());
-            String scientific_name = document.getFieldValue("scientific_name") == null? String.valueOf(document.getFieldValue("other_scientific_name")) : String.valueOf(document.getFieldValue("scientific_name"));
-            SearchResult result = new SearchResult(Integer.parseInt(document.getFieldValue("id").
-                    toString()), pageId, children,ancestors,scientific_name);
+            int pageId = document.getFieldValue("page_id") == null? 0:Integer.parseInt(document
+                    .getFieldValue(ResourceHandler.getPropertyValue("pageId")).toString());
+            String scientific_name = document.getFieldValue(ResourceHandler.getPropertyValue("scientificName")) == null
+                    ? String.valueOf(document.getFieldValue(ResourceHandler.getPropertyValue("otherScientificName")))
+                    : String.valueOf(document.getFieldValue(ResourceHandler.getPropertyValue("scientificName")));
+            SearchResult result = new SearchResult(Integer.parseInt(document.getFieldValue(ResourceHandler.getPropertyValue("ID"))
+                    .toString()), pageId, children, ancestors, scientific_name);
             results.add(result);
         }
         return results;
@@ -155,7 +152,7 @@ public class SearchHandler {
     private ArrayList<Integer> castObjectsCollectionToIntegerList(Collection<Object> childrenCollection){
         ArrayList<Integer> children = new ArrayList<Integer>();
         for(Object child : childrenCollection){
-            String child_string= child.toString();
+            String child_string = child.toString();
             children.add(Integer.valueOf(child_string));
 //            children.add((Integer) child);
         }
@@ -179,6 +176,6 @@ public class SearchHandler {
         Strategy strategy = new Strategy("scientific_name", "synonyms", "eq");
         Node ancestor = new Node( "2", 1,  "tiger",  2,  "family",5,
                 "5",  "6",  6,  -1, -1, -1);
-        searchHandler.getResults(node, strategy,ancestor);
+        searchHandler.getResults(node, strategy, ancestor);
     }
 }
