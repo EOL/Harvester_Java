@@ -26,6 +26,7 @@ public class NodeMapper {
     private SolrHandler solrHandler;
     int resourceId;
     private HashMap<Integer, Integer> nodePages;
+//    Stack<Integer>
 
     public NodeMapper(int resourceId){
         strategyHandler = new StrategyHandler();
@@ -79,12 +80,15 @@ public class NodeMapper {
             mapNode(node, usedAncestorDepth, usedStrategy);
         }
 //        System.out.println("---------------- has children is ------------- " + node.hasChildren() + " size " + node.getChildren().size());
+        logger.info("before get children");
         ArrayList<Node> children = node.getChildren();
         if(children.size() > 0 ){
+
 
             logger.info("====================children=================");
             mapNodes(nodeHandler.nodeMapper(children));
         }
+
     }
 
     private void mapNode(Node node, int depth, Strategy strategy){
@@ -102,13 +106,13 @@ public class NodeMapper {
                 // we don't know the root node of virus
 //                ancestor = nodeHandler.nodeMapper(nodeHandler.nativeVirus()).get(0);
 //                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
-                ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages);
+                ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages, resourceId);
             }else{
                 System.out.println("map Node : not virus neither surrogate");
                 logger.info("map Node : not virus neither surrogate");
                 logger.info("before matched ancestors");
 //            ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
-                ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages);
+                ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages, resourceId);
                 logger.info("after matched ancestors");
             }
             mapUnflaggedNode(node, ancestor, depth, strategy,ancestors);
@@ -148,7 +152,7 @@ public class NodeMapper {
                 depth++;
                 Node prev_ancestor = ancestor;
 //                ancestor = nodeHandler.matchedAncestor(nodeHandler.nodeMapper(node.getAncestors()), depth);
-                ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages);
+                ancestor = nodeHandler.matchedAncestor(ancestors, depth, nodePages, resourceId);
                 logger.info("depth is: " + depth);
                 if(ancestor!=null)System.out.println("ancestor "+ancestor.getGeneratedNodeId());
                 if(prev_ancestor!=null)System.out.println("prev_ancestor "+prev_ancestor.getGeneratedNodeId());
@@ -241,7 +245,7 @@ public class NodeMapper {
         System.out.println("New page is created for node named: "+node.getScientificName());
         logger.info("New page is created for node named: "+node.getScientificName());
 //        fileHandler.writeToFile("New page is created for node named: "+node.getScientificName());
-        logger.info("before calling neo4j function to create and assign page to node");
+        logger.info(" before calling neo4j function to create and assign page to node");
         int page_id = neo4jHandler.assignPageToNode(node.getGeneratedNodeId());
         nodePages.put(node.getGeneratedNodeId(),page_id);
         logger.info("after calling neo4j function to create and assign page to node");
