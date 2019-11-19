@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import static apoc.coll.Coll.compare;
+import static java.lang.Math.ceil;
 
 /**
  * Created by Amr.Morad on 3/21/2017.
@@ -21,12 +22,27 @@ public class MatchingScoreHandler {
     private double childMatchWeight;
     private double ancestorMatchWeight;
     private GlobalNamesHandler globalNameHandler;
+    private HashMap<Integer, Double> minimumAncestorsMatch;
 
     public MatchingScoreHandler(){
         minimumAncestoryMatchPercentage = Double.parseDouble(ResourceHandler.getPropertyValue("minimumAncestoryMatchPercentage"));
         childMatchWeight = Double.parseDouble(ResourceHandler.getPropertyValue("childMatchWeight"));
         ancestorMatchWeight = Double.parseDouble(ResourceHandler.getPropertyValue("ancestorMatchWeight"));
         globalNameHandler = new GlobalNamesHandler();
+        minimumAncestorsMatch = new HashMap<>();
+        minimumAncestorsMatch.put(0, 0.0);
+        minimumAncestorsMatch.put(1, 1.0);
+        minimumAncestorsMatch.put(2, 1.0);
+        minimumAncestorsMatch.put(3, 1.0);
+        minimumAncestorsMatch.put(4, 1.0);
+        minimumAncestorsMatch.put(5, 2.0);
+        minimumAncestorsMatch.put(6, 2.0);
+        minimumAncestorsMatch.put(7, 2.0);
+        minimumAncestorsMatch.put(8, 3.0);
+        minimumAncestorsMatch.put(9, 3.0);
+        for (int i = 10 ; i < 251 ; i++){
+            minimumAncestorsMatch.put(i, ceil(i*0.3));
+        }
     }
 
     public int countMatches(ArrayList<Node> matchingNodeChildren, ArrayList<Node> nodeChildren){
@@ -68,24 +84,48 @@ public class MatchingScoreHandler {
 //        return 0;
 //    }
 
-    public int countAncestors(ArrayList<Node> ancestors, HashMap<Integer, Integer> nodesPages){
-        System.out.println("size "+ancestors.size());
+    public int countAncestors(ArrayList<Node> resultAncestors, HashMap<Integer, Integer> nodesPages, ArrayList<Node> nodeAncestors){
+        System.out.println("size "+resultAncestors.size());
         int count = 0;
-        if(ancestors.size()>0) {
-            for (Node n : ancestors) {
-                if (n.getPageId() != 0 || nodesPages.get(n.getGeneratedNodeId()) != null)
-                    count++;
+        if(resultAncestors.size() > 0 && nodeAncestors.size() > 0) {
+            ArrayList<Integer> resultAncestorsPages = new ArrayList<>();
+            ArrayList<Integer> nodeAncestorsPages = new ArrayList<>();
 
+            for (Node n : resultAncestors) {
+                if (n.getPageId() != 0 ) {
+                    resultAncestorsPages.add(n.getPageId());
+                }
+                else if (nodesPages.get(n.getGeneratedNodeId()) != null){
+                    resultAncestorsPages.add(nodesPages.get(n.getGeneratedNodeId()));
+                }
             }
-            return matchingAncestorsScore(count, ancestors.size());
+            for (Node n : nodeAncestors) {
+                if (n.getPageId() != 0 ) {
+                    nodeAncestorsPages.add(n.getPageId());
+                }
+                else if (nodesPages.get(n.getGeneratedNodeId()) != null){
+                    nodeAncestorsPages.add(nodesPages.get(n.getGeneratedNodeId()));
+                }
+            }
+
+            for(int i = 0 ; i< nodeAncestorsPages.size() ; i++){
+                if(resultAncestorsPages.contains(nodeAncestorsPages.get(i)))
+                {
+                    count ++;
+                }
+            }
+
+            return matchingAncestorsScore(count, nodeAncestors.size());
         }
         else return 0;
 
     }
 
     public int matchingAncestorsScore(int matchingAncestorsCount, int totalAncestorsCount){
-        if(matchingAncestorsCount <= (totalAncestorsCount * minimumAncestoryMatchPercentage))
+
+        if (matchingAncestorsCount <= minimumAncestorsMatch.get(totalAncestorsCount)){
             return 0;
+        }
         return matchingAncestorsCount;
     }
 

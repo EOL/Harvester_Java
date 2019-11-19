@@ -2,6 +2,7 @@ package com.bibalex.taxonmatcher.handlers;
 
 import com.bibalex.taxonmatcher.models.Node;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bibalex.eol.parser.handlers.PropertiesHandler;
 
 import java.util.*;
 
@@ -10,11 +11,11 @@ import java.util.*;
  */
 public class NodeHandler {
 
-    public Node matchedAncestor(ArrayList<Node> ancestors, int depth, HashMap<Integer,Integer> nodesPages){
+    public Node matchedAncestor(ArrayList<Node> ancestors, int depth, HashMap<Integer,Integer> nodesPages, int resourceId){
         System.out.println("matched ancestor");
         System.out.println(depth);
         int i = 0;
-        if (ancestors != null) {
+        if (!ancestors.isEmpty() && resourceId == Integer.valueOf(ResourceHandler.getPropertyValue("DWHId"))) {
             for (Node ancestor : ancestors) {
                 if ((ancestor.getPageId() != 0 || nodesPages.get(ancestor.getGeneratedNodeId()) != null)&& i >= depth )
                     return ancestor;
