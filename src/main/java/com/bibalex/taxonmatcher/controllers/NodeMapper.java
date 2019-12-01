@@ -176,8 +176,9 @@ public class NodeMapper {
     }
 
     private MatchingScore findBestMatch(Node node, ArrayList<SearchResult> results, ArrayList<Node> ancestors){
+        NodeHandler nodeHandler = new NodeHandler();
         ArrayList<MatchingScore> scores = new ArrayList<MatchingScore>();
-
+        ArrayList<Integer> nodeAncestorsPages = nodeHandler.getPagesOfAncestors(ancestors, nodePages);
         for(SearchResult result : results){
 
             logger.info("before getting matched children count");
@@ -187,7 +188,7 @@ public class NodeMapper {
             logger.info("after getting matched children count");
             logger.info("matched children count " + matchedChildrenCount);
             logger.info("before getting matched ancestors count");
-            int matchedAncestorsCount = matchingScoreHandler.countAncestors(nodeHandler.nodeMapper(neo4jHandler.getNodesFromIds(result.getAncestors())), nodePages, ancestors);
+            int matchedAncestorsCount = matchingScoreHandler.countAncestors(nodeHandler.nodeMapper(neo4jHandler.getNodesFromIds(result.getAncestors())), nodePages, nodeAncestorsPages,ancestors.size());
 //            int matchedAncestorsCount = matchingScoreHandler.countAncestors(node);
             logger.info("after getting matched ancestors count");
             logger.info("matched Ancestors count " + matchedAncestorsCount);

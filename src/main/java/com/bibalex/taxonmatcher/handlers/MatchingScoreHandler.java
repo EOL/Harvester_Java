@@ -84,12 +84,11 @@ public class MatchingScoreHandler {
 //        return 0;
 //    }
 
-    public int countAncestors(ArrayList<Node> resultAncestors, HashMap<Integer, Integer> nodesPages, ArrayList<Node> nodeAncestors){
+    public int countAncestors(ArrayList<Node> resultAncestors, HashMap<Integer, Integer> nodesPages, ArrayList<Integer> nodeAncestorsPages, int ancestorsSize){
         System.out.println("size "+resultAncestors.size());
         int count = 0;
-        if(resultAncestors.size() > 0 && nodeAncestors.size() > 0) {
+        if(resultAncestors.size() > 0 && nodeAncestorsPages.size() > 0) {
             ArrayList<Integer> resultAncestorsPages = new ArrayList<>();
-            ArrayList<Integer> nodeAncestorsPages = new ArrayList<>();
 
             for (Node n : resultAncestors) {
                 if (n.getPageId() != 0 ) {
@@ -97,14 +96,6 @@ public class MatchingScoreHandler {
                 }
                 else if (nodesPages.get(n.getGeneratedNodeId()) != null){
                     resultAncestorsPages.add(nodesPages.get(n.getGeneratedNodeId()));
-                }
-            }
-            for (Node n : nodeAncestors) {
-                if (n.getPageId() != 0 ) {
-                    nodeAncestorsPages.add(n.getPageId());
-                }
-                else if (nodesPages.get(n.getGeneratedNodeId()) != null){
-                    nodeAncestorsPages.add(nodesPages.get(n.getGeneratedNodeId()));
                 }
             }
 
@@ -115,7 +106,7 @@ public class MatchingScoreHandler {
                 }
             }
 
-            return matchingAncestorsScore(count, nodeAncestors.size());
+            return matchingAncestorsScore(count, ancestorsSize);
         }
         else return 0;
 

@@ -46,4 +46,17 @@ public class NodeHandler {
         return afterMapping;
     }
 
+    public ArrayList<Integer> getPagesOfAncestors(ArrayList<Node> nodeAncestors, HashMap<Integer, Integer> nodePages){
+        ArrayList<Integer> nodeAncestorsPages = new ArrayList<>();
+        for (Node n : nodeAncestors) {
+            if (n.getPageId() != 0 ) {
+                nodeAncestorsPages.add(n.getPageId());
+            }
+            else if (nodePages.get(n.getGeneratedNodeId()) != null){
+                nodeAncestorsPages.add(nodePages.get(n.getGeneratedNodeId()));
+            }
+        }
+        return nodeAncestorsPages;
+    }
+
 }
