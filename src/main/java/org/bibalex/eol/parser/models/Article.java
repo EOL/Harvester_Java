@@ -2,18 +2,13 @@ package org.bibalex.eol.parser.models;
 
 import java.util.ArrayList;
 
-public class Media {
-    //TODO: ADD RESOURCEiD AND CHECK ATTRIBUTES WITH THAT OF MONGO
+public class Article {
     String taxonId;
     String mediaId;
-    String type;
-    String subType;
-    String format;
+    String resourceId;
     String subject;
     String title;
     String description;
-    String accessURI;
-    String thumbnailURI;
     String furtherInformationURI;
     String derivedFrom;
     String createDate;
@@ -28,33 +23,26 @@ public class Media {
     String publisher;
     String contributor;
     String creator;
-    ArrayList<Agent> agents;
-    //Todo: add those to location attributes
-    String locationCreated;
-    String genericLocation;
-    String latitude;
-    String longitude;
-    String altitude;
     String referenceId;
     String deltaStatus;
+    ArrayList<Agent> agents;
     String storageLayerPath;
     String storageLayerThumbnailPath;
+    String controlSection;
+    String format;
 
-    public Media(String taxonId,String mediaId, String type, String subType, String format, String subject, String title, String description, String accessURI,
-                 String thumbnailURI, String furtherInformationURI, String derivedFrom, String createDate, String modified, String language, String rating,
-                 String audience, String license, String rights, String owner, String bibliographicCitation, String publisher, String contributor,
-                 String creator, String locationCreated, String genericLocation, String latitude, String longitude, String altitude,
-                 String referenceId, String storageLayerPath, String storageLayerThumbnailPath, String deltaStatus) {
+    public Article(String taxonId, String mediaId, String resourceId, String subject,
+                   String title, String description, String furtherInformationURI, String derivedFrom, String createDate,
+                   String modified, String language, String rating, String audience, String license, String rights,
+                   String owner, String bibliographicCitation, String publisher, String contributor,
+                   String creator, String referenceId, String deltaStatus,String storageLayerPath,
+                   String storageLayerThumbnailPath, String controlSection,String format ) {
         this.taxonId = taxonId;
         this.mediaId = mediaId;
-        this.type = type;
-        this.subType = subType;
-        this.format = format;
+        this.resourceId = resourceId;
         this.subject = subject;
         this.title = title;
         this.description = description;
-        this.accessURI = accessURI;
-        this.thumbnailURI = thumbnailURI;
         this.furtherInformationURI = furtherInformationURI;
         this.derivedFrom = derivedFrom;
         this.createDate = createDate;
@@ -69,28 +57,17 @@ public class Media {
         this.publisher = publisher;
         this.contributor = contributor;
         this.creator = creator;
-        this.locationCreated = locationCreated;
-        this.genericLocation = genericLocation;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.altitude = altitude;
         this.referenceId = referenceId;
+        this.deltaStatus = deltaStatus;
         this.storageLayerPath = storageLayerPath;
         this.storageLayerThumbnailPath = storageLayerThumbnailPath;
-        this.deltaStatus = deltaStatus;
+        this.controlSection = controlSection;
         if(this.format != null) {
             this.format = this.format.replace("/", "_");
             this.format = this.format.replace("+", "$");
             this.format = this.format.replace("-", "_$");
 
         }
-        if(this.subType != null && this.subType.contains("/"))
-            this.subType=this.subType.replace("/","_");
-    }
-
-    public String getMediaId() {
-
-        return mediaId;
     }
 
     public String getTaxonId() {
@@ -100,41 +77,23 @@ public class Media {
     public void setTaxonId(String taxonId) {
         this.taxonId = taxonId;
     }
-    public String getDeltaStatus() {
-        return deltaStatus;
-    }
 
-    public void setDeltaStatus(String deltaStatus) {
-        this.deltaStatus = deltaStatus;
+    public String getMediaId() {
+        return mediaId;
     }
 
     public void setMediaId(String mediaId) {
         this.mediaId = mediaId;
     }
 
-    public String getType() {
-        return type;
+    public String getResourceId() {
+        return resourceId;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
     }
 
-    public String getSubType() {
-        return subType;
-    }
-
-    public void setSubType(String subType) {
-        this.subType = subType;
-    }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
-    }
 
     public String getSubject() {
         return subject;
@@ -158,22 +117,6 @@ public class Media {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getAccessURI() {
-        return accessURI;
-    }
-
-    public void setAccessURI(String accessURI) {
-        this.accessURI = accessURI;
-    }
-
-    public String getThumbnailURI() {
-        return thumbnailURI;
-    }
-
-    public void setThumbnailURI(String thumbnailURI) {
-        this.thumbnailURI = thumbnailURI;
     }
 
     public String getFurtherInformationURI() {
@@ -288,54 +231,6 @@ public class Media {
         this.creator = creator;
     }
 
-    public ArrayList<Agent> getAgents() {
-        return agents;
-    }
-
-    public void setAgents(ArrayList<Agent> agents) {
-        this.agents = agents;
-    }
-
-    public String getLocationCreated() {
-        return locationCreated;
-    }
-
-    public void setLocationCreated(String locationCreated) {
-        this.locationCreated = locationCreated;
-    }
-
-    public String getGenericLocation() {
-        return genericLocation;
-    }
-
-    public void setGenericLocation(String genericLocation) {
-        this.genericLocation = genericLocation;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getAltitude() {
-        return altitude;
-    }
-
-    public void setAltitude(String altitude) {
-        this.altitude = altitude;
-    }
-
     public String getReferenceId() {
         return referenceId;
     }
@@ -344,19 +239,29 @@ public class Media {
         this.referenceId = referenceId;
     }
 
-    public String getStorageLayerPath(){
-        return storageLayerPath;
+    public String getDeltaStatus() {
+        return deltaStatus;
     }
 
-    public void setStorageLayerPath(String storageLayerPath) {
-        this.storageLayerPath = storageLayerPath;
+    public void setDeltaStatus(String deltaStatus) {
+        this.deltaStatus = deltaStatus;
     }
 
-    public String getStorageLayerThumbnailPath() {
-        return storageLayerThumbnailPath;
+    public ArrayList<Agent> getAgents() {
+        return agents;
     }
 
-    public void setStorageLayerThumbnailPath(String storageLayerThumbnailPath) {
-        this.storageLayerThumbnailPath = storageLayerThumbnailPath;
+    public void setAgents(ArrayList<Agent> agents) {
+        this.agents = agents;
     }
+
+
+    public String getControlSection() {
+        return controlSection;
+    }
+
+    public void setControlSection(String controlSection) {
+        this.controlSection = controlSection;
+    }
+
 }
