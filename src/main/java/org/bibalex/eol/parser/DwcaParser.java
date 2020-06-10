@@ -408,7 +408,6 @@ public class DwcaParser {
                         extensionRecord.value(CommonTerms.contributorTerm),
                         extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaCreatorURI)),
                         extensionRecord.value(CommonTerms.referenceIDTerm), action,
-                        extensionRecord.value(CommonTerms.agentIDTerm),
                         storageLayerPath, storageLayerThumbnailPath,
                         extensionRecord.value(TermFactory.instance().findTerm(TermURIs.cvTermURI)),
                         extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaFormatURI)) );
@@ -441,7 +440,6 @@ public class DwcaParser {
                         extensionRecord.value(TermFactory.instance().findTerm(TermURIs.publisherURI)),
                         extensionRecord.value(CommonTerms.contributorTerm),
                         extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaCreatorURI)),
-                        extensionRecord.value(CommonTerms.agentIDTerm),
                         extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLocationCreatedURI)),
                         extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaSpatialURI)),
                         extensionRecord.value(TermFactory.instance().findTerm(TermURIs.mediaLatURI)),
