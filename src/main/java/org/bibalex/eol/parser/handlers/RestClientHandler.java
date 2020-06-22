@@ -157,6 +157,26 @@ public class RestClientHandler {
         return 0;
     }
 
+    public void sendNodestoMongodB(String uri, List<NodeRecord> nodes){
+        if (!uri.equalsIgnoreCase("")){
+            RestTemplate restTemplate = handleRestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("Accept", "application/json");
+            ResponseEntity response = null;
+
+            HttpEntity<Object> entity = new HttpEntity<Object>(nodes, headers);
+            // Send the request as POST
+            response = restTemplate.exchange(uri, HttpMethod.POST, entity, Boolean.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                System.out.println(response.getBody());
+            } else {
+                System.out.println("returned code(" + response.getStatusCode() + ")");
+            }
+        }
+
+}
+
     public boolean insertNodeRecordsToMysql(String uri, ArrayList<NodeRecord> records){
         if (!uri.equalsIgnoreCase("")) {
 

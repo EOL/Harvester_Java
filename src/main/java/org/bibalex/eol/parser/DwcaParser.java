@@ -46,7 +46,7 @@ public class DwcaParser {
     private HashMap<String, ArrayList<Metadata>>  occurrenceMetadataMapping;
     private Map<String, Map<String, String>> actionFiles;
     int batchSize = 1000;
-
+    
     public static final ArrayList<String> expectedMediaFormat = new ArrayList<>();
     private HashMap<String, Integer> deletedTaxons = new HashMap<>();
     private EntityManager entityManager;
@@ -105,7 +105,7 @@ public class DwcaParser {
         loadAllOccurrences();
         System.out.println("TOTAL " + occurrenceHashMap.size());
         for (String s: occurrenceHashMap.keySet()) {
-            System.out.print("OCC "+ s);
+          System.out.print("OCC "+ s);
         }
         parseRecords(resourceId, neo4jHandler);
         parseTraits();
@@ -114,7 +114,7 @@ public class DwcaParser {
         System.out.println("Finish metadata");
         printTraits(traits, metadata);
         System.out.println("Total number of traits: " + traits.size());
-        System.out.println("Total number of metadata: " + metadata.size());
+         System.out.println("Total number of metadata: " + metadata.size());
     }
 
     private boolean checkParentFormat() {
@@ -156,7 +156,7 @@ public class DwcaParser {
         if(parent_format) {
             scriptsHandler.runLoadNodesParentFormat(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)),
                     String.valueOf(termsSorted.indexOf((Object) DwcTerm.scientificName)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonRank)),
-                    String.valueOf(termsSorted.indexOf((Object) CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)),
+                    String.valueOf(termsSorted.indexOf((Object) CommonTerms.generatedAutoIdTerm)), String.valueOf(termsSorted.indexOf((Object) DwcTerm.parentNameUsageID)), 
                     this.dwca.getCore().getIgnoreHeaderLines() == 1 ? "true" : "false", String.valueOf(termsSorted.indexOf(CommonTerms.eolPageTerm)),
                     String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+1), String.valueOf(termsSorted.indexOf(CommonTerms.generatedAutoIdTerm)+2));
             scriptsHandler.runLoadRelationsParentFormat(relativePath.toString(), String.valueOf(resourceId), String.valueOf(termsSorted.indexOf((Object) DwcTerm.taxonID)),
@@ -238,7 +238,7 @@ public class DwcaParser {
                 for(Record record: occurrences) {
                     String occurrence_id = record.value(DwcTerm.occurrenceID);
                     logger.debug("Adding occurrence to the map with id: " + occurrence_id);
-                    occurrenceHashMap.put(occurrence_id, new TraitTaxon(starRecord.core().
+                    occurrenceHashMap.put(occurrence_id,  new TraitTaxon(starRecord.core().
                             value(TermFactory.instance().findTerm(TermURIs.taxonID_URI)),starRecord.core().
                             value(DwcTerm.scientificName)));
                     String lifestage = record.value(DwcTerm.lifeStage);
@@ -270,30 +270,26 @@ public class DwcaParser {
         int i = 0, count = 0;
 
         for (StarRecord rec : dwca) {
-            if(count %10000 ==0 && count!=0){
-                // TODO: Menna uncomment this
+          if(count %10000 ==0 && count!=0){
+               // TODO: Menna uncomment this
                 //insertNodeRecordsToMysql(records);
-                nodes.clear();
+              //  nodes.clear();
                 count =0;
-            }
-            count++;
+           }
+           count++;
             // TODO: Menna uncomment this
-            //    int generatedNodeId = Integer.valueOf(rec.core().value(CommonTerms.generatedAutoIdTerm));
-            i++;
-            int generatedNodeId =i;
-            System.out.println(rec.core().value(DwcTerm.taxonID)+" count"+count);
-            NodeRecord tableRecord = new NodeRecord(generatedNodeId + "", resourceId);
-            Taxon taxon = parseTaxon(rec, generatedNodeId);
-            if (taxon != null)
-                tableRecord.setTaxon(taxon);
-
+        //    int generatedNodeId = Integer.valueOf(rec.core().value(CommonTerms.generatedAutoIdTerm));
+           i++;
+           int generatedNodeId =i;
+           System.out.println(rec.core().value(DwcTerm.taxonID)+" count"+count);
+           NodeRecord node = parseTaxon(rec, generatedNodeId);
+            
             // no need for vernaculars to have taxonId they are embbeded
-            if (rec.hasExtension(GbifTerm.VernacularName))
-                tableRecord.setVernaculars(parseVernacularNames(rec));
-            nodes.add(tableRecord);
-
-            if (rec.hasExtension(CommonTerms.mediaTerm))
-                parseMedia(rec, media, articles);
+           if (rec.hasExtension(GbifTerm.VernacularName))
+              node.setVernaculars(parseVernacularNames(rec));
+           nodes.add(node);
+           if (rec.hasExtension(CommonTerms.mediaTerm))
+              parseMedia(rec, media, articles);
 
             System.out.println("before adjust refe");
             //adjustReferences(tableRecord);
@@ -301,11 +297,19 @@ public class DwcaParser {
             //records.add(tableRecord);
 
         }
-        // TODO: Menna uncomment this
+        sendNodestoMongodB(nodes);
+         // TODO: Menna uncomment this
         //insertNodeRecordsToMysql(records);
         //insertPlaceholderNodesToMysql();
         //addTimeOfHarvestingToMysql(false);
     }
+
+    private void sendNodestoMongodB(List<NodeRecord> nodes){
+        System.out.print("Sending Node");
+        RestClientHandler restClientHandler = new RestClientHandler();
+        restClientHandler.sendNodestoMongodB(PropertiesHandler.getProperty("addNodes"),nodes);
+    }
+
 
     private void addTimeOfHarvestingToMysql(boolean start){
         RestClientHandler restClientHandler = new RestClientHandler();
@@ -316,7 +320,7 @@ public class DwcaParser {
 
     }
 
-    private Taxon parseTaxon(StarRecord record, int generatedNodeId) {
+    private NodeRecord parseTaxon(StarRecord record, int generatedNodeId) {
         Map<String, String> actions = actionFiles.get(dwca.getCore().getLocation() + "_action");
         String taxonID = record.core().value(DwcTerm.taxonID);
         String action = "";
@@ -325,21 +329,11 @@ public class DwcaParser {
         else
             action = "I";
         System.out.println("taxon " + action);
-        Taxon taxonData = new Taxon(record.core().value(DwcTerm.taxonID), record.core().value(DwcTerm.scientificName),
-                record.core().value(DwcTerm.parentNameUsageID), record.core().value(DwcTerm.kingdom),
-                record.core().value(DwcTerm.phylum), record.core().value(DwcTerm.class_),
-                record.core().value(DwcTerm.order), record.core().value(DwcTerm.family),
-                record.core().value(DwcTerm.genus), record.core().value(DwcTerm.taxonRank),
-                record.core().value(CommonTerms.furtherInformationURL), record.core().value(DwcTerm.taxonomicStatus),
-                record.core().value(DwcTerm.taxonRemarks), record.core().value(DwcTerm.namePublishedIn),
-                record.core().value(CommonTerms.referenceIDTerm), record.core().value(CommonTerms.eolPageTerm),
-                record.core().value(DwcTerm.acceptedNameUsageID), record.core().value(CommonTerms.sourceTerm),
-                record.core().value(TermFactory.instance().findTerm(TermURIs.canonicalNameURL)),
-                record.core().value(TermFactory.instance().findTerm(TermURIs.scientificNameAuthorship)),
-                record.core().value(TermFactory.instance().findTerm(TermURIs.scientificNameID)),
-                record.core().value(TermFactory.instance().findTerm(TermURIs.datasetID)),
-                record.core().value(TermFactory.instance().findTerm(TermURIs.eolIdAnnotations)),
-                action, record.core().value(TermFactory.instance().findTerm(TermURIs.landmark))
+        NodeRecord taxonData = new NodeRecord(record.core().value(DwcTerm.taxonID), resourceID, String.valueOf(generatedNodeId),
+                record.core().value(DwcTerm.acceptedNameUsageID), record.core().value(DwcTerm.taxonRank),
+                record.core().value(DwcTerm.scientificName), record.core().value(DwcTerm.taxonomicStatus),
+                record.core().value(TermFactory.instance().findTerm(TermURIs.landmark)), record.core().value(DwcTerm.taxonRemarks),
+                action
         );
 
         if (resourceID != Integer.valueOf(PropertiesHandler.getProperty("DWHId")) && generatedNodeId != -1) {
@@ -347,11 +341,11 @@ public class DwcaParser {
 //            Neo4jHandler neo4jHandler = new Neo4jHandler();
 //            int pageId = neo4jHandler.getPageIdOfNode(generatedNodeId);
 //            if (pageId != 0)
-//                taxonData.setPageEolId(String.valueOf(pageId));
+//                taxonData.setpageId(pageId);
         }
         //todo: remove nest line and uncomment the above if condition
-        taxonData.setPageEolId(String.valueOf(3));
-        System.out.println("taxon ------>" + taxonData.getIdentifier());
+        taxonData.setPageId(3);
+        System.out.println("taxon ------>" + taxonData.getNodeId());
         return taxonData;
     }
 
@@ -482,7 +476,7 @@ public class DwcaParser {
                         placeholderNodes.get(i).getGeneratedNodeId() + "", this.resourceID);
 
                 Taxon taxon = new Taxon(placeholderNodes.get(i).getNodeId(), placeholderNodes.get(i).getScientificName(), placeholderNodes.get(i).getRank(), String.valueOf(placeholderNodes.get(i).getPageId()));
-                tableRecord.setTaxon(taxon);
+                //TODOtableRecord.setTaxon(taxon);
                 records.add(tableRecord);
             }
             insertNodeRecordsToMysql(records);
@@ -697,7 +691,7 @@ public class DwcaParser {
 //        }
 //    }
 
-
+    
 //    private void loadAssociationsByOccurrences(){
 //        logger.debug("Loading all associations with term: " + dwca.getExtension(CommonTerms.associationTerm));
 //        if (dwca.getExtension(CommonTerms.associationTerm) != null) {
@@ -901,7 +895,7 @@ public class DwcaParser {
         return action;
     }
 
-    //    private void adjustReferences(List<NodeRecord> taxa,List<Media> media) {
+//    private void adjustReferences(List<NodeRecord> taxa,List<Media> media) {
 //        // TODO: Menna uncomment this and check
 //        //ArrayList<Reference> refs = nodeRecord.getReferences();
 //        ArrayList<String> refIds = new ArrayList<String>();
@@ -1117,7 +1111,7 @@ public class DwcaParser {
         System.out.print("===================================================");
         System.out.print("===================================================");
         System.out.println("-------------scientific name---------------");
-        System.out.println(nodeRecord.getTaxon().getScientificName());
+        System.out.println(nodeRecord.getScientificName());
 //        System.out.println(" " + nodeRecord.getTaxonId());
 
         // if (!articles.isEmpty()) {
